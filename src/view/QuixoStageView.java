@@ -3,11 +3,10 @@ package view;
 import boardifier.control.Logger;
 import boardifier.model.GameStageModel;
 import boardifier.view.ClassicBoardLook;
-import boardifier.view.ContainerLook;
 import boardifier.view.GameStageView;
 
 import boardifier.view.TextLook;
-import model.HoleStageModel;
+import model.QuixoStageModel;
 
 /**
  * HoleStageView has to create all the looks for all game elements created by the HoleStageFactory.
@@ -32,14 +31,14 @@ import model.HoleStageModel;
  *   for red pot, a subclass RedPotLook of GridLook is used, in order to override the method that render the borders.
  */
 
-public class HoleStageView extends GameStageView {
-    public HoleStageView(String name, GameStageModel gameStageModel) {
+public class QuixoStageView extends GameStageView {
+    public QuixoStageView(String name, GameStageModel gameStageModel) {
         super(name, gameStageModel);
     }
 
     @Override
     public void createLooks() {
-        HoleStageModel model = (HoleStageModel)gameStageModel;
+        QuixoStageModel model = (QuixoStageModel)gameStageModel;
 
         /* Creating all the looks for all the game elements that are created by
            the HoleStageFactory.

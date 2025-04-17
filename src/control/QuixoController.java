@@ -9,18 +9,18 @@ import boardifier.model.Model;
 import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import boardifier.view.View;
-import model.HoleStageModel;
+import model.QuixoStageModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class HoleController extends Controller {
+public class QuixoController extends Controller {
 
     BufferedReader consoleIn;
     boolean firstPlayer;
 
-    public HoleController(Model model, View view) {
+    public QuixoController(Model model, View view) {
         super(model, view);
         firstPlayer = true;
     }
@@ -45,7 +45,7 @@ public class HoleController extends Controller {
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            HoleDecider decider = new HoleDecider(model,this);
+            QuixoDecider decider = new QuixoDecider(model,this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         }
@@ -72,11 +72,11 @@ public class HoleController extends Controller {
         model.setNextPlayer();
         // get the new player to display its name
         Player p = model.getCurrentPlayer();
-        HoleStageModel stageModel = (HoleStageModel) model.getGameStage();
+        QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
         stageModel.getPlayerName().setText(p.getName());
     }
     private boolean analyseAndPlay(String line) {
-        HoleStageModel gameStage = (HoleStageModel) model.getGameStage();
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         // get the pawn value from the first char
         int pawnIndex = (int) (line.charAt(0) - '1');
         if ((pawnIndex<0)||(pawnIndex>3)) return false;

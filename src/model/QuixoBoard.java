@@ -15,8 +15,8 @@ import java.awt.*;
  * this class also contains method to determine all the valid cells to put a
  * pawn with a given value.
  */
-public class HoleBoard extends ContainerElement {
-    public HoleBoard(int x, int y, GameStageModel gameStageModel) {
+public class QuixoBoard extends ContainerElement {
+    public QuixoBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a 3x3 grid, named "holeboard", and in x,y in space
         super("holeboard", x, y, 3 , 3, gameStageModel);
     }

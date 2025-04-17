@@ -1,6 +1,5 @@
 package model;
 
-import boardifier.model.ContainerElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
 import boardifier.model.TextElement;
@@ -21,12 +20,12 @@ import boardifier.model.TextElement;
  * look of the container.
  *
  */
-public class HoleStageFactory extends StageElementsFactory {
-    private HoleStageModel stageModel;
+public class QuixoStageFactory extends StageElementsFactory {
+    private QuixoStageModel stageModel;
 
-    public HoleStageFactory(GameStageModel gameStageModel) {
+    public QuixoStageFactory(GameStageModel gameStageModel) {
         super(gameStageModel);
-        stageModel = (HoleStageModel) gameStageModel;
+        stageModel = (QuixoStageModel) gameStageModel;
     }
 
     @Override
@@ -38,16 +37,16 @@ public class HoleStageFactory extends StageElementsFactory {
         stageModel.setPlayerName(text);
 
         // create the board, in 0,1 in the virtual space
-        HoleBoard board = new HoleBoard(0, 1, stageModel);
+        QuixoBoard board = new QuixoBoard(0, 1, stageModel);
         // assign the board to the game stage model
         stageModel.setBoard(board);
 
         //create the black pot in 18,0 in the virtual space
-        HolePawnPot blackPot = new HolePawnPot(18,0, stageModel);
+        QuixoPawnPot blackPot = new QuixoPawnPot(18,0, stageModel);
         // assign the black pot to the game stage model
         stageModel.setBlackPot(blackPot);
         //create the black pot in 25,0 in the virtual space
-        HolePawnPot redPot = new HolePawnPot(25,0, stageModel);
+        QuixoPawnPot redPot = new QuixoPawnPot(25,0, stageModel);
         // assign the red pot to the game stage model
         stageModel.setRedPot(redPot);
 

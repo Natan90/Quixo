@@ -3,9 +3,9 @@ import boardifier.model.GameException;
 import boardifier.view.View;
 import boardifier.control.StageFactory;
 import boardifier.model.Model;
-import control.HoleController;
+import control.QuixoController;
 
-public class HoleConsole {
+public class QuixoConsole {
 
     public static void main(String[] args) {
 
@@ -37,7 +37,7 @@ public class HoleConsole {
 
         StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
         View holeView = new View(model);
-        HoleController control = new HoleController(model,holeView);
+        QuixoController control = new QuixoController(model,holeView);
         control.setFirstStageName("hole");
         try {
             control.startGame();

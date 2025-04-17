@@ -27,23 +27,23 @@ import boardifier.model.*;
  * This is the role of computePartyResult(), which is called by the callback function if there is no more pawn to play.
  *
  */
-public class HoleStageModel extends GameStageModel {
+public class QuixoStageModel extends GameStageModel {
 
     // define stage state variables
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
 
     // define stage game elements
-    private HoleBoard board;
-    private HolePawnPot blackPot;
-    private HolePawnPot redPot;
+    private QuixoBoard board;
+    private QuixoPawnPot blackPot;
+    private QuixoPawnPot redPot;
     private Pawn[] blackPawns;
     private Pawn[] redPawns;
     private TextElement playerName;
     // Uncomment next line if the example with a main container is used. see end of HoleStageFactory and HoleStageView
     //private ContainerElement mainContainer;
 
-    public HoleStageModel(String name, Model model) {
+    public QuixoStageModel(String name, Model model) {
         super(name, model);
         blackPawnsToPlay = 4;
         redPawnsToPlay = 4;
@@ -62,26 +62,26 @@ public class HoleStageModel extends GameStageModel {
     }
      */
 
-    public HoleBoard getBoard() {
+    public QuixoBoard getBoard() {
         return board;
     }
-    public void setBoard(HoleBoard board) {
+    public void setBoard(QuixoBoard board) {
         this.board = board;
         addContainer(board);
     }
 
-    public HolePawnPot getBlackPot() {
+    public QuixoPawnPot getBlackPot() {
         return blackPot;
     }
-    public void setBlackPot(HolePawnPot blackPot) {
+    public void setBlackPot(QuixoPawnPot blackPot) {
         this.blackPot = blackPot;
         addContainer(blackPot);
     }
 
-    public HolePawnPot getRedPot() {
+    public QuixoPawnPot getRedPot() {
         return redPot;
     }
-    public void setRedPot(HolePawnPot redPot) {
+    public void setRedPot(QuixoPawnPot redPot) {
         this.redPot = redPot;
         addContainer(redPot);
     }
@@ -195,6 +195,6 @@ public class HoleStageModel extends GameStageModel {
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {
-        return new HoleStageFactory(this);
+        return new QuixoStageFactory(this);
     }
 }
