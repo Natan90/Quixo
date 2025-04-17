@@ -35,10 +35,10 @@ public class QuixoConsole {
             model.addComputerPlayer("computer2");
         }
 
-        StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
-        View holeView = new View(model);
-        QuixoController control = new QuixoController(model,holeView);
-        control.setFirstStageName("hole");
+        StageFactory.registerModelAndView("quixo", "model.QuixoStageModel", "view.QuixoStageView");
+        View quixoView = new View(model);
+        QuixoController control = new QuixoController(model,quixoView);
+        control.setFirstStageName("quixo");
         try {
             control.startGame();
             control.stageLoop();
