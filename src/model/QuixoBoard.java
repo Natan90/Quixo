@@ -9,7 +9,7 @@ import java.util.List;
 import java.awt.*;
 
 /**
- * Hole main board represent the element where pawns are put when played
+ * quixo main board represent the element where pawns are put when played
  * Thus, a simple ContainerElement with 3 rows and 3 column is needed.
  * Nevertheless, in order to "simplify" the work for the controller part,
  * this class also contains method to determine all the valid cells to put a
@@ -17,8 +17,8 @@ import java.awt.*;
  */
 public class QuixoBoard extends ContainerElement {
     public QuixoBoard(int x, int y, GameStageModel gameStageModel) {
-        // call the super-constructor to create a 3x3 grid, named "holeboard", and in x,y in space
-        super("holeboard", x, y, 3 , 3, gameStageModel);
+        // call the super-constructor to create a 3x3 grid, named "quixoboard", and in x,y in space
+        super("quixoboard", x, y, 3 , 3, gameStageModel);
     }
 
     public void setValidCells(int number) {
