@@ -37,6 +37,7 @@ public class QuixoStageModel extends GameStageModel {
     private QuixoBoard board;
     private QuixoPawnPot blackPot;
     private QuixoPawnPot redPot;
+    private Cube[] cubes;
     private Pawn[] blackPawns;
     private Pawn[] redPawns;
     private TextElement playerName;
@@ -105,6 +106,14 @@ public class QuixoStageModel extends GameStageModel {
             addElement(redPawns[i]);
         }
     }
+    public Cube[] getCubes() {
+        return cubes;
+    }
+    public void setCubes(Cube[] cubes){
+        this.cubes = cubes;
+        for (int i=0; i< cubes.length; i++)
+            addElement(cubes[i]);
+    }
 
     public TextElement getPlayerName() {
         return playerName;
@@ -113,6 +122,8 @@ public class QuixoStageModel extends GameStageModel {
         this.playerName = playerName;
         addElement(playerName);
     }
+
+
 
 
     private void setupCallbacks() {
@@ -155,10 +166,10 @@ public class QuixoStageModel extends GameStageModel {
                 p = (Pawn) (board.getElement(row, col));
                 if (p.getColor() == Pawn.PAWN_BLACK) {
                     nbBlack++;
-                    countBlack += p.getNumber();
+//                    countBlack += p.getNumber();
                 } else {
                     nbRed++;
-                    countRed += p.getNumber();
+//                    countRed += p.getNumber();
                 }
             }
             // change row & col to set them at the correct value for the next iteration
