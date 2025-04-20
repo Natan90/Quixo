@@ -66,6 +66,7 @@ public class QuixoStageView extends GameStageView {
         }
         for (int i = 0; i<25; i++){
             addLook(new CubeLook(model.getCubes()[i]));
+            System.out.println("CubeLook created");
         }
 
 

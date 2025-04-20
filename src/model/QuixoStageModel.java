@@ -111,8 +111,10 @@ public class QuixoStageModel extends GameStageModel {
     }
     public void setCubes(Cube[] cubes){
         this.cubes = cubes;
-        for (int i=0; i< cubes.length-1; i++)
+        for (int i=0; i< cubes.length; i++) {
             addElement(cubes[i]);
+            System.out.println("Cubes added to stage model" + cubes[i]);
+        }
     }
 
     public TextElement getPlayerName() {
