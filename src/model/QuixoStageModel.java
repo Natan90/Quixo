@@ -111,7 +111,7 @@ public class QuixoStageModel extends GameStageModel {
     }
     public void setCubes(Cube[] cubes){
         this.cubes = cubes;
-        for (int i=0; i< cubes.length; i++)
+        for (int i=0; i< cubes.length-1; i++)
             addElement(cubes[i]);
     }
 
@@ -130,12 +130,13 @@ public class QuixoStageModel extends GameStageModel {
         onPutInContainer( (element, gridDest, rowDest, colDest) -> {
             // just check when pawns are put in 3x3 board
             if (gridDest != board) return;
-            Pawn p = (Pawn) element;
-            if (p.getColor() == 0) {
-                blackPawnsToPlay--;
-            }
-            else {
-                redPawnsToPlay--;
+            Cube c = (Cube) element;
+            if (c.getFace() == Cube.CUBE_WHITE) {
+                //finir logique du jeu
+                //si la face du cube (rond ou croix) complete une ligne de 5 de sa face
+                // on appelle computePartyResult pour mettre fin au jeu
+                //et je pense qu'il n'y aura meme pas besoin de l'appeler puisque le jeu s'arrête directement après
+                //la condition de victoire. Ya pas de point à calculer comme sur The Hole
             }
             if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
                 computePartyResult();

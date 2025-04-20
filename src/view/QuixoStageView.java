@@ -65,7 +65,7 @@ public class QuixoStageView extends GameStageView {
             addLook(new PawnLook(model.getRedPawns()[i]));
         }
         for (int i = 0; i<25; i++){
-            addLook(new CubeLook(model.getCubes()));
+            addLook(new CubeLook(model.getCubes()[i]));
         }
 
 

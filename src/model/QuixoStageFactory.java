@@ -66,11 +66,19 @@ public class QuixoStageFactory extends StageElementsFactory {
         }
 
         Cube[] cubes = new Cube[25];
+
+        for (int i =0; i<25; i++){
+            cubes[i] = new Cube(i, stageModel);
+        }
         for(int i=0;i< 4; i++){
             for (int j=0; j< 4; j++){
                 board.addElement(cubes[i], i, j);
             }
         }
+
+
+        stageModel.setCubes(cubes);
+
         // assign the black pawns to the game stage model
         stageModel.setRedPawns(redPawns);
 
