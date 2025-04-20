@@ -16,7 +16,7 @@ public class Cube extends GameElement {
         // registering element types defined especially for this game
         ElementTypes.register("cube",69);
         type = ElementTypes.getType("cube");
-        this.face = face;
+        this.face = 0; // par defaut, la face est blanche, et l'etat par défaut de blanche est 0
         this.color = color;
     }
 

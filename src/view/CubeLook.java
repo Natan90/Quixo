@@ -22,8 +22,13 @@ public class CubeLook extends ElementLook {
     protected void render() {
 
         Cube cube = (Cube)element;
-        if (cube.getColor() == Cube.CUBE_WHITE) {
-            shape[0][0] = ConsoleColor.BLACK + ConsoleColor.WHITE_BACKGROUND + cube.getFace() + ConsoleColor.RESET;
-        }
+
+        if (cube.getFace() == 0)
+            shape[0][0] = ConsoleColor.BLACK + ConsoleColor.WHITE_BACKGROUND + " " + ConsoleColor.RESET;
+        else if (cube.getFace() == 1)
+            shape[0][0] = ConsoleColor.BLACK + ConsoleColor.WHITE_BACKGROUND + "O" + ConsoleColor.RESET;
+        else if (cube.getFace() == 2)
+            shape[0][0] = ConsoleColor.BLACK + ConsoleColor.WHITE_BACKGROUND + "X" + ConsoleColor.RESET;
+
     }
 }
