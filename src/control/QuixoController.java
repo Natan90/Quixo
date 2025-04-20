@@ -9,6 +9,7 @@ import boardifier.model.Model;
 import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import boardifier.view.View;
+import model.Cube;
 import model.QuixoStageModel;
 
 import java.io.BufferedReader;
@@ -55,7 +56,7 @@ public class QuixoController extends Controller {
                 System.out.print(p.getName()+ " > ");
                 try {
                     String line = consoleIn.readLine();
-                    if (line.length() == 3) {
+                    if (line.length() == 2) {
                         ok = analyseAndPlay(line);
                     }
                     if (!ok) {
@@ -77,31 +78,45 @@ public class QuixoController extends Controller {
     }
     private boolean analyseAndPlay(String line) {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
-        // get the pawn value from the first char
-        int pawnIndex = (int) (line.charAt(0) - '1');
-        if ((pawnIndex<0)||(pawnIndex>3)) return false;
         // get the ccords in the board
-        int col = (int) (line.charAt(1) - 'A');
-        int row = (int) (line.charAt(2) - '1');
-        // check coords validity
-        if ((row<0)||(row>2)) return false;
-        if ((col<0)||(col>2)) return false;
+        int col = (int) (line.charAt(0) - 'A');
+        int row = (int) (line.charAt(1) - '1');
+
+        //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
+        if(col > 0 && col < 3 && row > 0 && row < 3)
+            return false;
+
+
+
+
         // check if the pawn is still in its pot
         ContainerElement pot = null;
-        if (model.getIdPlayer() == 0) {
-            pot = gameStage.getBlackPot();
+        pot = gameStage.getBoard();
+
+//        if (pot.isEmptyAt(pawnIndex,0)) return false;
+
+        //recuperer le cube choisi dans le plateau
+        Cube cube = (Cube) pot.getElement(col, row);
+        //regarder si le joueur n'a pas choisi un cube de l'autre joueur
+        if(cube.getFace() == 2 && model.getIdPlayer() == 1 || cube.getFace() == 1 && model.getIdPlayer() == 2) {
+            return false;
         }
-        else {
-            pot = gameStage.getRedPot();
-        }
-        if (pot.isEmptyAt(pawnIndex,0)) return false;
-        GameElement pawn = pot.getElement(pawnIndex,0);
         // compute valid cells for the chosen pawn
-        gameStage.getBoard().setValidCells(pawnIndex+1);
+        int cubeIndex = (col+1)*(row+1) ;
+
+        //bouger le pion choisi -> réafficher le plateau
+        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", 10, 10);
+        //maintenant il faut appeler la méthode pour setValidCells
+        //demander un deuxieme coup a l'utilisateur
+        //verifier si son coup est valide
+        //si oui, jouer le coup, afficher le plateau du jeu et mettre fin au tour du joueur
+
+
+//        gameStage.getBoard().setValidCells(cubeIndex);
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
-        ActionList actions = ActionFactory.generatePutInContainer(model, pawn, "quixoboard", row, col);
-        actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
+
+        actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
         return true;

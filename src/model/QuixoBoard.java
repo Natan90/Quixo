@@ -34,7 +34,10 @@ public class QuixoBoard extends ContainerElement {
 
     public List<Point> computeValidCells(int number) {
         List<Point> lst = new ArrayList<>();
-        Pawn p = null;
+        Cube c = null;
+
+
+
         return lst;
     }
 }
