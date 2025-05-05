@@ -37,33 +37,17 @@ public class QuixoStageFactory extends StageElementsFactory {
         stageModel.setPlayerName(text);
 
         // create the board, in 0,1 in the virtual space
-        QuixoBoard board = new QuixoBoard(0, 1, stageModel);
+        QuixoBoard board = new QuixoBoard(30, 1, stageModel);
         // assign the board to the game stage model
         stageModel.setBoard(board);
 
-        //create the black pot in 18,0 in the virtual space
-        QuixoPawnPot blackPot = new QuixoPawnPot(40,0, stageModel);
         // assign the black pot to the game stage model
-        stageModel.setBlackPot(blackPot);
+
         //create the black pot in 25,0 in the virtual space
-        QuixoPawnPot redPot = new QuixoPawnPot(25,0, stageModel);
+        QuixoPawnPot redPot = new QuixoPawnPot(70,0, stageModel);
         // assign the red pot to the game stage model
         stageModel.setRedPot(redPot);
 
-        /* create the pawns
-            NB: their coordinates are by default 0,0 but since they are put
-            within the pots, their real coordinates will be computed by the view
-         */
-        Pawn[] blackPawns = new Pawn[4];
-        for(int i=0;i<4;i++) {
-            blackPawns[i] = new Pawn(i + 1, Pawn.PAWN_BLACK, stageModel);
-        }
-        // assign the black pawns to the game stage model
-        stageModel.setBlackPawns(blackPawns);
-        Pawn[] redPawns = new Pawn[4];
-        for(int i=0;i<4;i++) {
-            redPawns[i] = new Pawn(i + 1, Pawn.PAWN_RED, stageModel);
-        }
 
         Cube[] cubes = new Cube[25];
 
@@ -90,15 +74,6 @@ public class QuixoStageFactory extends StageElementsFactory {
                 board.addElement(cubes[index], i, j);
                 index++;
             }
-        }
-
-        // assign the black pawns to the game stage model
-        stageModel.setRedPawns(redPawns);
-
-        // finally put the pawns to their pot
-        for (int i=0;i<4;i++) {
-            blackPot.addElement(blackPawns[i], i,0);
-            redPot.addElement(redPawns[i], i,0);
         }
 
         /* Example with a main container that takes the ownership of the location

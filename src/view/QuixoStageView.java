@@ -40,6 +40,8 @@ public class QuixoStageView extends GameStageView {
     public void createLooks() {
         QuixoStageModel model = (QuixoStageModel)gameStageModel;
 
+
+
         /* Creating all the looks for all the game elements that are created by
            the HoleStageFactory.
            WARNING ! If there is a game element that has no associated look, the execution
@@ -56,14 +58,14 @@ public class QuixoStageView extends GameStageView {
         addLook(new TextLook(model.getPlayerName()));
         // create a ClassicBoardLook (with borders and coordinates) for the main board.
         addLook(new ClassicBoardLook(2, 4, model.getBoard(), 1, 1, true));
+
         // create looks for both pots
-        addLook(new BlackPawnPotLook(model.getBlackPot()));
         addLook(new RedPawnPotLook(2, 4, model.getRedPot()));
         // create looks for all pawns
-        for(int i=0;i<4;i++) {
-            addLook(new PawnLook(model.getBlackPawns()[i]));
-            addLook(new PawnLook(model.getRedPawns()[i]));
-        }
+
+
+
+
         for (int i = 0; i<25; i++){
             addLook(new CubeLook(model.getCubes()[i]));
             System.out.println("CubeLook created");

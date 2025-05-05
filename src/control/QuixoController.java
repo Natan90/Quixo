@@ -1,4 +1,4 @@
-package control;
+ package control;
 
 import boardifier.control.ActionFactory;
 import boardifier.control.ActionPlayer;
@@ -102,14 +102,23 @@ public class QuixoController extends Controller {
         int cubeIndex = (col+1)*(row+1) ;
 
         //bouger le pion choisi -> réafficher le plateau
-        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", 10, 10);
+
+//        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 1, 1);
+//        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
+        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
+        actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 1, 1));
+
+
+
+
+ 
+
         //maintenant il faut appeler la méthode pour setValidCells
         //demander un deuxieme coup a l'utilisateur
         //verifier si son coup est valide
         //si oui, jouer le coup, afficher le plateau du jeu et mettre fin au tour du joueur
-
-
 //        gameStage.getBoard().setValidCells(cubeIndex);
+
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
 

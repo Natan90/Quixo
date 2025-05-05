@@ -9,7 +9,7 @@ import boardifier.model.ContainerElement;
  */
 public class QuixoPawnPot extends ContainerElement {
     public QuixoPawnPot(int x, int y, GameStageModel gameStageModel) {
-        // call the super-constructor to create a 4x1 grid, named "pawnpot", and in x,y in space
-        super("pawnpot", x, y, 4, 1, gameStageModel);
+        // call the super-constructor to create a 1x1 grid, named "pawnpot", and in x,y in space
+        super("cubepot", x, y, 1, 1, gameStageModel);
     }
 }

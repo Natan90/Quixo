@@ -86,26 +86,15 @@ public class QuixoStageModel extends GameStageModel {
         this.redPot = redPot;
         addContainer(redPot);
     }
+//    public QuixoPawnPot getRedPot() {
+//        return redPot;
+//    }
+//    public void setRedPot(QuixoPawnPot redPot) {
+//        this.redPot = redPot;
+//        addContainer(redPot);
+//    }
 
-    public Pawn[] getBlackPawns() {
-        return blackPawns;
-    }
-    public void setBlackPawns(Pawn[] blackPawns) {
-        this.blackPawns = blackPawns;
-        for(int i=0;i<blackPawns.length;i++) {
-            addElement(blackPawns[i]);
-        }
-    }
 
-    public Pawn[] getRedPawns() {
-        return redPawns;
-    }
-    public void setRedPawns(Pawn[] redPawns) {
-        this.redPawns = redPawns;
-        for(int i=0;i<redPawns.length;i++) {
-            addElement(redPawns[i]);
-        }
-    }
     public Cube[] getCubes() {
         return cubes;
     }
