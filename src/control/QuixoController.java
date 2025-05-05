@@ -86,9 +86,6 @@ public class QuixoController extends Controller {
         if(col > 0 && col < 3 && row > 0 && row < 3)
             return false;
 
-
-
-
         // check if the pawn is still in its pot
         ContainerElement pot = null;
         pot = gameStage.getBoard();
