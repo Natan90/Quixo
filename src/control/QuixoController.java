@@ -20,6 +20,7 @@ public class QuixoController extends Controller {
 
     BufferedReader consoleIn;
     boolean firstPlayer;
+    int[] coordCube = new int[2];
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -33,41 +34,14 @@ public class QuixoController extends Controller {
     public void stageLoop() {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
         update();
-        while (!model.isEndStage()) {
-            chooseTurn(0);
+        while(! model.isEndStage()) {
             playTurn();
+            update();
+            playTurn2();
             endOfTurn();
             update();
         }
         endGame();
-    }
-
-    private void chooseTurn(int state) {
-        // get the new player"
-        Player p = model.getCurrentPlayer();
-        if (p.getType() == Player.COMPUTER) {
-            System.out.println("COMPUTER PLAYS");
-            QuixoDecider decider = new QuixoDecider(model, this);
-            ActionPlayer play = new ActionPlayer(model, this, decider, null);
-            play.start();
-        } else {
-            boolean ok = false;
-            while (!ok) {
-                System.out.print(p.getName() + " > ");
-                try {
-                    String line = consoleIn.readLine();
-                    if (line.length() == 2) {
-                        //if state == 0, analyse and play
-                        ok = analyseAndPlay(line);
-                        //else nouvelle methode
-                    }
-                    if (!ok) {
-                        System.out.println("incorrect instruction. retry !");
-                    }
-                } catch (IOException e) {
-                }
-            }
-        }
     }
 
     private void playTurn() {
@@ -75,13 +49,14 @@ public class QuixoController extends Controller {
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            QuixoDecider decider = new QuixoDecider(model, this);
+            QuixoDecider decider = new QuixoDecider(model,this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-        } else {
+        }
+        else {
             boolean ok = false;
             while (!ok) {
-                System.out.print(p.getName() + " > ");
+                System.out.print(p.getName()+ " > ");
                 try {
                     String line = consoleIn.readLine();
                     if (line.length() == 2) {
@@ -90,8 +65,35 @@ public class QuixoController extends Controller {
                     if (!ok) {
                         System.out.println("incorrect instruction. retry !");
                     }
-                } catch (IOException e) {
                 }
+                catch(IOException e) {}
+            }
+        }
+    }
+
+    public void playTurn2() {
+        // get the new player
+        Player p = model.getCurrentPlayer();
+        if (p.getType() == Player.COMPUTER) {
+            System.out.println("COMPUTER PLAYS");
+            QuixoDecider decider = new QuixoDecider(model,this);
+            ActionPlayer play = new ActionPlayer(model, this, decider, null);
+            play.start();
+        }
+        else {
+            boolean ok = false;
+            while (!ok) {
+                System.out.print(p.getName()+ " > ");
+                try {
+                    String line = consoleIn.readLine();
+                    if (line.length() == 2) {
+                        ok = analyseAndPlay2(line);
+                    }
+                    if (!ok) {
+                        System.out.println("incorrect instruction. retry !");
+                    }
+                }
+                catch(IOException e) {}
             }
         }
     }
@@ -104,25 +106,29 @@ public class QuixoController extends Controller {
         QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
         stageModel.getPlayerName().setText(p.getName());
     }
-
     private boolean analyseAndPlay(String line) {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         // get the ccords in the board
-        int row = (int) (line.charAt(0) - 'A');
-        int col = (int) (line.charAt(1) - '1');
+        int col = (int) (line.charAt(0) - 'A');
+        int row = (int) (line.charAt(1) - '1');
 
         //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
-        if(col > 0 && col < 3 && row > 0 && row < 3)
+        if(col > 0 && col < 4 && row > 0 && row < 4)
             return false;
 
+        System.out.println("row = " + row + " col = " + col + "----------------------------------------------------");
+
         // check if the pawn is still in its pot
-        ContainerElement pot = null;
-        pot = gameStage.getBoard();
+        ContainerElement board = null;
+        board = gameStage.getBoard();
 
 //        if (pot.isEmptyAt(pawnIndex,0)) return false;
 
         //recuperer le cube choisi dans le plateau
-        Cube cube = (Cube) pot.getElement(col, row);
+        Cube cube = (Cube) board.getElement(row, col);
+        coordCube[0] = col;
+        coordCube[1] = row;
+
         //regarder si le joueur n'a pas choisi un cube de l'autre joueur
         if(cube.getFace() == 2 && model.getIdPlayer() == 1 || cube.getFace() == 1 && model.getIdPlayer() == 2) {
             return false;
@@ -147,12 +153,135 @@ public class QuixoController extends Controller {
         //si oui, jouer le coup, afficher le plateau du jeu et mettre fin au tour du joueur
 //        gameStage.getBoard().setValidCells(cubeIndex);
 
-        if (!gameStage.getBoard().canReachCell(row,col)) return false;
+      if (!gameStage.getBoard().canReachCell(row,col)) {
+          return false;
+      }
 
 
         actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
+        return true;
+    }
+    private boolean analyseAndPlay2(String line) {
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        // get the ccords in the board
+        int col = (int) (line.charAt(0) - 'A');
+        int row = (int) (line.charAt(1) - '1');
+
+        //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
+
+
+//        ContainerElement board = null;
+
+        ContainerElement board = gameStage.getBoard();
+
+        ContainerElement pot = null;
+        pot = gameStage.getRedPot();
+
+        //recuperer le cube choisi dans le plateau
+        Cube cube = (Cube) pot.getElement(0, 0);
+        //regarder si le jo ueur n'a pas choisi un cube de l'autre joueur
+//        if(cube.getFace() == 2 && model.getIdPlayer() == 1 || cube.getFace() == 1 && model.getIdPlayer() == 2) {
+//            return false;
+//        }
+        // compute valid cells for the chosen pawn
+//        int cubeIndex = (col+1)*(row+1) ;
+
+        System.out.println("row =" + row + " col = " + col + " -------------------------------------------------------");
+
+        //verifier si on est dans les 9 cubes du milieu
+        if (col > 0 && col < 4 && row > 0 && row < 4) {
+            System.out.println("Dans le carré du milieu");
+            return false;
+        }
+        //verifier si on joue bien sur la ligne ou colonne correspondante
+        if (col != coordCube[0] && row != coordCube[1]) {
+            System.out.println("Dans la verif tableau coup bon");
+            return false;
+        }
+        //verifier si c'est la meme position
+        if (col == coordCube[0] && row == coordCube[1]){
+            System.out.println("Position exacte");
+            return false;
+        }
+        //verifier si c'est la bonne saisie et comprise entre 1 et 3 inclus
+        if((col == coordCube[0] && row > 0 && row < 4) || (row == coordCube[1] && col > 0 && col < 4)){
+            System.out.println("dans le truc de baisé");
+            return false;
+        }
+
+
+        ActionList actions = null;
+
+
+        if(col == coordCube[0]){
+            if (row < coordCube[1]){
+                System.out.println("C'est une colone donc je déplace les ligne ++");
+                for (int i = row; i < coordCube[1]; i++){
+                    Cube cubeBoard = (Cube) board.getElement(i, col);
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, col);
+                    ActionPlayer play = new ActionPlayer(model, this, actions);
+                    play.start();
+                    System.out.println("i = " + i + "...............................................");
+                }
+            }else {
+                System.out.println("C'est une colone donc je déplace les ligne --");
+                for (int i = row; i > coordCube[1]; i--){
+                    Cube cubeBoard = (Cube) board.getElement(i, col);
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, col);
+                    ActionPlayer play = new ActionPlayer(model, this, actions);
+                    play.start();
+                    System.out.println("i = " + i + "...............................................");
+
+                }
+            }
+        }
+
+
+        if(row == coordCube[1]){
+            if (col < coordCube[0]){
+                System.out.println("C'est une ligne donc je déplace les colonnes ++");
+                for (int i = col; i < coordCube[0]; i++){
+                    Cube cubeBoard = (Cube) board.getElement(row, i);
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i + 1);
+                    ActionPlayer play = new ActionPlayer(model, this, actions);
+                    play.start();
+                    System.out.println("i = " + i + "...............................................");
+
+                }
+            }else {
+                System.out.println("C'est une ligne donc je déplace les colonnes --");
+                for (int i = col; i > coordCube[0]; i--){
+                    Cube cubeBoard = (Cube) board.getElement(row, i);
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i- 1 );
+                    ActionPlayer play = new ActionPlayer(model, this, actions);
+                    play.start();
+                    System.out.println("i = " + i + "...............................................");
+
+                }
+            }
+        }
+
+
+        if(model.getIdPlayer() == 1)
+            cube.setFace(1);
+        else
+            cube.setFace(2);
+
+        actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", row, col);
+
+
+        if (!gameStage.getBoard().canReachCell(row,col)) {
+            System.out.println("Dans le reach cell");
+            return false;
+        }
+
+
+        actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
+        ActionPlayer play = new ActionPlayer(model, this, actions);
+        play.start();
+
         return true;
     }
 }

@@ -26,5 +26,8 @@ public class Cube extends GameElement {
     public int getFace(){
         return face;
     }
+    public void setFace(int face){
+        this.face = face;
+    }
 
 }
