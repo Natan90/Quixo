@@ -69,7 +69,6 @@ public class QuixoController extends Controller {
     }
 
     public void endOfTurn() {
-
         model.setNextPlayer();
         // get the new player to display its name
         Player p = model.getCurrentPlayer();
@@ -85,9 +84,6 @@ public class QuixoController extends Controller {
         //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
         if(col > 0 && col < 3 && row > 0 && row < 3)
             return false;
-
-
-
 
         // check if the pawn is still in its pot
         ContainerElement pot = null;
