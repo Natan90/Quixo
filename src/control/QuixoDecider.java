@@ -57,6 +57,7 @@ public class QuixoDecider extends Decider {
                 }
             }
         }
+
         ActionList actions = ActionFactory.generatePutInContainer( model, pawn, "quixoboard", rowDest, colDest);
         actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
 
