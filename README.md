@@ -1,5 +1,7 @@
 # Quixo
 
+### Nous travaillons ensemble via codeWithMe sur Idea, donc il est normal que seul moi fasse les commits sur github puisque nous travaillons tous localement sur ma machine
+
 - **Membres du projet :**
     - Natan BOUCHE
     - Arthur AIGUBELLE
