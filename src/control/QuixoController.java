@@ -35,16 +35,16 @@ public class QuixoController extends Controller {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
         update();
         while(! model.isEndStage()) {
-            playTurn();
+            playTurn(false);
             update();
-            playTurn2();
+            playTurn(true);
             endOfTurn();
             update();
         }
         endGame();
     }
 
-    private void playTurn() {
+    private void playTurn(boolean isSecondeMove) {
         // get the new player
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
@@ -60,34 +60,10 @@ public class QuixoController extends Controller {
                 try {
                     String line = consoleIn.readLine();
                     if (line.length() == 2) {
-                        ok = analyseAndPlay(line);
-                    }
-                    if (!ok) {
-                        System.out.println("incorrect instruction. retry !");
-                    }
-                }
-                catch(IOException e) {}
-            }
-        }
-    }
-
-    public void playTurn2() {
-        // get the new player
-        Player p = model.getCurrentPlayer();
-        if (p.getType() == Player.COMPUTER) {
-            System.out.println("COMPUTER PLAYS");
-            QuixoDecider decider = new QuixoDecider(model,this);
-            ActionPlayer play = new ActionPlayer(model, this, decider, null);
-            play.start();
-        }
-        else {
-            boolean ok = false;
-            while (!ok) {
-                System.out.print(p.getName()+ " > ");
-                try {
-                    String line = consoleIn.readLine();
-                    if (line.length() == 2) {
-                        ok = analyseAndPlay2(line);
+                        if (!isSecondeMove)
+                            ok = analyseAndPlay(line);
+                        else
+                            ok = analyseAndPlay2(line);
                     }
                     if (!ok) {
                         System.out.println("incorrect instruction. retry !");
@@ -130,7 +106,7 @@ public class QuixoController extends Controller {
         coordCube[1] = row;
 
         //regarder si le joueur n'a pas choisi un cube de l'autre joueur
-        if(cube.getFace() == 2 && model.getIdPlayer() == 1 || cube.getFace() == 1 && model.getIdPlayer() == 2) {
+        if((cube.getFace() == 2 && model.getIdPlayer() == 0 )|| (cube.getFace() == 1 && model.getIdPlayer() == 1)) {
             return false;
         }
         // compute valid cells for the chosen pawn
@@ -264,7 +240,7 @@ public class QuixoController extends Controller {
         }
 
 
-        if(model.getIdPlayer() == 1)
+        if(model.getIdPlayer() == 0)
             cube.setFace(1);
         else
             cube.setFace(2);
@@ -284,4 +260,21 @@ public class QuixoController extends Controller {
 
         return true;
     }
+
+
+    public boolean isWinning(ContainerElement board) {
+
+
+        for (int i = 0; i <= 4; i++) {
+            for (int j = 0; j <= 4; j++) {
+                Cube cube = (Cube) board.getElement(i, j);
+
+            }
+        }
+
+
+
+        return false;
+    }
+
 }
