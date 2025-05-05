@@ -44,7 +44,7 @@ public class QuixoStageFactory extends StageElementsFactory {
         // assign the black pot to the game stage model
 
         //create the black pot in 25,0 in the virtual space
-        QuixoPawnPot redPot = new QuixoPawnPot(70,0, stageModel);
+        QuixoPawnPot redPot = new QuixoPawnPot(10,5, stageModel);
         // assign the red pot to the game stage model
         stageModel.setRedPot(redPot);
 
@@ -55,17 +55,6 @@ public class QuixoStageFactory extends StageElementsFactory {
             cubes[i] = new Cube(Cube.CUBE_WHITE, stageModel);
         }
         stageModel.setCubes(cubes);
-
-//        for (int i=0; i<5; i++)
-//            board.addElement(cubes[i], i, 0);
-//        for (int i=0; i<5; i++)
-//            board.addElement(cubes[i+5], i, 1);
-//        for (int i=0; i<5; i++)
-//            board.addElement(cubes[i+10], i, 2);
-//        for (int i=0; i<5; i++)
-//            board.addElement(cubes[i+15], i, 3);
-//        for (int i=0; i<5; i++)
-//            board.addElement(cubes[i+20], i, 4);
 
 
         int index = 0;

@@ -1,4 +1,4 @@
- package control;
+package control;
 
 import boardifier.control.ActionFactory;
 import boardifier.control.ActionPlayer;
@@ -33,7 +33,8 @@ public class QuixoController extends Controller {
     public void stageLoop() {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
         update();
-        while(! model.isEndStage()) {
+        while (!model.isEndStage()) {
+            chooseTurn(0);
             playTurn();
             endOfTurn();
             update();
@@ -41,19 +42,46 @@ public class QuixoController extends Controller {
         endGame();
     }
 
+    private void chooseTurn(int state) {
+        // get the new player"
+        Player p = model.getCurrentPlayer();
+        if (p.getType() == Player.COMPUTER) {
+            System.out.println("COMPUTER PLAYS");
+            QuixoDecider decider = new QuixoDecider(model, this);
+            ActionPlayer play = new ActionPlayer(model, this, decider, null);
+            play.start();
+        } else {
+            boolean ok = false;
+            while (!ok) {
+                System.out.print(p.getName() + " > ");
+                try {
+                    String line = consoleIn.readLine();
+                    if (line.length() == 2) {
+                        //if state == 0, analyse and play
+                        ok = analyseAndPlay(line);
+                        //else nouvelle methode
+                    }
+                    if (!ok) {
+                        System.out.println("incorrect instruction. retry !");
+                    }
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
     private void playTurn() {
         // get the new player
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            QuixoDecider decider = new QuixoDecider(model,this);
+            QuixoDecider decider = new QuixoDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-        }
-        else {
+        } else {
             boolean ok = false;
             while (!ok) {
-                System.out.print(p.getName()+ " > ");
+                System.out.print(p.getName() + " > ");
                 try {
                     String line = consoleIn.readLine();
                     if (line.length() == 2) {
@@ -62,8 +90,8 @@ public class QuixoController extends Controller {
                     if (!ok) {
                         System.out.println("incorrect instruction. retry !");
                     }
+                } catch (IOException e) {
                 }
-                catch(IOException e) {}
             }
         }
     }
@@ -76,11 +104,12 @@ public class QuixoController extends Controller {
         QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
         stageModel.getPlayerName().setText(p.getName());
     }
+
     private boolean analyseAndPlay(String line) {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         // get the ccords in the board
-        int col = (int) (line.charAt(0) - 'A');
-        int row = (int) (line.charAt(1) - '1');
+        int row = (int) (line.charAt(0) - 'A');
+        int col = (int) (line.charAt(1) - '1');
 
         //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
         if(col > 0 && col < 3 && row > 0 && row < 3)
@@ -105,13 +134,12 @@ public class QuixoController extends Controller {
 
 //        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 1, 1);
 //        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
-        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
-        actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 1, 1));
+        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
 
 
 
 
- 
+
 
         //maintenant il faut appeler la méthode pour setValidCells
         //demander un deuxieme coup a l'utilisateur
