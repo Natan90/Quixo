@@ -126,7 +126,6 @@ public class QuixoController extends Controller {
 //        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
         ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
 
-
         //maintenant il faut appeler la méthode pour setValidCells
         //demander un deuxieme coup a l'utilisateur
         //verifier si son coup est valide
