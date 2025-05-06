@@ -4,10 +4,6 @@ import boardifier.model.GameElement;
 import boardifier.view.ConsoleColor;
 import boardifier.view.ElementLook;
 import model.Cube;
-import boardifier.model.GameElement;
-import boardifier.view.ConsoleColor;
-import boardifier.view.ElementLook;
-import model.Pawn;
 
 /**
  * The look of the Pawn is fixed, with a single characters representing the value of the pawn

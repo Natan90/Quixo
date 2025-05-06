@@ -38,8 +38,6 @@ public class QuixoStageModel extends GameStageModel {
     private QuixoPawnPot blackPot;
     private QuixoPawnPot redPot;
     private Cube[] cubes;
-    private Pawn[] blackPawns;
-    private Pawn[] redPawns;
     private TextElement playerName;
     // Uncomment next line if the example with a main container is used. see end of HoleStageFactory and HoleStageView
     //private ContainerElement mainContainer;
@@ -115,7 +113,7 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks() {          //private
+    public void setupCallbacks(ContainerElement board) {
 
         System.out.println("dans setupcallbacks");
 

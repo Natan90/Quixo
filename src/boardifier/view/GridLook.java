@@ -7,6 +7,8 @@ import boardifier.model.ContainerElement;
 public class GridLook extends ContainerLook {
 
     protected int borderWidth;
+    protected final String PURPLE = "\u001B[35m";
+    protected final String RESET = "\u001B[0m";
 
     public GridLook(int rowHeight, int colWidth, ContainerElement containerElement, int depth, int borderWidth) {
         this(rowHeight, colWidth, containerElement,depth, 0 , 0, borderWidth);
@@ -78,53 +80,53 @@ public class GridLook extends ContainerLook {
                 int yy = getCellBottom(i,j)+1; // +1 because border is below of the real position
                 //top-left corner
                 if (y==0) {
-                    if (x==0) shape[innersTop+y][innersLeft+x] = "\u2554"; // draw ╔
-                    else shape[innersTop+y][innersLeft+x] = "\u2566"; // draw ╦
+                    if (x==0) shape[innersTop+y][innersLeft+x] = PURPLE + "\u2554" + RESET; // draw ╔
+                    else shape[innersTop+y][innersLeft+x] = PURPLE + "\u2566" + RESET; // draw ╦
                 }
                 else {
-                    if (x==0) shape[innersTop+y][innersLeft+x] = "\u2560"; // draw ╠
-                    else shape[innersTop+y][innersLeft+x] = "\u256c"; // draw ╬
+                    if (x==0) shape[innersTop+y][innersLeft+x] = PURPLE + "\u2560" + RESET; // draw ╠
+                    else shape[innersTop+y][innersLeft+x] = PURPLE + "\u256c" + RESET; // draw ╬
                 }
 
                 // top-right corner
                 if (y==0) {
-                    if (xx==getGridWidth()) shape[innersTop+y][innersLeft+xx] = "\u2557"; // draw ╗
-                    else shape[ innersTop+y][innersLeft+xx] = "\u2566"; // draw ╦
+                    if (xx==getGridWidth()) shape[innersTop+y][innersLeft+xx] = PURPLE + "\u2557" + RESET; // draw ╗
+                    else shape[ innersTop+y][innersLeft+xx] = PURPLE + "\u2566" + RESET; // draw ╦
                 }
                 else {
-                    if (xx==getGridWidth()) shape[ innersTop+y][innersLeft+xx] = "\u2563"; // draw ╣
-                    else shape[ innersTop+y][innersLeft+xx] = "\u256c"; // draw ╬
+                    if (xx==getGridWidth()) shape[ innersTop+y][innersLeft+xx] = PURPLE + "\u2563" + RESET; // draw ╣
+                    else shape[ innersTop+y][innersLeft+xx] = PURPLE + "\u256c" + RESET; // draw ╬
                 }
 
                 //bottom-left corner
                 if (yy==getGridHeight()) {
-                    if (x==0) shape[ innersTop+yy][innersLeft+x] = "\u255A"; // draw ╚
-                    else shape[ innersTop+yy][innersLeft+x] = "\u2569"; // draw ╩
+                    if (x==0) shape[ innersTop+yy][innersLeft+x] = PURPLE + "\u255A" + RESET; // draw ╚
+                    else shape[ innersTop+yy][innersLeft+x] = PURPLE + "\u2569" + RESET; // draw ╩
                 }
                 else {
-                    if (x==0) shape[ innersTop+yy][innersLeft+x] = "\u2560"; // draw ╠
-                    else shape[ innersTop+yy][innersLeft+x] = "\u256c"; // draw ╬
+                    if (x==0) shape[ innersTop+yy][innersLeft+x] = PURPLE + "\u2560" + RESET; // draw ╠
+                    else shape[ innersTop+yy][innersLeft+x] = PURPLE + "\u256c" + RESET; // draw ╬
                 }
 
                 // bottom-right corner
                 if (yy==getGridHeight()) {
-                    if (xx==getGridWidth()) shape[ innersTop+yy][innersLeft+xx] = "\u255d"; // draw ╝
-                    else shape[ innersTop+yy][innersLeft+xx] = "\u2569"; // draw ╩
+                    if (xx==getGridWidth()) shape[ innersTop+yy][innersLeft+xx] = PURPLE + "\u255d" + RESET; // draw ╝
+                    else shape[ innersTop+yy][innersLeft+xx] = PURPLE + "\u2569" + RESET; // draw ╩
                 }
                 else {
-                    if (xx==getGridWidth()) shape[ innersTop+yy][innersLeft+xx] = "\u2563"; // draw ╣
-                    else shape[ innersTop+yy][innersLeft+xx] = "\u256c"; // draw ╬
+                    if (xx==getGridWidth()) shape[ innersTop+yy][innersLeft+xx] = PURPLE + "\u2563" + RESET; // draw ╣
+                    else shape[ innersTop+yy][innersLeft+xx] = PURPLE + "\u256c" + RESET; // draw ╬
                 }
 
                 // draw top/bottom horizontal lines
                 for (int k = x+1; k < xx; k++) {
-                    shape[ innersTop+y][innersLeft+k] = "\u2550";
-                    shape[ innersTop+yy][innersLeft+k] = "\u2550";
+                    shape[ innersTop+y][innersLeft+k] = PURPLE + "\u2500" + RESET;
+                    shape[ innersTop+yy][innersLeft+k] = PURPLE + "\u2500" + RESET;
                 }
                 // draw left/right vertical lines
                 for (int k = y+1; k < yy; k++) {
-                    shape[innersTop+k][innersLeft+x] = "\u2551";
-                    shape[innersTop+k][innersLeft+xx] = "\u2551";
+                    shape[innersTop+k][innersLeft+x] = PURPLE + "\u2502" + RESET;
+                    shape[innersTop+k][innersLeft+xx] = PURPLE + "\u2502" + RESET;
                 }
             }
         }

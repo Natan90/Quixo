@@ -1,3 +1,3 @@
 cd out/production/Quixo/
-java QuixoConsole < ../../../fichier_test/gagner_ligne.txt
+java QuixoConsole < ../../../fichier_test/gagner_colonne.txt
 cd ../../../
