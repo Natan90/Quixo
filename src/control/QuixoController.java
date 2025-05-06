@@ -3,10 +3,7 @@ package control;
 import boardifier.control.ActionFactory;
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
-import boardifier.model.GameElement;
-import boardifier.model.ContainerElement;
-import boardifier.model.Model;
-import boardifier.model.Player;
+import boardifier.model.*;
 import boardifier.model.action.ActionList;
 import boardifier.view.View;
 import model.Cube;
@@ -22,10 +19,12 @@ public class QuixoController extends Controller {
     boolean firstPlayer;
     int[] coordCube = new int[2];
     ContainerElement board;
+    QuixoStageModel quixoStageModel;
 
     public QuixoController(Model model, View view) {
         super(model, view);
         firstPlayer = true;
+        quixoStageModel = new QuixoStageModel("quixostagemodel", model);
     }
 
     /**
@@ -75,12 +74,9 @@ public class QuixoController extends Controller {
     }
 
     public void endOfTurn() {
-        System.out.println(isWinning(board) + " --------------------------------------");
-        if(isWinning(board)) {
-            model.isEndStage();
-            System.out.println(model.isEndStage() + "endstage -----------------------------------");
-            return;
-        }
+
+
+        quixoStageModel.setupCallbacks();
 
         model.setNextPlayer();
         // get the new player to display its name
@@ -125,6 +121,7 @@ public class QuixoController extends Controller {
 //        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 1, 1);
 //        ActionList actions = ActionFactory.generateRemoveFromContainer(model, cube);
         ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
+
 
         //maintenant il faut appeler la méthode pour setValidCells
         //demander un deuxieme coup a l'utilisateur
@@ -221,6 +218,7 @@ public class QuixoController extends Controller {
 
         if (row == coordCube[1]) {
             if (col < coordCube[0]) {
+
                 System.out.println("C'est une ligne donc je déplace les colonnes ++");
                 for (int i = col; i < coordCube[0]; i++) {
                     Cube cubeBoard = (Cube) board.getElement(row, i);
@@ -230,6 +228,7 @@ public class QuixoController extends Controller {
                     System.out.println("i = " + i + "...............................................");
 
                 }
+
             } else {
                 System.out.println("C'est une ligne donc je déplace les colonnes --");
                 for (int i = col; i > coordCube[0]; i--) {
@@ -265,92 +264,7 @@ public class QuixoController extends Controller {
         return true;
     }
 
-
-    public boolean isWinning(ContainerElement board) {
-        int size = 5;
-        int face = 0;
-        boolean allSame = false;
-
-        // Vérification des lignes
-        for (int i = 0; i < size; i++) {
-            System.out.println("Vérification des lignes");
-            // On récupère la face du premier cube
-            face = ((Cube) board.getElement(i, 0)).getFace();
-            //Si face blanche, on return false directement
-            allSame = true;
-            for (int j = 1; j < size; j++) {
-                if(face == 0){
-                    allSame = false;
-
-                    break;
-                }
-                // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
-                    allSame = false;
-                    break;
-                }
-            }
-            if (allSame) return allSame;
-        }
-
-        // Vérification des colonnes
-        for (int j = 0; j < size; j++) {
-            System.out.println("Vérification des colonnes");
-            // On récupère la face du premier cube
-            face = ((Cube) board.getElement(0, j)).getFace();
-            allSame = true;
-            for (int i = 1; i < size; i++) {
-                if(face == 0){
-                    allSame = false;
-                    break;
-                }
-                // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
-                    allSame = false;
-                    break;
-                }
-            }
-            if (allSame) return allSame;
-        }
-
-        // Diagonale principale (0,0 à 4,4)
-        // On récupère la face du premier cube
-        face = ((Cube) board.getElement(0, 0)).getFace();
-
-        boolean allSameDiag1 = true;
-        for (int i = 1; i < size; i++) {
-            System.out.println("Vérification première diago");
-            if(face == 0){
-                allSameDiag1 = false;
-                break;
-            }
-            // On compare avec les cubes à la suite
-            if (((Cube) board.getElement(i, i)).getFace() != face) {
-                allSameDiag1 = false;
-                break;
-            }
-        }
-        if (allSameDiag1) return allSameDiag1;
-
-        // Diagonale secondaire (0,4 à 4,0)
-        // On récupère la face du premier cube
-        face = ((Cube) board.getElement(0, size - 1)).getFace();
-        boolean allSameDiag2 = true;
-
-        for (int i = 1; i < size; i++) {
-            System.out.println("Vérification deuxième diago");
-            if(face == 0){
-                allSameDiag2 = false;
-                break;
-            }
-            // On compare avec les cubes à la suite
-            if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
-                allSameDiag2 = false;
-                break;
-            }
-        }
-        if(allSameDiag2) return allSameDiag2;
-
-        return false;
-    }
+//    public boolean isWinning(ContainerElement board) {
+//
+//    }
 }

@@ -46,9 +46,7 @@ public class QuixoStageModel extends GameStageModel {
 
     public QuixoStageModel(String name, Model model) {
         super(name, model);
-        blackPawnsToPlay = 4;
-        redPawnsToPlay = 4;
-        setupCallbacks();
+//        setupCallbacks();
     }
 
     //Uncomment this 2 methods if example with a main container is used
@@ -117,83 +115,128 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    private void setupCallbacks() {
-        onPutInContainer( (element, gridDest, rowDest, colDest) -> {
-            // just check when pawns are put in 3x3 board
-            if (gridDest != board) return;
-            Cube c = (Cube) element;
-            if (c.getFace() == Cube.CUBE_WHITE) {
-                //finir logique du jeu
-                //si la face du cube (rond ou croix) complete une ligne de 5 de sa face
-                // on appelle computePartyResult pour mettre fin au jeu
-                //et je pense qu'il n'y aura meme pas besoin de l'appeler puisque le jeu s'arrête directement après
-                //la condition de victoire. Ya pas de point à calculer comme sur The Hole
-            }
-            if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
-                computePartyResult();
-            }
-        });
-    }
+    public void setupCallbacks() {          //private
 
-    private void computePartyResult() {
-        int idWinner = -1;
-        // get the empty cell, which should be in 2D at [0,0], [0,2], [1,1], [2,0] or [2,2]
-        // i.e. or in 1D at index 0, 2, 4, 6 or 8
-        int i = 0;
-        int nbBlack = 0;
-        int nbRed = 0;
-        int countBlack = 0;
-        int countRed = 0;
-        Pawn p = null;
-        int row, col;
-        for (i = 0; i < 9; i+=2) {
-            if (board.isEmptyAt(i / 3, i % 3)) break;
-        }
-        // get the 4 adjacent cells (if they exist) starting by the upper one
-        row = (i / 3) - 1;
-        col = i % 3;
-        for (int j = 0; j < 4; j++) {
-            // skip invalid cells
-            if ((row >= 0) && (row <= 2) && (col >= 0) && (col <= 2)) {
-                p = (Pawn) (board.getElement(row, col));
-                if (p.getColor() == Pawn.PAWN_BLACK) {
-                    nbBlack++;
-//                    countBlack += p.getNumber();
-                } else {
-                    nbRed++;
-//                    countRed += p.getNumber();
+        System.out.println("dans setupcallbacks");
+
+        int size = 5;
+        int face = 0;
+        boolean allSame = false;
+
+        // Vérification des lignes
+        for (int i = 0; i < size; i++) {
+            System.out.println("Vérification des lignes");
+            // On récupère la face du premier cube
+            face = ((Cube) board.getElement(i, 0)).getFace();
+            //Si face blanche, on return false directement
+            allSame = true;
+            for (int j = 1; j < size; j++) {
+                if(face == 0){
+                    allSame = false;
+                    break;
+                }
+                // On compare avec les cubes à la suite
+                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                    allSame = false;
+                    break;
                 }
             }
-            // change row & col to set them at the correct value for the next iteration
-            if ((j==0) || (j==2)) {
-                row++;
-                col--;
-            }
-            else if (j==1) {
-                col += 2;
-            }
+            if (allSame)
+                computePartyResult(face);
         }
 
-        // decide whose winning
-        if (nbBlack < nbRed) {
+        // Vérification des colonnes
+        for (int j = 0; j < size; j++) {
+            System.out.println("Vérification des colonnes");
+            // On récupère la face du premier cube
+            face = ((Cube) board.getElement(0, j)).getFace();
+            allSame = true;
+            for (int i = 1; i < size; i++) {
+                if(face == 0){
+                    allSame = false;
+                    break;
+                }
+                // On compare avec les cubes à la suite
+                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                    allSame = false;
+                    break;
+                }
+            }
+            if (allSame)
+                computePartyResult(face);
+        }
+
+        // Diagonale principale (0,0 à 4,4)
+        // On récupère la face du premier cube
+        face = ((Cube) board.getElement(0, 0)).getFace();
+
+        boolean allSameDiag1 = true;
+        for (int i = 1; i < size; i++) {
+            System.out.println("Vérification première diago");
+            if(face == 0){
+                allSameDiag1 = false;
+                break;
+            }
+            // On compare avec les cubes à la suite
+            if (((Cube) board.getElement(i, i)).getFace() != face) {
+                allSameDiag1 = false;
+                break;
+            }
+        }
+        if (allSameDiag1)
+            computePartyResult(face);
+
+        // Diagonale secondaire (0,4 à 4,0)
+        // On récupère la face du premier cube
+        face = ((Cube) board.getElement(0, size - 1)).getFace();
+        boolean allSameDiag2 = true;
+
+        for (int i = 1; i < size; i++) {
+            System.out.println("Vérification deuxième diago");
+            if(face == 0){
+                allSameDiag2 = false;
+                break;
+            }
+            // On compare avec les cubes à la suite
+            if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
+                allSameDiag2 = false;
+                break;
+            }
+        }
+        if(allSameDiag2)
+            computePartyResult(face);
+
+
+    }
+
+    private void computePartyResult(int face) {
+        int idWinner = -1;
+        if( face == 1 ){
+            System.out.println("Le winner est 1 avec id = 0");
+
             idWinner = 0;
         }
-        else if (nbBlack > nbRed) {
+        if( face == 2 ){
+            System.out.println("Le winner est 2 avec id = 0");
             idWinner = 1;
         }
-        else {
-            if (countBlack < countRed) {
-                idWinner = 0;
-            }
-            else if (countBlack > countRed) {
-                idWinner = 1;
-            }
-        }
-        System.out.println("nb black: "+nbBlack+", nb red: "+nbRed+", count black: "+countBlack+", count red: "+countRed+", winner is player "+idWinner);
         // set the winner
         model.setIdWinner(idWinner);
         // stop de the game
         model.stopStage();
+
+
+//
+//        System.out.println(isWinning(board) + " --------------------------------------");
+//        if(isWinning(board)) {
+////            int idWinner = model.getCurrentPlayer();
+//            model.stopStage();
+//            System.out.println(model.isEndStage() + " stopStage -----------------------------------");
+//
+//            model.isEndStage();
+//            System.out.println(model.isEndStage() + " endstage -----------------------------------");
+//            return;
+//        }
     }
 
     @Override
