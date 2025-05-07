@@ -113,7 +113,7 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks(ContainerElement board, int otherFace) {
+    public void setupCallbacks(ContainerElement board) {
 
         System.out.println("dans setupcallbacks");
 
@@ -134,20 +134,15 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (otherFace != face) {
-                    if (((Cube) board.getElement(i, j)).getFace() != face) {
-                        allSame = false;
-                        break;
-                    }
+                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                    allSame = false;
+                    break;
                 }
 
             }
             if (allSame) {
-                computePartyResult(face);
-                if (face == 1) {
-                    computePartyResult(2);
-                } else if (face == 2) {
-                    computePartyResult(1);
+                if (model.getCurrentPlayer().getType() + 1 != face) {
+                    computePartyResult(face);
                 }
             }
 
@@ -160,87 +155,71 @@ public class QuixoStageModel extends GameStageModel {
             face = ((Cube) board.getElement(0, j)).getFace();
             allSame = true;
             for (int i = 1; i < size; i++) {
-                if(face == 0){
+                if (face == 0) {
                     allSame = false;
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (otherFace != face) {
-                    if (((Cube) board.getElement(i, j)).getFace() != face) {
-                        allSame = false;
-                        break;
-                    }
+                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                    allSame = false;
+                    break;
                 }
 
             }
             if (allSame) {
-                computePartyResult(face);
-                if (face == 1) {
-                    computePartyResult(2);
-                } else if (face == 2) {
-                    computePartyResult(1);
+                if (model.getCurrentPlayer().getType() + 1 != face) {
+                    computePartyResult(face);
                 }
             }
-        }
 
-        // Diagonale principale (0,0 à 4,4)
-        // On récupère la face du premier cube
-        face = ((Cube) board.getElement(0, 0)).getFace();
+            // Diagonale principale (0,0 à 4,4)
+            // On récupère la face du premier cube
+            face = ((Cube) board.getElement(0, 0)).getFace();
 
-        boolean allSameDiag1 = true;
-        for (int i = 1; i < size; i++) {
-            System.out.println("Vérification première diago");
-            if(face == 0){
-                allSameDiag1 = false;
-                break;
-            }
-            // On compare avec les cubes à la suite
-            if (otherFace != face) {
+            boolean allSameDiag1 = true;
+            for (int i = 1; i < size; i++) {
+                System.out.println("Vérification première diago");
+                if (face == 0) {
+                    allSameDiag1 = false;
+                    break;
+                }
+                // On compare avec les cubes à la suite
                 if (((Cube) board.getElement(i, i)).getFace() != face) {
                     allSameDiag1 = false;
                     break;
                 }
             }
-        }
-        if (allSameDiag1) {
-            computePartyResult(face);
-            if (face == 1) {
-                computePartyResult(2);
-            } else if (face == 2) {
-                computePartyResult(1);
+            if (allSameDiag1) {
+                if (model.getCurrentPlayer().getType() + 1 != face) {
+                    computePartyResult(face);
+                }
             }
-        }
 
-        // Diagonale secondaire (0,4 à 4,0)
-        // On récupère la face du premier cube
-        face = ((Cube) board.getElement(0, size - 1)).getFace();
-        boolean allSameDiag2 = true;
+            // Diagonale secondaire (0,4 à 4,0)
+            // On récupère la face du premier cube
+            face = ((Cube) board.getElement(0, size - 1)).getFace();
+            boolean allSameDiag2 = true;
 
-        for (int i = 1; i < size; i++) {
-            System.out.println("Vérification deuxième diago");
-            if(face == 0){
-                allSameDiag2 = false;
-                break;
-            }
-            // On compare avec les cubes à la suite
-            if (otherFace != face) {
+            for (int i = 1; i < size; i++) {
+                System.out.println("Vérification deuxième diago");
+                if (face == 0) {
+                    allSameDiag2 = false;
+                    break;
+                }
+                // On compare avec les cubes à la suite
                 if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
                     allSameDiag2 = false;
                     break;
                 }
+
+            }
+            if (allSameDiag2) {
+                if (model.getCurrentPlayer().getType() + 1 != face) {
+                    computePartyResult(face);
+                }
             }
 
         }
-        if (allSameDiag2) {
-            computePartyResult(face);
-            if (face == 1) {
-                computePartyResult(2);
-            } else if (face == 2) {
-                computePartyResult(1);
-            }
-        }
-
-
     }
 
     private void computePartyResult(int face) {
@@ -263,7 +242,7 @@ public class QuixoStageModel extends GameStageModel {
 //
 //        System.out.println(isWinning(board) + " --------------------------------------");
 //        if(isWinning(board)) {
-////            int idWinner = model.getCurrentPlayer();
+//            int id = model.getCurrentPlayer().getType();
 //            model.stopStage();
 //            System.out.println(model.isEndStage() + " stopStage -----------------------------------");
 //
