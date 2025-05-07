@@ -80,7 +80,7 @@ public class QuixoController extends Controller {
     public void endOfTurn() {
 
 
-        quixoStageModel.setupCallbacks(board);
+        quixoStageModel.setupCallbacks(board, 0);
 
         model.setNextPlayer();
         // get the new player to display its name

@@ -113,7 +113,7 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks(ContainerElement board) {
+    public void setupCallbacks(ContainerElement board, int otherFace) {
 
         System.out.println("dans setupcallbacks");
 
@@ -134,13 +134,23 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
-                    allSame = false;
-                    break;
+                if (otherFace != face) {
+                    if (((Cube) board.getElement(i, j)).getFace() != face) {
+                        allSame = false;
+                        break;
+                    }
+                }
+
+            }
+            if (allSame) {
+                computePartyResult(face);
+                if (face == 1) {
+                    computePartyResult(2);
+                } else if (face == 2) {
+                    computePartyResult(1);
                 }
             }
-            if (allSame)
-                computePartyResult(face);
+
         }
 
         // Vérification des colonnes
@@ -155,13 +165,22 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
-                    allSame = false;
-                    break;
+                if (otherFace != face) {
+                    if (((Cube) board.getElement(i, j)).getFace() != face) {
+                        allSame = false;
+                        break;
+                    }
+                }
+
+            }
+            if (allSame) {
+                computePartyResult(face);
+                if (face == 1) {
+                    computePartyResult(2);
+                } else if (face == 2) {
+                    computePartyResult(1);
                 }
             }
-            if (allSame)
-                computePartyResult(face);
         }
 
         // Diagonale principale (0,0 à 4,4)
@@ -176,13 +195,21 @@ public class QuixoStageModel extends GameStageModel {
                 break;
             }
             // On compare avec les cubes à la suite
-            if (((Cube) board.getElement(i, i)).getFace() != face) {
-                allSameDiag1 = false;
-                break;
+            if (otherFace != face) {
+                if (((Cube) board.getElement(i, i)).getFace() != face) {
+                    allSameDiag1 = false;
+                    break;
+                }
             }
         }
-        if (allSameDiag1)
+        if (allSameDiag1) {
             computePartyResult(face);
+            if (face == 1) {
+                computePartyResult(2);
+            } else if (face == 2) {
+                computePartyResult(1);
+            }
+        }
 
         // Diagonale secondaire (0,4 à 4,0)
         // On récupère la face du premier cube
@@ -196,13 +223,22 @@ public class QuixoStageModel extends GameStageModel {
                 break;
             }
             // On compare avec les cubes à la suite
-            if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
-                allSameDiag2 = false;
-                break;
+            if (otherFace != face) {
+                if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
+                    allSameDiag2 = false;
+                    break;
+                }
+            }
+
+        }
+        if (allSameDiag2) {
+            computePartyResult(face);
+            if (face == 1) {
+                computePartyResult(2);
+            } else if (face == 2) {
+                computePartyResult(1);
             }
         }
-        if(allSameDiag2)
-            computePartyResult(face);
 
 
     }

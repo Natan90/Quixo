@@ -26,36 +26,20 @@ public class QuixoDecider extends Decider {
     @Override
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
-//        QuixoStageModel stage = (QuixoStageModel)model.getGameStage();
-//        QuixoBoard board = stage.getBoard(); // get the board
-//        QuixoPawnPot pot = null; // the pot where to take a pawn
-//        GameElement pawn = null; // the pawn that is moved
-//        int rowDest = 0; // the dest. row in board
-//        int colDest = 0; // the dest. col in board
-//
-////        if (model.getIdPlayer() == Pawn.PAWN_BLACK) {
-//            pot = stage.getBlackPot();
-//        }
-//        else {
-//            pot = stage.getRedPot();
-//        }
-//
-//        for(int i=0;i<4;i++) {
-////            Pawn p = (Pawn)pot.getElement(i,0);
-//            // if there is a pawn in i.
-//            if (p != null) {
-//                // get the valid cells
-////                List<Point> valid = board.computeValidCells(p.getNumber());
-//                if (valid.size() != 0) {
-//                    // choose at random one of the valid cells
-//                    int id = loto.nextInt(valid.size());
-////                    pawn = p;
-//                    rowDest = valid.get(id).y;
-//                    colDest = valid.get(id).x;
-//                    break; // stop the loop
-//                }
-//            }
-//        }
+        QuixoStageModel stage = (QuixoStageModel)model.getGameStage();
+        QuixoBoard board = stage.getBoard(); // get the board
+        QuixoPawnPot pot = null; // the pot where to take a pawn
+        GameElement pawn = null; // the pawn that is moved
+        int rowDest = 0; // the dest. row in board
+        int colDest = 0; // the dest. col in board
+
+        int[] coordCube = new int[2];
+
+        List<Point> valid = board.computeValidCells(true, coordCube, model);
+        //regarder si on ne peut pas aligner 5 cubes
+        // Si non, essayer de creer la plus grande serie de cube possible
+        // Si il n'y a pas de possibilité de faire une ligne de 3,
+
 
         ActionList actions = ActionFactory.generatePutInContainer( model, null, "quixoboard", 0, 0);
         actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
