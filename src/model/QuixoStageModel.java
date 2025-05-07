@@ -118,8 +118,8 @@ public class QuixoStageModel extends GameStageModel {
         System.out.println("dans setupcallbacks");
 
         int size = 5;
-        int face = 0;
-        boolean allSame = false;
+        int face;
+        boolean allSame;
 
         // Vérification des lignes
         for (int i = 0; i < size; i++) {

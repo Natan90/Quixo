@@ -35,7 +35,6 @@ public class QuixoBoard extends ContainerElement {
             for(Point p : valid) {
                 reachableCells[p.y][p.x] = true;
             }
-            System.out.println(Arrays.deepToString(reachableCells));
         }
     }
 
@@ -49,16 +48,19 @@ public class QuixoBoard extends ContainerElement {
         ContainerElement board = gameStage.getBoard();
 
         //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
-
+        int merde=0;
             for (int i = 0; i < size; i++) {
+//                System.out.println("i " + i);
                 for (int j = 0; j < size; j++) {
+                    merde++;
 
-                    cube = (Cube) board.getElement(j, i);
-                    System.out.println(Arrays.toString(coordCube));
+                    System.out.println(merde);
+//                    System.out.println("j " + j);
+                    cube = (Cube) board.getElement(i, j);
 
                     // col = j et row = i
                     //Cas toujours invalide que ce soit dans les 2 moves
-                    if (i > 0 && j < 4  && j > 0 && i < 4 ) {
+                    if (i > 0 && j < 4 && j > 0 && i < 4 ) {
                         System.out.println("Dans le carré du milieu");
                         continue;
                     }
@@ -66,12 +68,9 @@ public class QuixoBoard extends ContainerElement {
                     if (isFirstMove){
 
                         if ((cube.getFace() == 2 && model.getIdPlayer() == 0) || (cube.getFace() == 1 && model.getIdPlayer() == 1)) {
-                            System.out.println("on rentre dedans ");
+                            System.out.println("if de la face avec le player");
                             continue;
                         }
-
-
-
 
                     }else {
 
@@ -92,9 +91,7 @@ public class QuixoBoard extends ContainerElement {
                         }
 
                     }
-                    lst.add(new Point(j, i));
-
-
+                    lst.add(new Point(i, j));
                 }
             }
 

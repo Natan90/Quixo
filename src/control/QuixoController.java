@@ -109,13 +109,14 @@ public class QuixoController extends Controller {
 
         //recuperer le cube choisi dans le plateau
         Cube cube = (Cube) board.getElement(row, col);
+
         coordCube[0] = col;
         coordCube[1] = row;
 
         //regarder si le joueur n'a pas choisi un cube de l'autre joueur
         QuixoBoard board = gameStage.getBoard();
 
-        Point coup = new Point(col, row);
+        Point coup = new Point(row, col);
 
         //Regarder si le coup actuel est dans la liste des bons coups fournie par computeValidCells()
         List<Point> coupsValides = board.computeValidCells(true, coordCube, model);
@@ -124,11 +125,7 @@ public class QuixoController extends Controller {
             return false;
 
 
-
-
         ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
-
-
 
 
         actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
@@ -143,10 +140,7 @@ public class QuixoController extends Controller {
         int col = (int) (line.charAt(0) - 'A');
         int row = (int) (line.charAt(1) - '1');
 
-        Point coup = new Point(col, row);
-
-//        coordCube[0] = col;
-//        coordCube[1] = row;
+        Point coup = new Point(row, col);
 
 
         QuixoBoard board = gameStage.getBoard();
