@@ -3,8 +3,10 @@ package model;
 import boardifier.control.Logger;
 import boardifier.model.GameStageModel;
 import boardifier.model.ContainerElement;
+import boardifier.model.Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.*;
 
@@ -21,22 +23,80 @@ public class QuixoBoard extends ContainerElement {
         super("quixoboard", x, y, 5 , 5, gameStageModel);
     }
 
-    public void setValidCells(int number) {
+    public boolean[][] getReachableCells() {
+        return getReachableCells();
+    }
+
+    public void setValidCells(boolean isFirstMove, int[] coordCube, Model model) {
         Logger.debug("called",this);
         resetReachableCells(false);
-        List<Point> valid = computeValidCells(number);
+        List<Point> valid = computeValidCells(isFirstMove, coordCube, model);
         if (valid != null) {
             for(Point p : valid) {
                 reachableCells[p.y][p.x] = true;
             }
+            System.out.println(Arrays.deepToString(reachableCells));
         }
     }
 
-    public List<Point> computeValidCells(int number) {
+    public List<Point> computeValidCells(boolean isFirstMove, int[] coordCube, Model model) {
+        int size = 5;
         List<Point> lst = new ArrayList<>();
-        Cube c = null;
+        Cube cube = null;
+
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        //recuperer le cube choisi dans le plateau
+        ContainerElement board = gameStage.getBoard();
+
+        //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
+
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+
+                    cube = (Cube) board.getElement(j, i);
+                    System.out.println(Arrays.toString(coordCube));
+
+                    // col = j et row = i
+                    //Cas toujours invalide que ce soit dans les 2 moves
+                    if (i > 0 && j < 4  && j > 0 && i < 4 ) {
+                        System.out.println("Dans le carré du milieu");
+                        continue;
+                    }
+
+                    if (isFirstMove){
+
+                        if ((cube.getFace() == 2 && model.getIdPlayer() == 0) || (cube.getFace() == 1 && model.getIdPlayer() == 1)) {
+                            System.out.println("on rentre dedans ");
+                            continue;
+                        }
 
 
+
+
+                    }else {
+
+                        //verifier si on joue bien sur la ligne ou colonne correspondante
+                        if (j != coordCube[0] && i != coordCube[1]) {
+                            System.out.println("Dans la verif tableau coup bon");
+                            continue;
+                        }
+                        //verifier si c'est la meme position
+                        if (j == coordCube[0] && i == coordCube[1]) {
+                            System.out.println("Position exacte");
+                            continue;
+                        }
+                        //verifier si c'est la bonne saisie et comprise entre 1 et 3 inclus
+                        if ((j == coordCube[0] && i > 0 && i < 4) || (i == coordCube[1] && j > 0 && j < 4)) {
+                            System.out.println("dans le truc de baisé");
+                            continue;
+                        }
+
+                    }
+                    lst.add(new Point(j, i));
+
+
+                }
+            }
 
         return lst;
     }
