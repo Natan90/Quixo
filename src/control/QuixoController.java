@@ -19,6 +19,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.ResultSet;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.ArrayList;
@@ -73,8 +74,11 @@ public class QuixoController extends Controller {
                             ok = analyseAndPlay(line);
                             setColorCoups();
                         }
-                        else
+                        else {
+                            resetColorCoups();
                             ok = analyseAndPlay2(line);
+                        }
+
                     }
                     if (!ok) {
                         System.out.println("incorrect instruction. retry !");
@@ -151,6 +155,18 @@ public class QuixoController extends Controller {
         for (Point p : coupsPossibles) {
             Cube coupsValideColores = (Cube) board.getElement(p.x, p.y);
             coupsValideColores.setJouable();
+        }
+    }
+
+    private void resetColorCoups() {
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        QuixoBoard board = gameStage.getBoard();
+
+        List<Point> coupsPossibles = board.computeValidCells(false, coordCube, model);
+        System.out.println(coupsPossibles.toString());
+        for (Point p : coupsPossibles) {
+            Cube coupsValideColores = (Cube) board.getElement(p.x, p.y);
+            coupsValideColores.resetJouable();
         }
     }
 
