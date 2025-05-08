@@ -149,7 +149,7 @@ public class QuixoController extends Controller {
         List<Point> coupsPossibles = board.computeValidCells(false, coordCube, model);
         System.out.println(coupsPossibles.toString());
         for (Point p : coupsPossibles) {
-            Cube coupsValideColores = (Cube) board.getElement(p.y, p.x);
+            Cube coupsValideColores = (Cube) board.getElement(p.x, p.y);
             coupsValideColores.setJouable();
         }
     }
