@@ -52,7 +52,7 @@ public class QuixoStageFactory extends StageElementsFactory {
         Cube[] cubes = new Cube[25];
 
         for (int i =0; i<25; i++){
-            cubes[i] = new Cube(Cube.CUBE_WHITE, stageModel);
+            cubes[i] = new Cube(Cube.CUBE_WHITE, stageModel, false);
         }
         stageModel.setCubes(cubes);
 

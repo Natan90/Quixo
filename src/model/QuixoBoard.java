@@ -58,6 +58,12 @@ public class QuixoBoard extends ContainerElement {
 //                    System.out.println("j " + j);
                     cube = (Cube) board.getElement(i, j);
 
+                    //On vérifie si le cube est null (utile pour les couleurs quand o enleve le cube du board et qu'on le met dans la poule)
+                    if (cube == null) {
+                        System.out.println("cube = null");
+                        continue;  // Si le cube est nul, passer à la prochaine itération
+                    }
+
                     // col = j et row = i
                     //Cas toujours invalide que ce soit dans les 2 moves
                     if (i > 0 && j < 4 && j > 0 && i < 4 ) {

@@ -5,15 +5,21 @@ import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.model.*;
 import boardifier.model.action.ActionList;
+import boardifier.view.ConsoleColor;
+import boardifier.view.ElementLook;
+import boardifier.view.GameStageView;
 import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
+import view.CubeLook;
+import view.QuixoStageView;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -63,8 +69,10 @@ public class QuixoController extends Controller {
                 try {
                     String line = consoleIn.readLine();
                     if (line.length() == 2) {
-                        if (!isSecondeMove)
+                        if (!isSecondeMove) {
                             ok = analyseAndPlay(line);
+                            setColorCoups();
+                        }
                         else
                             ok = analyseAndPlay2(line);
                     }
@@ -79,8 +87,7 @@ public class QuixoController extends Controller {
 
     public void endOfTurn() {
 
-
-        quixoStageModel.setupCallbacks(board, 0);
+        quixoStageModel.setupCallbacks(board);
 
         model.setNextPlayer();
         // get the new player to display its name
@@ -120,7 +127,7 @@ public class QuixoController extends Controller {
 
         //Regarder si le coup actuel est dans la liste des bons coups fournie par computeValidCells()
         List<Point> coupsValides = board.computeValidCells(true, coordCube, model);
-        System.out.println(coupsValides.toString());
+//        System.out.println(coupsValides.toString());
         if(!coupsValides.contains(coup))
             return false;
 
@@ -133,6 +140,20 @@ public class QuixoController extends Controller {
         play.start();
         return true;
     }
+
+
+    private void setColorCoups() {
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        QuixoBoard board = gameStage.getBoard();
+
+        List<Point> coupsPossibles = board.computeValidCells(false, coordCube, model);
+        System.out.println(coupsPossibles.toString());
+        for (Point p : coupsPossibles) {
+            Cube coupsValideColores = (Cube) board.getElement(p.y, p.x);
+            coupsValideColores.setJouable();
+        }
+    }
+
 
     private boolean analyseAndPlay2(String line) {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
@@ -151,6 +172,9 @@ public class QuixoController extends Controller {
         //recuperer le cube choisi dans le plateau
         Cube cube = (Cube) pot.getElement(0, 0);
 
+
+
+
         if (!gameStage.getBoard().canReachCell(row, col)) {
             System.out.println("Dans le reach cell");
             return false;
@@ -159,7 +183,6 @@ public class QuixoController extends Controller {
         //Regarder si le coup actuel est dans la liste des bons coups fournie par computeValidCells()
         List<Point> coupsValides = board.computeValidCells(false, coordCube, model);
         System.out.println(coupsValides.toString());
-
         if(!coupsValides.contains(coup))
             return false;
 
