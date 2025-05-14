@@ -58,8 +58,6 @@ public class QuixoController extends Controller {
     private void playTurn(boolean isSecondeMove) {
         // get the new player
         Player p = model.getCurrentPlayer();
-        System.out.println(p.getType());
-        System.out.println(p.getName());
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             QuixoDecider decider = new QuixoDecider(model, this);
