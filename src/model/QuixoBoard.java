@@ -48,33 +48,31 @@ public class QuixoBoard extends ContainerElement {
         ContainerElement board = gameStage.getBoard();
 
         //verifier que l'utilisateur a bien choisi une case sur l'exterieur du plateau
-        int merde=0;
+
             for (int i = 0; i < size; i++) {
 //                System.out.println("i " + i);
                 for (int j = 0; j < size; j++) {
-                    merde++;
 
-                    System.out.println(merde);
 //                    System.out.println("j " + j);
                     cube = (Cube) board.getElement(i, j);
 
                     //On vérifie si le cube est null (utile pour les couleurs quand o enleve le cube du board et qu'on le met dans la poule)
                     if (cube == null) {
-                        System.out.println("cube = null");
+//                        System.out.println("cube = null");
                         continue;  // Si le cube est nul, passer à la prochaine itération
                     }
 
                     // col = j et row = i
                     //Cas toujours invalide que ce soit dans les 2 moves
                     if (i > 0 && j < 4 && j > 0 && i < 4 ) {
-                        System.out.println("Dans le carré du milieu");
+//                        System.out.println("Dans le carré du milieu");
                         continue;
                     }
 
                     if (isFirstMove){
 
                         if ((cube.getFace() == 2 && model.getIdPlayer() == 0) || (cube.getFace() == 1 && model.getIdPlayer() == 1)) {
-                            System.out.println("if de la face avec le player");
+//                            System.out.println("if de la face avec le player");
                             continue;
                         }
 
@@ -82,17 +80,17 @@ public class QuixoBoard extends ContainerElement {
 
                         //verifier si on joue bien sur la ligne ou colonne correspondante
                         if (j != coordCube[0] && i != coordCube[1]) {
-                            System.out.println("Dans la verif tableau coup bon");
+//                            System.out.println("Dans la verif tableau coup bon");
                             continue;
                         }
                         //verifier si c'est la meme position
                         if (j == coordCube[0] && i == coordCube[1]) {
-                            System.out.println("Position exacte");
+//                            System.out.println("Position exacte");
                             continue;
                         }
                         //verifier si c'est la bonne saisie et comprise entre 1 et 3 inclus
                         if ((j == coordCube[0] && i > 0 && i < 4) || (i == coordCube[1] && j > 0 && j < 4)) {
-                            System.out.println("dans le truc de baisé");
+//                            System.out.println("dans le truc de baisé");
                             continue;
                         }
 

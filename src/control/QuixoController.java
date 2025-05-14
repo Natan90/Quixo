@@ -58,6 +58,8 @@ public class QuixoController extends Controller {
     private void playTurn(boolean isSecondeMove) {
         // get the new player
         Player p = model.getCurrentPlayer();
+        System.out.println(p.getType());
+        System.out.println(p.getName());
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             QuixoDecider decider = new QuixoDecider(model, this);
@@ -72,10 +74,10 @@ public class QuixoController extends Controller {
                     if (line.length() == 2) {
                         if (!isSecondeMove) {
                             ok = analyseAndPlay(line);
-                            setColorCoups();
+                            setColorCoups(true);
                         }
                         else {
-                            resetColorCoups();
+                            setColorCoups(false);
                             ok = analyseAndPlay2(line);
                         }
 
@@ -107,7 +109,7 @@ public class QuixoController extends Controller {
         int col = (int) (line.charAt(0) - 'A');
         int row = (int) (line.charAt(1) - '1');
 
-        System.out.println("row = " + row + " col = " + col + "----------------------------------------------------");
+//        System.out.println("row = " + row + " col = " + col + "----------------------------------------------------");
 
         // check if the pawn is still in its pot
         board = null;
@@ -146,7 +148,7 @@ public class QuixoController extends Controller {
     }
 
 
-    private void setColorCoups() {
+    private void setColorCoups(boolean setJouable) {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         QuixoBoard board = gameStage.getBoard();
 
@@ -154,19 +156,10 @@ public class QuixoController extends Controller {
         System.out.println(coupsPossibles.toString());
         for (Point p : coupsPossibles) {
             Cube coupsValideColores = (Cube) board.getElement(p.x, p.y);
-            coupsValideColores.setJouable();
-        }
-    }
-
-    private void resetColorCoups() {
-        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
-        QuixoBoard board = gameStage.getBoard();
-
-        List<Point> coupsPossibles = board.computeValidCells(false, coordCube, model);
-        System.out.println(coupsPossibles.toString());
-        for (Point p : coupsPossibles) {
-            Cube coupsValideColores = (Cube) board.getElement(p.x, p.y);
-            coupsValideColores.resetJouable();
+            if (setJouable)
+                coupsValideColores.setJouable();
+            else
+                coupsValideColores.resetJouable();
         }
     }
 
@@ -192,7 +185,7 @@ public class QuixoController extends Controller {
 
 
         if (!gameStage.getBoard().canReachCell(row, col)) {
-            System.out.println("Dans le reach cell");
+//            System.out.println("Dans le reach cell");
             return false;
         }
 
@@ -208,22 +201,22 @@ public class QuixoController extends Controller {
 
         if (col == coordCube[0]) {
             if (row < coordCube[1]) {
-                System.out.println("C'est une colone donc je déplace les ligne ++");
+//                System.out.println("C'est une colone donc je déplace les ligne ++");
                 for (int i = row; i < coordCube[1]; i++) {
                     Cube cubeBoard = (Cube) board.getElement(i, col);
                     actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, col);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-                    System.out.println("i = " + i + "...............................................");
+//                    System.out.println("i = " + i + "...............................................");
                 }
             } else {
-                System.out.println("C'est une colone donc je déplace les ligne --");
+//                System.out.println("C'est une colone donc je déplace les ligne --");
                 for (int i = row; i > coordCube[1]; i--) {
                     Cube cubeBoard = (Cube) board.getElement(i, col);
                     actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, col);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-                    System.out.println("i = " + i + "...............................................");
+//                    System.out.println("i = " + i + "...............................................");
 
                 }
             }
@@ -233,24 +226,24 @@ public class QuixoController extends Controller {
         if (row == coordCube[1]) {
             if (col < coordCube[0]) {
 
-                System.out.println("C'est une ligne donc je déplace les colonnes ++");
+//                System.out.println("C'est une ligne donc je déplace les colonnes ++");
                 for (int i = col; i < coordCube[0]; i++) {
                     Cube cubeBoard = (Cube) board.getElement(row, i);
                     actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i + 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-                    System.out.println("i = " + i + "...............................................");
+//                    System.out.println("i = " + i + "...............................................");
 
                 }
 
             } else {
-                System.out.println("C'est une ligne donc je déplace les colonnes --");
+//                System.out.println("C'est une ligne donc je déplace les colonnes --");
                 for (int i = col; i > coordCube[0]; i--) {
                     Cube cubeBoard = (Cube) board.getElement(row, i);
                     actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i - 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-                    System.out.println("i = " + i + "...............................................");
+//                    System.out.println("i = " + i + "...............................................");
 
                 }
             }

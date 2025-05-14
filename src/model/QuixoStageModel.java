@@ -115,7 +115,7 @@ public class QuixoStageModel extends GameStageModel {
 
     public void setupCallbacks(ContainerElement board) {
 
-        System.out.println("dans setupcallbacks");
+//        System.out.println("dans setupcallbacks");
 
         int size = 5;
         int face;
@@ -123,7 +123,7 @@ public class QuixoStageModel extends GameStageModel {
 
         // Vérification des lignes
         for (int i = 0; i < size; i++) {
-            System.out.println("Vérification des lignes");
+//            System.out.println("Vérification des lignes");
             // On récupère la face du premier cube
             face = ((Cube) board.getElement(i, 0)).getFace();
             //Si face blanche, on return false directement
@@ -150,7 +150,7 @@ public class QuixoStageModel extends GameStageModel {
 
         // Vérification des colonnes
         for (int j = 0; j < size; j++) {
-            System.out.println("Vérification des colonnes");
+//            System.out.println("Vérification des colonnes");
             // On récupère la face du premier cube
             face = ((Cube) board.getElement(0, j)).getFace();
             allSame = true;
@@ -178,7 +178,7 @@ public class QuixoStageModel extends GameStageModel {
 
             boolean allSameDiag1 = true;
             for (int i = 1; i < size; i++) {
-                System.out.println("Vérification première diago");
+//                System.out.println("Vérification première diago");
                 if (face == 0) {
                     allSameDiag1 = false;
                     break;
@@ -200,8 +200,8 @@ public class QuixoStageModel extends GameStageModel {
             face = ((Cube) board.getElement(0, size - 1)).getFace();
             boolean allSameDiag2 = true;
 
-            for (int i = 1; i < size; i++) {
-                System.out.println("Vérification deuxième diago");
+            for (int i = size; i > 1; i--) {
+//                System.out.println("Vérification deuxième diago");
                 if (face == 0) {
                     allSameDiag2 = false;
                     break;
@@ -239,17 +239,6 @@ public class QuixoStageModel extends GameStageModel {
         model.stopStage();
 
 
-//
-//        System.out.println(isWinning(board) + " --------------------------------------");
-//        if(isWinning(board)) {
-//            int id = model.getCurrentPlayer().getType();
-//            model.stopStage();
-//            System.out.println(model.isEndStage() + " stopStage -----------------------------------");
-//
-//            model.isEndStage();
-//            System.out.println(model.isEndStage() + " endstage -----------------------------------");
-//            return;
-//        }
     }
 
     @Override

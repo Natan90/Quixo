@@ -17,10 +17,8 @@ public class CubeLook extends ElementLook {
 
     public void render() {
         Cube cube = (Cube)element;
-        System.out.println("render() appelé pour " + cube + " jouable=" + cube.isJouable());
 
         if (cube.isJouable()) {
-            System.out.println("dans isJouable");
             if (cube.getFace() == 0)
                 shape[0][0] = ConsoleColor.BLACK + ConsoleColor.GREEN_BACKGROUND + " " + ConsoleColor.RESET;
             else if (cube.getFace() == 1)
@@ -28,7 +26,6 @@ public class CubeLook extends ElementLook {
             else if (cube.getFace() == 2)
                 shape[0][0] = ConsoleColor.BLACK + ConsoleColor.GREEN_BACKGROUND + "O" + ConsoleColor.RESET;
         } else {
-            System.out.println("dans else");
             if (cube.getFace() == 0)
                 shape[0][0] = ConsoleColor.BLACK + ConsoleColor.WHITE_BACKGROUND + " " + ConsoleColor.RESET;
             else if (cube.getFace() == 1)
