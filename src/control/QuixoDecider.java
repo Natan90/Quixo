@@ -27,6 +27,7 @@ public class QuixoDecider extends Decider {
         super(model, control);
     }
 
+    int max;
     QuixoBoard board;
 
     @Override
@@ -59,7 +60,31 @@ public class QuixoDecider extends Decider {
         System.out.println(alignementsCurrentPlayer);
 
         List<Point> coordMaxInList = new ArrayList<>(searchMax(alignementsOpponent));
-        System.out.println(coordMaxInList);
+        System.out.println("coordMaxInList : "+coordMaxInList);
+        System.out.println("max : "+max);
+
+        List<Point> move = new ArrayList<>();
+
+        if(max <= 2 || coordMaxInList.isEmpty()){
+            // jouer un autre coup interessant
+            for(int i = 0; i<valid.size(); i++){
+                // recuperer la face de chaque cube de la liste
+                int currentFace = ((Cube) board.getElement((int) valid.get(i).getX(), (int) valid.get(i).getY())).getFace();
+
+                // vérifier si elle est blanche
+                if(currentFace == 0)
+                    // si oui, on l'ajoute à la liste des moves car on considère cette case intéressante
+                    move.add(valid.get(i));
+            }
+        }
+
+        //bon là j'ai pris le premier elem de la liste c'est pour le test
+        Cube cubeChoisi = ((Cube) board.getElement((int) move.getFirst().getX(), (int) move.getFirst().getY()));
+        int[] coordCubeChoisi = {(int) cubeChoisi.getX(), (int) cubeChoisi.getY()};
+
+
+        List<Point> firstMove = new ArrayList<>(board.computeValidCells(false, coordCubeChoisi, model));
+        System.out.println("firstMove : " + firstMove.toString());
 
 
 
@@ -69,14 +94,10 @@ public class QuixoDecider extends Decider {
         // Si aucune option intéressante, prioriser les coins ou les cases blanches
 
 
+        System.out.println("liste move interessants et jouables : " + move);
+        System.out.println("Cube choisi : " + (int) move.getFirst().getX() + " "+ (int) move.getFirst().getY());
 
-
-
-
-
-
-
-        ActionList actions = ActionFactory.generatePutInContainer( model, null, "quixoboard", 0, 0);
+        ActionList actions = ActionFactory.generatePutInContainer( model, cubeChoisi, "cubepot", 0, 0);
         actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
 
         return actions;
@@ -127,30 +148,30 @@ public class QuixoDecider extends Decider {
 
 
         // Diagonales de (0,0) à (4,4)
-        int j = 4;
-        for (int i = 0; i < size; i++) {
+        int j = 0;
+        for (int i = size - 1; i > 1; i++) {
             int compteur = 0;
             currentFace = ((Cube) board.getElement(i, j)).getFace();
 
             if (face == currentFace) {
                 compteur++;
             }
-            j--;
+            j++;
 
-            if(i == size-1)
+            if(i == 1)
                 diagonales.add(compteur);
         }
 
         // Diagonale secondaire de (0,4) à (4,0)
 
         j = 0;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size ; i++) {
             int compteur = 0;
-                currentFace = ((Cube) board.getElement(i, j)).getFace();
-                if (face == currentFace) {
-                    compteur++;
-                }
-                j++;
+            currentFace = ((Cube) board.getElement(i, j)).getFace();
+            if (face == currentFace) {
+                compteur++;
+            }
+            j++;
 
             if(i == size-1)
                 diagonales.add(compteur);
@@ -168,7 +189,7 @@ public class QuixoDecider extends Decider {
     public List<Point> searchMax(List<List<Integer>> liste){
 
         List<Point> coordMax = new ArrayList<>();
-        int max = 0;
+        max = 0;
 
 
         for (int i = 0; i < liste.size(); i++) {
@@ -190,4 +211,21 @@ public class QuixoDecider extends Decider {
 
         return coordMax;
     }
+    // les param rentrés sont les coordonnées du coup interessant (donc le deuxieme coup, la finalité)
+    // ce qu'on veut faire c'est de renvoyer la liste des coordonées du premier coup
+    public List<Point> getCoordPremierCoup(int x, int y){
+        List<int[][]> coordPremierCoup = new ArrayList<>();
+        int newX = 0, newY =0;
+        int[][] coord = new int[1][1];
+
+        List<Point> valid = board.computeValidCells(false, new int[]{x, y}, model);
+
+
+
+        return valid;
+    }
+//    public List<Point> getBestCubes(){
+//
+//
+//    }
 }
