@@ -149,9 +149,9 @@ public class QuixoDecider extends Decider {
 
         // Diagonales de (0,0) à (4,4)
         int j = 0;
-        for (int i = size - 1; i > 1; i++) {
+        for (int i = 0; i < size; i++) {
             int compteur = 0;
-            currentFace = ((Cube) board.getElement(i, j)).getFace();
+            currentFace = ((Cube) board.getElement(i, i)).getFace();
 
             if (face == currentFace) {
                 compteur++;
@@ -165,9 +165,11 @@ public class QuixoDecider extends Decider {
         // Diagonale secondaire de (0,4) à (4,0)
 
         j = 0;
-        for (int i = 0; i < size ; i++) {
+        for (int i = size - 1; i >= 0 ; i--) {
+            System.out.println("i " + i);
+            System.out.println("j " + j);
             int compteur = 0;
-            currentFace = ((Cube) board.getElement(i, j)).getFace();
+            currentFace = ((Cube) board.getElement(j, i)).getFace();
             if (face == currentFace) {
                 compteur++;
             }
@@ -224,8 +226,21 @@ public class QuixoDecider extends Decider {
 
         return valid;
     }
-//    public List<Point> getBestCubes(){
-//
-//
-//    }
+
+    // méthode qui retourne les coordonnées des positions pour compléter les lignes de 5
+    public List<Point> getBestCubes(List<Point> coordMaxInList){
+        List<Point> bestCoord = new ArrayList<>();
+        for(int i = 0; i<coordMaxInList.size(); i++){
+            int x = (int) coordMaxInList.get(i).getX();
+            if (x == 0){
+                for (int j = 0; j<5; j++){
+
+                }
+            }
+        }
+
+
+
+        return bestCoord;
+    }
 }
