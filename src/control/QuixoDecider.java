@@ -86,6 +86,8 @@ public class QuixoDecider extends Decider {
         List<Point> firstMove = new ArrayList<>(board.computeValidCells(false, coordCubeChoisi, model));
         System.out.println("firstMove : " + firstMove.toString());
 
+        List<Point> test = getBestCubes(coordMaxInList);
+
 
 
         //stratégie en deux temps
@@ -146,38 +148,30 @@ public class QuixoDecider extends Decider {
             colonnes.add(compteur);
         }
 
-
-        // Diagonales de (0,0) à (4,4)
-        int j = 0;
+        // Diagonale principale de (0,0) à (4,4)
+        int compteur = 0;
         for (int i = 0; i < size; i++) {
-            int compteur = 0;
             currentFace = ((Cube) board.getElement(i, i)).getFace();
-
             if (face == currentFace) {
                 compteur++;
             }
-            j++;
-
-            if(i == 1)
+            if (i == size - 1)
                 diagonales.add(compteur);
         }
+
 
         // Diagonale secondaire de (0,4) à (4,0)
-
-        j = 0;
-        for (int i = size - 1; i >= 0 ; i--) {
-            System.out.println("i " + i);
-            System.out.println("j " + j);
-            int compteur = 0;
-            currentFace = ((Cube) board.getElement(j, i)).getFace();
+        compteur = 0;
+        for (int i = 0; i < size; i++) {
+            currentFace = ((Cube) board.getElement(i, size - 1 - i)).getFace();
             if (face == currentFace) {
                 compteur++;
             }
-            j++;
 
-            if(i == size-1)
+            if (i == size - 1)
                 diagonales.add(compteur);
         }
+
 
 
         alignements.add(lignes);
@@ -229,18 +223,23 @@ public class QuixoDecider extends Decider {
 
     // méthode qui retourne les coordonnées des positions pour compléter les lignes de 5
     public List<Point> getBestCubes(List<Point> coordMaxInList){
-        List<Point> bestCoord = new ArrayList<>();
+        List<Point> caseObjectif = new ArrayList<>();
         for(int i = 0; i<coordMaxInList.size(); i++){
             int x = (int) coordMaxInList.get(i).getX();
+            int y = (int) coordMaxInList.get(i).getY();
             if (x == 0){
                 for (int j = 0; j<5; j++){
-
+                    int currentFace = ((Cube) board.getElement(4, j)).getFace();
+//                    System.out.println("model.getCurrentPlayer().getType() : "+model.getCurrentPlayer().get);
+                    Player p = model.getIdPlayer();
+                    System.out.println("currentFace : " + currentFace);
+                    if(currentFace != model.getCurrentPlayer().getType()-1 || currentFace == 0){
+                        caseObjectif.add(new Point(j, y));
+                    }
                 }
             }
         }
-
-
-
-        return bestCoord;
+        System.out.println("case objectif : " + caseObjectif);
+        return caseObjectif;
     }
 }
