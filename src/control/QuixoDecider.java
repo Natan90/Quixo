@@ -106,6 +106,34 @@ public class QuixoDecider extends Decider {
         return actions;
     }
 
+    public ActionList play1() {
+        QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
+        board = stage.getBoard(); // get the board
+
+
+        Cube cube = (Cube) board.getElement(0, 0);
+
+        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
+        actions.setDoEndOfTurn(true);
+
+        return actions;
+    }
+
+    public ActionList play2() {
+        QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
+        board = stage.getBoard(); // get the board
+
+
+        Cube cube = (Cube) board.getElement(0, 0);
+
+        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", 0, 0);
+        actions.setDoEndOfTurn(true);
+
+        return actions;
+    }
+
+
+
     public boolean opponentIsWinning() {
         return false;
 

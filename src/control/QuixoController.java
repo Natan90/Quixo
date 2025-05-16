@@ -61,8 +61,10 @@ public class QuixoController extends Controller {
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             QuixoDecider decider = new QuixoDecider(model, this);
-            ActionPlayer play = new ActionPlayer(model, this, decider, null);
+            ActionPlayer play = new ActionPlayer(model, this, decider, decider.play1());
             play.start();
+            ActionPlayer play2 = new ActionPlayer(model, this, decider, decider.play2());
+            play2.start();
         } else {
             boolean ok = false;
             while (!ok) {
