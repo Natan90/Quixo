@@ -34,7 +34,7 @@ public class QuixoDecider extends Decider {
     @Override
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
-        QuixoStageModel stage = (QuixoStageModel)model.getGameStage();
+        QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
         board = stage.getBoard(); // get the board
         ContainerElement pot = null; // the pot where to take a pawn
         pot = stage.getRedPot();
@@ -45,7 +45,7 @@ public class QuixoDecider extends Decider {
         int[] coordCube = new int[2];
 
         // Liste des coins. Si aucun coup n'est interessant à jouer, le bot jouera dans les coins
-        List<Point> coins = List.of(new Point(0, 0), new Point(0,4), new Point(4, 0), new Point(4, 4));
+        List<Point> coins = List.of(new Point(0, 0), new Point(0, 4), new Point(4, 0), new Point(4, 4));
         System.out.println("coins : " + coins.toString());
 
         List<Point> valid = board.computeValidCells(true, coordCube, model);
@@ -61,19 +61,19 @@ public class QuixoDecider extends Decider {
         System.out.println(alignementsCurrentPlayer);
 
         List<Point> coordMaxInList = new ArrayList<>(searchMax(alignementsOpponent));
-        System.out.println("coordMaxInList : "+coordMaxInList);
-        System.out.println("max : "+max);
+        System.out.println("coordMaxInList : " + coordMaxInList);
+        System.out.println("max : " + max);
 
         List<Point> move = new ArrayList<>();
 
-        if(max <= 2 || coordMaxInList.isEmpty()){
+        if (max <= 2 || coordMaxInList.isEmpty()) {
             // jouer un autre coup interessant
-            for(int i = 0; i<valid.size(); i++){
+            for (int i = 0; i < valid.size(); i++) {
                 // recuperer la face de chaque cube de la liste
                 int currentFace = ((Cube) board.getElement((int) valid.get(i).getX(), (int) valid.get(i).getY())).getFace();
 
                 // vérifier si elle est blanche
-                if(currentFace == 0)
+                if (currentFace == 0)
                     // si oui, on l'ajoute à la liste des moves car on considère cette case intéressante
                     move.add(valid.get(i));
             }
@@ -91,7 +91,6 @@ public class QuixoDecider extends Decider {
         List<Point> test = getBestCubes(coordMaxInList);
 
 
-
         //stratégie en deux temps
         // Si la liste adverse contient de gros alignements on va essayer de bloquer (à partir de 2 ou 3)
         // Sinon, on va essayer de compléter nos series de lignes
@@ -99,14 +98,15 @@ public class QuixoDecider extends Decider {
 
 
         System.out.println("liste move interessants et jouables : " + move);
-        System.out.println("Cube choisi : " + (int) move.get(0).getX() + " "+ (int) move.get(0).getY());
+        System.out.println("Cube choisi : " + (int) move.get(0).getX() + " " + (int) move.get(0).getY());
 
-        ActionList actions = ActionFactory.generatePutInContainer( model, cubeChoisi, "cubepot", 0, 0);
+        ActionList actions = ActionFactory.generatePutInContainer(model, cubeChoisi, "cubepot", 0, 0);
         actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
 
         return actions;
     }
-    public boolean opponentIsWinning(){
+
+    public boolean opponentIsWinning() {
         return false;
 
     }
@@ -132,7 +132,7 @@ public class QuixoDecider extends Decider {
             for (int j = 0; j < size; j++) {
                 currentFace = ((Cube) board.getElement(i, j)).getFace();
 
-                if(face == currentFace)
+                if (face == currentFace)
                     compteur++;
 
             }
@@ -144,7 +144,7 @@ public class QuixoDecider extends Decider {
             for (int j = 0; j < size; j++) {
                 currentFace = ((Cube) board.getElement(j, i)).getFace();
 
-                if(face == currentFace)
+                if (face == currentFace)
                     compteur++;
             }
             colonnes.add(compteur);
@@ -175,7 +175,6 @@ public class QuixoDecider extends Decider {
         }
 
 
-
         alignements.add(lignes);
         alignements.add(colonnes);
         alignements.add(diagonales);
@@ -184,7 +183,7 @@ public class QuixoDecider extends Decider {
 
     }
 
-    public List<Point> searchMax(List<List<Integer>> liste){
+    public List<Point> searchMax(List<List<Integer>> liste) {
 
         List<Point> coordMax = new ArrayList<>();
         max = 0;
@@ -198,8 +197,7 @@ public class QuixoDecider extends Decider {
                     max = elem;
                     coordMax.clear();
                     coordMax.add(new Point(i, j));
-                }
-                else if (elem == max) {
+                } else if (elem == max) {
                     coordMax.add(new Point(i, j));
                 }
 
@@ -209,52 +207,73 @@ public class QuixoDecider extends Decider {
 
         return coordMax;
     }
+
     // les param rentrés sont les coordonnées du coup interessant (donc le deuxieme coup, la finalité)
     // ce qu'on veut faire c'est de renvoyer la liste des coordonées du premier coup
-    public List<Point> getCoordPremierCoup(int x, int y){
+    public List<Point> getCoordPremierCoup(int x, int y) {
         List<int[][]> coordPremierCoup = new ArrayList<>();
-        int newX = 0, newY =0;
+        int newX = 0, newY = 0;
         int[][] coord = new int[1][1];
 
         List<Point> valid = board.computeValidCells(false, new int[]{x, y}, model);
-
 
 
         return valid;
     }
 
     // méthode qui retourne les coordonnées des positions pour compléter les lignes de 5
-    public List<Point> getBestCubes(List<Point> coordMaxInList){
+    public List<Point> getBestCubes(List<Point> coordMaxInList) {
         List<Point> caseObjectif = new ArrayList<>();
-        for(int i = 0; i<coordMaxInList.size(); i++){
+        int currentFace;
+
+        for (int i = 0; i < coordMaxInList.size(); i++) {
             int x = (int) coordMaxInList.get(i).getX();
             int y = (int) coordMaxInList.get(i).getY();
-            if (x == 0){
-                for (int j = 0; j<5; j++){
-                    int currentFace = ((Cube) board.getElement(4, j)).getFace();
-//                    System.out.println("model.getCurrentPlayer().getType() : "+model.getCurrentPlayer().get);
 
-                    // Je pense que ça vérifie si la face correspond au type du joueur
-                    // Car le model.getPlayers est la liste des deux joueurs, avec le joueur1 en premier donc dans ce cas l'humain
-                    // Et on vérifie donc à chaque fois à qui appartient le face
-                    // La face X = 1 donc on veut le premier joueur -> get(currentFace - 1) -> get(0), donc on obtient bien le premier joueur
-                    // Avec O = 2, on a donc get(1) qui donne le second joueur
-                    // Je pense que ça pourrait marcher comme ça
-                    if (currentFace == 0)
-                        System.out.println("Le cube est blanc");
-                    else {
-                        Player joueur = model.getPlayers().get(currentFace - 1);
-                        System.out.println("Le cube est avec le joueur : " + joueur.getName());
+            switch (x){
+                //Pour vérifier les lignes
+                case 0:
+                    for (int j = 0; j < 5; j++) {
+//                        System.out.println("dans ligne");
+                        cubeDetection(y, j, caseObjectif);
                     }
+                    continue;
+                    //Pour vérifier les colonnes
 
-                    System.out.println("currentFace : " + currentFace);
-                    if(currentFace != model.getCurrentPlayer().getType()-1 || currentFace == 0){
-                        caseObjectif.add(new Point(j, y));
-                    }
-                }
-            }
+                case 1:
+//                     System.out.println("dans colonnes");
+                         for (int j = 0; j < 5; j++) {
+                             cubeDetection(j, y, caseObjectif);
+                         }
+                    continue;
+                    //Pour vérifier les diagos
+
+                case 2:
+                    if (y == 0) {
+//                        System.out.println("dans diagonales1");
+                        for (int j = 0; j < 5; j++) {
+                            cubeDetection(j, j, caseObjectif);
+                        }
+                    } else {
+//                        System.out.println("dans diagonales2");
+                        for (int j = 0; j < 5; j++) {
+                            cubeDetection(5 - 1 - j, j, caseObjectif);
+                       }
+                  }
+             }
         }
         System.out.println("case objectif : " + caseObjectif);
         return caseObjectif;
     }
+
+
+    private void cubeDetection(int i, int j, List<Point> caseObjectif) {
+        Cube cube = (Cube) board.getElement(i, j);
+        int currentFace = cube.getFace();
+
+        if (currentFace == 0 || currentFace != model.getCurrentPlayer().getType() - 1) {
+            caseObjectif.add(new Point(j, i));
+        }
+    }
+
 }
