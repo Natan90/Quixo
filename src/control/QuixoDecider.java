@@ -89,6 +89,7 @@ public class QuixoDecider extends Decider {
         System.out.println("firstMove : " + firstMove.toString());
 
         List<Point> test = getBestCubes(coordMaxInList);
+        System.out.println(" test ----------------------------------------------"+test);
 
 
         //stratégie en deux temps
@@ -100,10 +101,17 @@ public class QuixoDecider extends Decider {
         System.out.println("liste move interessants et jouables : " + move);
         System.out.println("Cube choisi : " + (int) move.get(0).getX() + " " + (int) move.get(0).getY());
 
-        ActionList actions = ActionFactory.generatePutInContainer(model, cubeChoisi, "cubepot", 0, 0);
-        actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
 
-        return actions;
+
+        ActionList actions = ActionFactory.generatePutInContainer(model, cubeChoisi, "cubepot", 0, 0);
+//        actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
+
+        ActionList actions1 = play1();
+        actions1.addAll(play2());
+        actions1.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
+
+
+        return actions1;
     }
 
     public ActionList play1() {
@@ -111,7 +119,8 @@ public class QuixoDecider extends Decider {
         board = stage.getBoard(); // get the board
 
 
-        Cube cube = (Cube) board.getElement(0, 0);
+        Cube cube = (Cube) board.getElement(4, 4);
+        cube.setFace(2);
 
         ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
         actions.setDoEndOfTurn(true);
@@ -121,12 +130,13 @@ public class QuixoDecider extends Decider {
 
     public ActionList play2() {
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
-        board = stage.getBoard(); // get the board
+        QuixoPawnPot pot = stage.getRedPot(); // get the board
 
 
-        Cube cube = (Cube) board.getElement(0, 0);
+        Cube cube = (Cube) pot.getElement(0, 0);
 
-        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", 0, 0);
+
+        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", 4, 0);
         actions.setDoEndOfTurn(true);
 
         return actions;
@@ -144,6 +154,7 @@ public class QuixoDecider extends Decider {
     public List<List<Integer>> getAlignement(int face) {
         int size = 5;
         int currentFace;
+        System.out.println("  ----------------------"+board);
 
         List<Integer> lignes = new ArrayList<>();
         List<Integer> colonnes = new ArrayList<>();
