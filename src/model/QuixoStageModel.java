@@ -141,9 +141,13 @@ public class QuixoStageModel extends GameStageModel {
 
             }
             if (allSame) {
-                if (model.getCurrentPlayer().getType() + 1 != face) {
+                Player joueurFace = model.getPlayers().get(face - 1);
+                if (joueurFace.getType() != face - 1) {
                     computePartyResult(face);
                 }
+//                if (model.getCurrentPlayer().getType() + 1 != face) {
+//                    computePartyResult(face);
+//                }
             }
 
         }
@@ -167,9 +171,13 @@ public class QuixoStageModel extends GameStageModel {
 
             }
             if (allSame) {
-                if (model.getCurrentPlayer().getType() + 1 != face) {
+                Player joueurFace = model.getPlayers().get(face - 1);
+                if (joueurFace.getType() != face - 1) {
                     computePartyResult(face);
                 }
+//                if (model.getCurrentPlayer().getType() + 1 != face) {
+//                    computePartyResult(face);
+//                }
             }
 
             // Diagonale principale (0,0 à 4,4)
@@ -190,9 +198,13 @@ public class QuixoStageModel extends GameStageModel {
                 }
             }
             if (allSameDiag1) {
-                if (model.getCurrentPlayer().getType() + 1 != face) {
+                Player joueurFace = model.getPlayers().get(face - 1);
+                if (joueurFace.getType() != face - 1) {
                     computePartyResult(face);
                 }
+//                if (model.getCurrentPlayer().getType() + 1 != face) {
+//                    computePartyResult(face);
+//                }
             }
 
             // Diagonale secondaire (0,4 à 4,0)
@@ -214,9 +226,13 @@ public class QuixoStageModel extends GameStageModel {
 
             }
             if (allSameDiag2) {
-                if (model.getCurrentPlayer().getType() + 1 != face) {
+                Player joueurFace = model.getPlayers().get(face - 1);
+                if (joueurFace.getType() != face - 1) {
                     computePartyResult(face);
                 }
+//                if (model.getCurrentPlayer().getType() + 1 != face) {
+//                    computePartyResult(face);
+//                }
             }
 
         }

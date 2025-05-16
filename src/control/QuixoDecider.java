@@ -6,6 +6,7 @@ import boardifier.control.Decider;
 import boardifier.model.ContainerElement;
 import boardifier.model.GameElement;
 import boardifier.model.Model;
+import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import model.Cube;
 import model.QuixoBoard;
@@ -79,7 +80,8 @@ public class QuixoDecider extends Decider {
         }
 
         //bon là j'ai pris le premier elem de la liste c'est pour le test
-        Cube cubeChoisi = ((Cube) board.getElement((int) move.getFirst().getX(), (int) move.getFirst().getY()));
+        Cube cubeChoisi = ((Cube) board.getElement((int) move.get(0).getX(), (int) move.get(0).getY()));
+
         int[] coordCubeChoisi = {(int) cubeChoisi.getX(), (int) cubeChoisi.getY()};
 
 
@@ -97,7 +99,7 @@ public class QuixoDecider extends Decider {
 
 
         System.out.println("liste move interessants et jouables : " + move);
-        System.out.println("Cube choisi : " + (int) move.getFirst().getX() + " "+ (int) move.getFirst().getY());
+        System.out.println("Cube choisi : " + (int) move.get(0).getX() + " "+ (int) move.get(0).getY());
 
         ActionList actions = ActionFactory.generatePutInContainer( model, cubeChoisi, "cubepot", 0, 0);
         actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
@@ -231,7 +233,20 @@ public class QuixoDecider extends Decider {
                 for (int j = 0; j<5; j++){
                     int currentFace = ((Cube) board.getElement(4, j)).getFace();
 //                    System.out.println("model.getCurrentPlayer().getType() : "+model.getCurrentPlayer().get);
-                    Player p = model.getIdPlayer();
+
+                    // Je pense que ça vérifie si la face correspond au type du joueur
+                    // Car le model.getPlayers est la liste des deux joueurs, avec le joueur1 en premier donc dans ce cas l'humain
+                    // Et on vérifie donc à chaque fois à qui appartient le face
+                    // La face X = 1 donc on veut le premier joueur -> get(currentFace - 1) -> get(0), donc on obtient bien le premier joueur
+                    // Avec O = 2, on a donc get(1) qui donne le second joueur
+                    // Je pense que ça pourrait marcher comme ça
+                    if (currentFace == 0)
+                        System.out.println("Le cube est blanc");
+                    else {
+                        Player joueur = model.getPlayers().get(currentFace - 1);
+                        System.out.println("Le cube est avec le joueur : " + joueur.getName());
+                    }
+
                     System.out.println("currentFace : " + currentFace);
                     if(currentFace != model.getCurrentPlayer().getType()-1 || currentFace == 0){
                         caseObjectif.add(new Point(j, y));
