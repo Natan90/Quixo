@@ -125,7 +125,11 @@ public class QuixoStageModel extends GameStageModel {
         for (int i = 0; i < size; i++) {
             System.out.println("Vérification des lignes");
             // On récupère la face du premier cube
-            face = ((Cube) board.getElement(i, 0)).getFace();
+            Cube cube = (Cube) board.getElement(i, 0);
+            if (cube == null)
+                continue;
+
+            face = cube.getFace();
             //Si face blanche, on return false directement
             allSame = true;
             for (int j = 1; j < size; j++) {
@@ -134,7 +138,10 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                Cube cube1 = (Cube) board.getElement(i, j);
+                if (cube1 == null)
+                    continue;
+                if (cube1.getFace() != face) {
                     allSame = false;
                     break;
                 }
@@ -156,7 +163,11 @@ public class QuixoStageModel extends GameStageModel {
         for (int j = 0; j < size; j++) {
             System.out.println("Vérification des colonnes");
             // On récupère la face du premier cube
-            face = ((Cube) board.getElement(0, j)).getFace();
+            Cube cube = (Cube) board.getElement(0, j);
+            if (cube == null)
+                continue;
+
+            face = cube.getFace();
             allSame = true;
             for (int i = 1; i < size; i++) {
                 if (face == 0) {
@@ -164,7 +175,10 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, j)).getFace() != face) {
+                Cube cube1 = (Cube) board.getElement(i, j);
+                if (cube1 == null)
+                    continue;
+                if (cube1.getFace() != face) {
                     allSame = false;
                     break;
                 }
@@ -182,7 +196,10 @@ public class QuixoStageModel extends GameStageModel {
 
             // Diagonale principale (0,0 à 4,4)
             // On récupère la face du premier cube
-            face = ((Cube) board.getElement(0, 0)).getFace();
+            Cube cube1 = (Cube) board.getElement(0, 0);
+            if (cube1 == null)
+                continue;
+            face = cube1.getFace();
 
             boolean allSameDiag1 = true;
             for (int i = 1; i < size; i++) {
@@ -192,7 +209,10 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, i)).getFace() != face) {
+                Cube cube2 = (Cube) board.getElement(i, i);
+                if (cube2 == null)
+                    continue;
+                if (cube2.getFace() != face) {
                     allSameDiag1 = false;
                     break;
                 }
@@ -209,7 +229,10 @@ public class QuixoStageModel extends GameStageModel {
 
             // Diagonale secondaire (0,4 à 4,0)
             // On récupère la face du premier cube
-            face = ((Cube) board.getElement(0, size - 1)).getFace();
+            Cube cube2 = (Cube) board.getElement(0, size - 1);
+            if (cube2 == null)
+                continue;
+            face = cube2.getFace();
             boolean allSameDiag2 = true;
 
             for (int i = size - 1; i > 1; i--) {
@@ -219,7 +242,10 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
                 // On compare avec les cubes à la suite
-                if (((Cube) board.getElement(i, size - 1 - i)).getFace() != face) {
+                Cube cube3 = (Cube) board.getElement(i, size - 1 - i);
+                if (cube3 == null)
+                    continue;
+                if (cube3.getFace() != face) {
                     allSameDiag2 = false;
                     break;
                 }

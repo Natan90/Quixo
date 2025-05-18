@@ -5,24 +5,16 @@ import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.model.*;
 import boardifier.model.action.ActionList;
-import boardifier.view.ConsoleColor;
-import boardifier.view.ElementLook;
-import boardifier.view.GameStageView;
 import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
-import view.CubeLook;
-import view.QuixoStageView;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
-import java.sql.SQLOutput;
 import java.util.List;
-import java.util.ArrayList;
 
 public class QuixoController extends Controller {
 
@@ -31,6 +23,7 @@ public class QuixoController extends Controller {
     int[] coordCube = new int[2];
     ContainerElement board;
     QuixoStageModel quixoStageModel;
+
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -46,28 +39,29 @@ public class QuixoController extends Controller {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
         update();
         while (!model.isEndStage()) {
-            playTurn(false);
-            update();
-            playTurn(true);
+            if (model.getCurrentPlayer().getType() == Player.COMPUTER) {
+                playTurn(null);
+            } else {
+                playTurn(false);
+                update();
+                playTurn(true);
+            }
+
             endOfTurn();
             update();
         }
         endGame();
     }
 
-    private void playTurn(boolean isSecondeMove) {
+    private void playTurn(Boolean isSecondeMove) {
         // get the new player
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             QuixoDecider decider = new QuixoDecider(model, this);
-            ActionPlayer play = new ActionPlayer(model, this, decider, null);
-            play.start();
+            ActionPlayer playDecider = new ActionPlayer(model, this, decider, null);
+            playDecider.start();
 
-//            ActionPlayer play = new ActionPlayer(model, this, decider, decider.play1());
-//            play.start();
-//            ActionPlayer play2 = new ActionPlayer(model, this, decider, decider.play2());
-//            play2.start();
         } else {
             boolean ok = false;
             while (!ok) {
@@ -187,7 +181,6 @@ public class QuixoController extends Controller {
 
 
 
-
         if (!gameStage.getBoard().canReachCell(row, col)) {
 //            System.out.println("Dans le reach cell");
             return false;
@@ -200,71 +193,91 @@ public class QuixoController extends Controller {
             return false;
 
 
+        mooveSequenceCube(row, col, coordCube[1], coordCube[0], true);
+
+        return true;
+    }
+
+
+
+    // S'occupe de déplacer les cubes 1 par 1 et ajoute le cube choisi en dernier
+    public void mooveSequenceCube(int startRow, int startCol, int endRow, int endCol, boolean human) {
+        System.out.println("-------------------------------------------------------------------");
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        QuixoBoard board = gameStage.getBoard();
+
+        Cube cube = null;
+        if (human) {
+            ContainerElement pot = gameStage.getRedPot();
+            cube = (Cube) pot.getElement(0, 0);
+        } else {
+            cube = (Cube) board.getElement(endRow, endCol);
+        }
+
+
+
         ActionList actions = null;
 
-
-        if (col == coordCube[0]) {
-            if (row < coordCube[1]) {
-//                System.out.println("C'est une colone donc je déplace les ligne ++");
-                for (int i = row; i < coordCube[1]; i++) {
-                    Cube cubeBoard = (Cube) board.getElement(i, col);
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, col);
+        if (startCol == endCol) {
+            if (startRow < endRow) {
+                System.out.println("Déplacement colonne vers le bas");
+                for (int i = startRow; i < endRow; i++) {
+                    Cube cubeBoard = (Cube) board.getElement(i, startCol);
+                    if (cubeBoard == null)
+                        continue;
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, startCol);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-//                    System.out.println("i = " + i + "...............................................");
                 }
             } else {
-//                System.out.println("C'est une colone donc je déplace les ligne --");
-                for (int i = row; i > coordCube[1]; i--) {
-                    Cube cubeBoard = (Cube) board.getElement(i, col);
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, col);
+                System.out.println("Déplacement colonne vers le haut");
+                for (int i = startRow; i > endRow; i--) {
+                    Cube cubeBoard = (Cube) board.getElement(i, startCol);
+                    if (cubeBoard == null)
+                        continue;
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, startCol);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-//                    System.out.println("i = " + i + "...............................................");
-
                 }
             }
         }
 
-
-        if (row == coordCube[1]) {
-            if (col < coordCube[0]) {
-
-//                System.out.println("C'est une ligne donc je déplace les colonnes ++");
-                for (int i = col; i < coordCube[0]; i++) {
-                    Cube cubeBoard = (Cube) board.getElement(row, i);
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i + 1);
+        if (startRow == endRow) {
+            if (startCol < endCol) {
+                System.out.println("Déplacement ligne vers la droite");
+                for (int i = startCol; i < endCol; i++) {
+                    Cube cubeBoard = (Cube) board.getElement(startRow, i);
+                    if (cubeBoard == null)
+                        continue;
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", startRow, i + 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-//                    System.out.println("i = " + i + "...............................................");
-
                 }
-
             } else {
-//                System.out.println("C'est une ligne donc je déplace les colonnes --");
-                for (int i = col; i > coordCube[0]; i--) {
-                    Cube cubeBoard = (Cube) board.getElement(row, i);
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", row, i - 1);
+               System.out.println("Déplacement ligne vers la gauche");
+                for (int i = startCol; i > endCol; i--) {
+                    Cube cubeBoard = (Cube) board.getElement(startRow, i);
+                    if (cubeBoard == null)
+                        continue;
+                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", startRow, i - 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
-//                    System.out.println("i = " + i + "...............................................");
-
                 }
             }
         }
 
-
+        // Mise à jour de la face du cube final selon le joueur
         if (model.getIdPlayer() == 0)
             cube.setFace(1);
         else
             cube.setFace(2);
 
-        actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", row, col);
+        actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", startRow, startCol);
+        actions.setDoEndOfTurn(true); // Finir le tour après cette action
 
-        actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
-
-        return true;
     }
+
+
 }
