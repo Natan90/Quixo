@@ -58,7 +58,7 @@ public class QuixoController extends Controller {
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            QuixoDecider2 decider = new QuixoDecider2(model, this);
+            QuixoDecider decider = new QuixoDecider(model, this);
             ActionPlayer playDecider = new ActionPlayer(model, this, decider, null);
             playDecider.start();
 
@@ -71,10 +71,8 @@ public class QuixoController extends Controller {
                     if (line.length() == 2) {
                         if (!isSecondeMove) {
                             ok = analyseAndPlay(line);
-                            setColorCoups(true);
                         }
                         else {
-                            setColorCoups(false);
                             ok = analyseAndPlay2(line);
                         }
 
@@ -141,6 +139,8 @@ public class QuixoController extends Controller {
         actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
+
+        setColorCoups(true);
         return true;
     }
 
@@ -163,6 +163,8 @@ public class QuixoController extends Controller {
 
 
     private boolean analyseAndPlay2(String line) {
+        setColorCoups(false);
+
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         // get the coords in the board
         int col = (int) (line.charAt(0) - 'A');
@@ -206,7 +208,6 @@ public class QuixoController extends Controller {
         // insertionCol = colonne où sera inséré le cube du joueur après le décalage
         // fromRow = ligne du cube le plus éloigné, celui qui sera déplacé en premier
         // fromCol = colonne du cube le plus éloigné, celui qui sera déplacé en premier
-        System.out.println("-------------------------------------------------------------------");
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         QuixoBoard board = gameStage.getBoard();
 

@@ -26,6 +26,7 @@ public class QuixoDecider2 extends Decider {
     int max;
     QuixoBoard board;
     QuixoBoard simulatedBoard;
+    QuixoStageModel stageModel;
 
 
     @Override
@@ -33,7 +34,10 @@ public class QuixoDecider2 extends Decider {
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
         board = stage.getBoard(); // get the board
-        simulatedBoard = stage.getBoard();
+
+        stageModel = new QuixoStageModel("simulateBoard", model);
+
+        simulatedBoard = new QuixoBoard(0, 0, stageModel);
         ContainerElement pot = null; // the pot where to take a pawn
         pot = stage.getRedPot();
 
