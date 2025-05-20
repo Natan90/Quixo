@@ -76,6 +76,7 @@ public class QuixoDecider2 extends Decider {
             int col = (int) allMoves.get(i).getX();
             Cube cube = (Cube) simulatedBoard.getElement(row, col);
 
+
             ActionList defaultAction = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
 
             //second coup
@@ -86,14 +87,14 @@ public class QuixoDecider2 extends Decider {
             cube = (Cube) pot.getElement(0, 0);
 
             ActionList deuxiemeCoup = ActionFactory.generatePutInContainer(model, cube, "quixoboard", row, col);
+            //jouer tout les coups possibles sur le plateau simulé en parcourant la liste allMoves
+            //dans le premier element de la liste il y a le premier coup et le deuxième, le deuxième coup
+            //appeler getAlignement() ou une autre méthode pour calculer le "rendement" de chaque coup
+            //jouer le coup le plus intéressant sur le VRAI plateau de jeu
 
 
 
         }
-
-
-
-        //faire une liste de tout les coups possibles
 
 
         QuixoController quixoController = (QuixoController) control;
