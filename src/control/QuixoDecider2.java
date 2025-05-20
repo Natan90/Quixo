@@ -33,6 +33,8 @@ public class QuixoDecider2 extends Decider {
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
+
+
         board = stage.getBoard(); // get the board
 
         stageModel = new QuixoStageModel("simulateBoard", model);
