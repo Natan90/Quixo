@@ -91,7 +91,7 @@ public class QuixoDecider extends Decider {
 
         ActionList actions = new ActionList();
 
-        if (cube != null) {
+        if (cube != null && cube.getFace() != model.getCurrentPlayer().getType()) {
             cube.setFace(2);
             actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0));
             actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
@@ -131,15 +131,18 @@ public class QuixoDecider extends Decider {
 
         List<Point> firstMoves = board.computeValidCells(true, new int[2], model);
 
-        // On essaye d'abord de blocker l'adversaire -> stratégie défensive
-        for (int i = 0; i < bestCasesToBlock.size(); i++) {
-            Point cible = bestCasesToBlock.get(i);
-            int[] move = trouverSecondMove(cible, firstMoves);
-            System.out.println("move bestCasesToBlock : "+ Arrays.toString(move));
-            if (move != null) {
-                return move;
+        if (max > 2) {
+            // On essaye d'abord de blocker l'adversaire -> stratégie défensive
+            for (int i = 0; i < bestCasesToBlock.size(); i++) {
+                Point cible = bestCasesToBlock.get(i);
+                int[] move = trouverSecondMove(cible, firstMoves);
+                System.out.println("move bestCasesToBlock : "+ Arrays.toString(move));
+                if (move != null) {
+                    return move;
+                }
             }
         }
+
         // Ensuite on essaye de se faire gagner
         for (int i = 0; i < bestCasesToWin.size(); i++) {
             Point cible = bestCasesToWin.get(i);
@@ -164,13 +167,18 @@ public class QuixoDecider extends Decider {
             coordCube[0] = posCube.y;
             coordCube[1] = posCube.x;
 
-            List<Point> moves = board.computeValidCells(false, coordCube, model);
-            for (int j = 0; j < moves.size(); j++) {
-                Point dest = moves.get(j);
-                if (dest.y == cible.y && dest.x == cible.x) {
-                    return new int[]{coordCube[0], coordCube[1], dest.y, dest.x};
+            Cube cube = (Cube) board.getElement(coordCube[0], coordCube[1]);
+            if (cube != null && cube.getFace() != model.getCurrentPlayer().getType() - 1) {
+                List<Point> moves = board.computeValidCells(false, coordCube, model);
+                for (int j = 0; j < moves.size(); j++) {
+                    Point dest = moves.get(j);
+                    if (dest.y == cible.y && dest.x == cible.x) {
+                        return new int[]{coordCube[0], coordCube[1], dest.y, dest.x};
+                    }
                 }
             }
+
+
         }
         return null;
     }
