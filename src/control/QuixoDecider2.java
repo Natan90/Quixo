@@ -1,6 +1,7 @@
 package control;
 
 import boardifier.control.ActionFactory;
+import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.control.Decider;
 import boardifier.model.ContainerElement;
@@ -53,7 +54,17 @@ public class QuixoDecider2 extends Decider {
             int insertionCol = (int) allMoves.get(i+1).getX();
             int insertionRow = (int) allMoves.get(i+1).getY();
 
+
+
+
             int[][] tabAfterMove = moveSequenceCube(insertionRow, insertionCol, fromRow, fromCol);
+            System.out.println("Tableau de base : ");
+            afficheTab2D(tabBoard);
+            System.out.println(new StringBuilder().append("déplacement de : ").append(fromCol).append(fromRow));
+            System.out.println(new StringBuilder().append("destination : ").append(insertionCol).append(insertionRow));
+            System.out.println("Tableau après le coup : ");
+            afficheTab2D(tabAfterMove);
+
             // ce qu'il faut faire -> completer la méthode moveSequenceCube qui nous retourne l'etat du tableau après avoir tout bougé
             // ensuite appeler une nouvelle méthode pour calculer "l'éfficacité" du coup en cours
             // stocker le resultat qqpart
@@ -68,14 +79,48 @@ public class QuixoDecider2 extends Decider {
 
 
 
-        return firstAction;
+        return null;
 
     }
 
-    public int[][] moveSequenceCube(int insertionRow, int insertionCol, int fromRow, int fromCol){
-        int[][] tabBoardAfterMove;
+    public int[][] moveSequenceCube(int insertionRow, int insertionCol, int fromRow, int fromCol) {
+        // Créez une copie du tableau actuel
+        int[][] tabBoardAfterMove = copyBoardInTab();
+//        int[][] tabBoardAfterMove = Arrays.stream(copyBoardInTab())
+//                .map(int[]::clone)
+//                .toArray(int[][]::new);
 
-        return null;
+        if (insertionCol == fromCol) {
+            if (insertionRow < fromRow) {
+                // Déplacement colonne vers le bas
+                for (int i = fromRow; i > insertionRow; i--) {
+                    tabBoardAfterMove[i][fromCol] = tabBoardAfterMove[i - 1][fromCol];
+                }
+            } else {
+                // Déplacement colonne vers le haut
+                for (int i = fromRow; i < insertionRow; i++) {
+                    tabBoardAfterMove[i][fromCol] = tabBoardAfterMove[i + 1][fromCol];
+                }
+            }
+        }
+
+        if (insertionRow == fromRow) {
+            if (insertionCol < fromCol) {
+                // Déplacement ligne vers la droite
+                for (int i = fromCol; i > insertionCol; i--) {
+                    tabBoardAfterMove[fromRow][i] = tabBoardAfterMove[fromRow][i - 1];
+                }
+            } else {
+                // Déplacement ligne vers la gauche
+                for (int i = fromCol; i < insertionCol; i++) {
+                    tabBoardAfterMove[fromRow][i] = tabBoardAfterMove[fromRow][i + 1];
+                }
+            }
+        }
+
+        tabBoardAfterMove[insertionRow][insertionCol] = 2; // Face du joueur 2
+
+        return tabBoardAfterMove;
     }
 
     public int[][] copyBoardInTab(){
@@ -121,6 +166,16 @@ public class QuixoDecider2 extends Decider {
             }
         }
         return allMoves;
+    }
+    public void afficheTab2D(int[][] tab){
+//        System.out.println("Tableau : \n");
+        for(int i =0; i<tab.length;i++){
+            for (int j=0; j<tab.length; j++){
+                System.out.print(tab[i][j]);
+            }
+            System.out.println("");
+        }
+
     }
 
 
