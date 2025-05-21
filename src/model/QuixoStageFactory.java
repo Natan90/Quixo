@@ -38,6 +38,7 @@ public class QuixoStageFactory extends StageElementsFactory {
 
         // create the board, in 0,1 in the virtual space
         QuixoBoard board = new QuixoBoard(30, 1, stageModel);
+
         // assign the board to the game stage model
         stageModel.setBoard(board);
 

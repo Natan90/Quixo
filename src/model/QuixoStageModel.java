@@ -67,14 +67,6 @@ public class QuixoStageModel extends GameStageModel {
         addContainer(board);
     }
 
-    public QuixoPawnPot getBlackPot() {
-        return blackPot;
-    }
-    public void setBlackPot(QuixoPawnPot blackPot) {
-        this.blackPot = blackPot;
-        addContainer(blackPot);
-    }
-
     public QuixoPawnPot getRedPot() {
         return redPot;
     }
@@ -82,14 +74,6 @@ public class QuixoStageModel extends GameStageModel {
         this.redPot = redPot;
         addContainer(redPot);
     }
-//    public QuixoPawnPot getRedPot() {
-//        return redPot;
-//    }
-//    public void setRedPot(QuixoPawnPot redPot) {
-//        this.redPot = redPot;
-//        addContainer(redPot);
-//    }
-
 
     public Cube[] getCubes() {
         return cubes;
@@ -114,8 +98,6 @@ public class QuixoStageModel extends GameStageModel {
 
 
     public void setupCallbacks(ContainerElement board) {
-
-//        System.out.println("dans setupcallbacks");
 
         int size = 5;
         int face;
