@@ -115,13 +115,13 @@ public class QuixoDecider extends Decider {
         System.out.println(alignementsCurrentPlayer);
 
 
-        // retourne les coordonnées dans la liste des scores d'alignements les plus grands
-        List<Point> coordMaxOpponent = new ArrayList<>(searchMax(alignementsOpponent));
-
-        System.out.println("coordMaxOpponent : " + coordMaxOpponent);
-        System.out.println("max : " + max);
         List<Point> coordMaxCurrentPlayer = new ArrayList<>(searchMax(alignementsCurrentPlayer));
         System.out.println("coordMaxCurrentPlayer : " + coordMaxCurrentPlayer);
+        // retourne les coordonnées dans la liste des scores d'alignements les plus grands
+        List<Point> coordMaxOpponent = new ArrayList<>(searchMax(alignementsOpponent));
+        System.out.println("coordMaxOpponent : " + coordMaxOpponent);
+        System.out.println("max : " + max);
+
 
         List<Point> bestCasesToWin = getBestCubes(coordMaxCurrentPlayer);  // pour gagner
         // retourne les coordonnées des cases manquantes pour compléter la ligne de 5
@@ -168,7 +168,7 @@ public class QuixoDecider extends Decider {
             coordCube[1] = posCube.x;
 
             Cube cube = (Cube) board.getElement(coordCube[0], coordCube[1]);
-            if (cube != null && cube.getFace() != model.getCurrentPlayer().getType() - 1) {
+            if (cube != null && (cube.getFace() == 0 || cube.getFace() == model.getCurrentPlayer().getType())) {
                 List<Point> moves = board.computeValidCells(false, coordCube, model);
                 for (int j = 0; j < moves.size(); j++) {
                     Point dest = moves.get(j);
@@ -177,8 +177,6 @@ public class QuixoDecider extends Decider {
                     }
                 }
             }
-
-
         }
         return null;
     }
