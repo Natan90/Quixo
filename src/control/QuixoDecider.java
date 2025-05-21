@@ -348,7 +348,7 @@ public class QuixoDecider extends Decider {
         if (cube != null)
             currentFace = cube.getFace();
 
-        if (currentFace == 0 || currentFace != model.getCurrentPlayer().getType() - 1) {
+        if (currentFace == 0 || currentFace == model.getCurrentPlayer().getType() - 1) {
             caseObjectif.add(new Point(j, i));
         }
     }

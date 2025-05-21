@@ -43,10 +43,5 @@ public class Cube extends GameElement {
     public boolean isJouable() {
         return isJouable;
     }
-//    public void coupsJouable(List<Point> points) {
-//        for (int i = 0; i < points.size(); i++) {
-//            Point point = points.get(i);
-//        }
-//    }
 
 }
