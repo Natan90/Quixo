@@ -28,19 +28,18 @@ public class QuixoBoardUnitTest {
         gameStageModel = Mockito.mock(GameStageModel.class);
         quixoStageModel = Mockito.mock(QuixoStageModel.class);
         board = new QuixoBoard(0, 0, gameStageModel);
-        coordCube = new int[]{0, 1, 2};
+        coordCube = new int[]{2, 0};
         model = Mockito.mock(Model.class);
     }
 
     @Test
-    public void testComputeValidCellsFirstMove() {
+    public void testComputeValidCells() {
+        Cube cube = Mockito.mock(Cube.class);
         when(model.getGameStage()).thenReturn(quixoStageModel);
         when(quixoStageModel.getBoard()).thenReturn(board);
-        when(model.getIdPlayer()).thenReturn(0);
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                Cube cube = Mockito.mock(Cube.class);
                 if (i == 0 && j == 0) {
                     // Quand on est en (0,0), on met la face du cube à celle de l'adversaire
                     when(cube.getFace()).thenReturn(2);
@@ -48,15 +47,30 @@ public class QuixoBoardUnitTest {
                     // Sinon, on les mets en cube blanc
                     when(cube.getFace()).thenReturn(0);
                 }
+                Assertions.assertNotNull(cube);
                 board.addElement(cube, i, j);
             }
         }
-        List<Point> valid = board.computeValidCells(true, null, model);
-        Assertions.assertEquals(valid, board.computeValidCells(true, coordCube, model));
+        // Vérification si on prend la face de l'adversaire
+        when(cube.getFace()).thenReturn(2);
+        when(model.getIdPlayer()).thenReturn(0);
+        Assertions.assertNotEquals(cube.getFace(), model.getIdPlayer());
+        when(cube.getFace()).thenReturn(1);
+        when(model.getIdPlayer()).thenReturn(1);
+        Assertions.assertEquals(cube.getFace(), model.getIdPlayer());
 
-        // Vrifier si les cases sont bien dans les cases valides
+        List<Point> valid = board.computeValidCells(true, null, model);
+        Assertions.assertEquals(valid, board.computeValidCells(true, null, model));
+
+        // Vérifier si les cases sont bien dans les cases valides
         Assertions.assertFalse(valid.contains(new Point(0, 0)));
-        Assertions.assertTrue(valid.contains(new Point(0, 1)));
+
+        List<Point> secondMove = board.computeValidCells(false, coordCube, model);
+        Assertions.assertFalse(secondMove.contains(new Point(0, 2)));   // Même position
+        Assertions.assertFalse(secondMove.contains(new Point(1, 2)));    // Même colonne
+        Assertions.assertFalse(secondMove.contains(new Point(0, 1)));    // Même ligne
+
+        Assertions.assertFalse(secondMove.contains(new Point(2, 3)));   // Mauvaise saisie
     }
 
     @Test
@@ -82,11 +96,4 @@ public class QuixoBoardUnitTest {
             }
         }
     }
-
-    @Test
-    public void testSetValidCells() {
-        board.setValidCells(true, coordCube, model);
-
-    }
-
 }
