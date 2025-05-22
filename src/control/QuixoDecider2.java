@@ -28,12 +28,22 @@ public class QuixoDecider2 extends Decider {
     QuixoBoard board;
     QuixoStageModel stageModel;
     ActionList firstAction;
+    QuixoController quixoController = (QuixoController) control;
+
+    final int ALIGN3 = 50;
+    final int ALIGN4 = 100;
+    final int ALIGN5 = 10000;
+    int scoreFinal;
+    int[][] coordBestMove;
+
 
 
     @Override
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
+        scoreFinal =-100000;
+        coordBestMove = new int[2][2];
 
 
         board = stage.getBoard(); // get the board
@@ -42,7 +52,8 @@ public class QuixoDecider2 extends Decider {
         pot = stage.getRedPot();
 
         int[][] tabBoard = copyBoardInTab();
-        List<Point> allMoves = getAllmoves();
+            List<Point> allMoves = getAllmoves();
+        System.out.println(allMoves);
 
         for (int i = 0; i<allMoves.size(); i=i+2){
 
@@ -54,41 +65,123 @@ public class QuixoDecider2 extends Decider {
             int insertionCol = (int) allMoves.get(i+1).getX();
             int insertionRow = (int) allMoves.get(i+1).getY();
 
-
-
-
             int[][] tabAfterMove = moveSequenceCube(insertionRow, insertionCol, fromRow, fromCol);
-            System.out.println("Tableau de base : ");
-            afficheTab2D(tabBoard);
-            System.out.println(new StringBuilder().append("déplacement de : ").append(fromCol).append(fromRow));
-            System.out.println(new StringBuilder().append("destination : ").append(insertionCol).append(insertionRow));
-            System.out.println("Tableau après le coup : ");
-            afficheTab2D(tabAfterMove);
+            int score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
+            if(score > scoreFinal) {
+                scoreFinal = score;
+                fromRow = (int) allMoves.get(i).getY();
+                fromCol = (int) allMoves.get(i).getX();
+                insertionRow = (int) allMoves.get(i+1).getY();
+                insertionCol = (int) allMoves.get(i+1).getX();
 
-            // ce qu'il faut faire -> completer la méthode moveSequenceCube qui nous retourne l'etat du tableau après avoir tout bougé
-            // ensuite appeler une nouvelle méthode pour calculer "l'éfficacité" du coup en cours
-            // stocker le resultat qqpart
-            // écraser le tableau ou on a bougé les cubes
-            // repartir du tableau tabBoard
-            // jouer les prochains coups
+                coordBestMove[0] = new int[]{fromRow, fromCol};
+                coordBestMove[1] = new int[]{insertionRow, insertionCol};
 
-
+                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
+            }
+//            System.out.println("Tableau de base : ");
+//            afficheTab2D(tabBoard);
+//            System.out.println(new StringBuilder().append("déplacement de : ").append(fromRow).append(fromCol));
+//            System.out.println(new StringBuilder().append("destination : ").append(insertionRow).append(insertionCol));
+//            System.out.println("Tableau après le coup : ");
+//            afficheTab2D(tabAfterMove);
         }
 
+        Cube cube = (Cube) board.getElement(coordBestMove[0][0], coordBestMove[0][1]);// row -- col
+
+        cube.setFace(2);
+//        ActionList firstMove = ActionFactory.generatePutInContainer(model, cube, "cubepot", coordBestMove[0][0], coordBestMove[0][1]);
+
+
+        System.out.println("Je prends l'element : "+coordBestMove[0][0] + coordBestMove[0][1]);
+//        cube = (Cube) pot.getElement(0, 0);
+        System.out.println("Element deplacé dans le pot");
+        quixoController.mooveSequenceCube(coordBestMove[1][0], coordBestMove[1][1], coordBestMove[0][0], coordBestMove[0][1], false); //insert row, insert col, from row, from col
+        System.out.println("Element reposé en  : "+coordBestMove[1][0] + coordBestMove[1][1]);
+
+        ActionList secondMove = ActionFactory.generatePutInContainer(model, cube, "quixoboard", coordBestMove[1][0], coordBestMove[1][1]); //rowdest, coldest
+
+//        firstMove.addAll(secondMove);
+        secondMove.setDoEndOfTurn(true);
+        return secondMove;
+
+    }
+
+    public int getScore(int face, int[][] tabAfterMove) {
+        int size = 5;
+        int score=0;
 
 
 
+        for (int i = 0; i < size; i++) {
+            int alignements = 0;
+//            System.out.println("Vérification des lignes");
 
+            // Vérification des lignes
+            for (int j = 0; j < size; j++) {
+                if (tabAfterMove[i][j] == face)
+                    alignements++;
+
+            }
+            if(alignements == 3)
+                score+= ALIGN3;
+            else if (alignements == 4)
+                score+= ALIGN4;
+            else if (alignements == 5)
+                score+= ALIGN5;
+
+            // Vérification des colonnes
+            alignements = 0;
+            for (int j = 0; j < size; j++) {
+                if (tabAfterMove[i][j] == face)
+                    alignements++;
+
+
+            }
+            if(alignements == 3)
+                score+= ALIGN3;
+            else if (alignements == 4)
+                score+= ALIGN4;
+            else if (alignements == 5)
+                score+= ALIGN5;
+        }
+
+        // Diagonale principale de (0,0) à (4,4)
+        int alignements =0;
+        for (int i = 0; i < size; i++) {
+            if (tabAfterMove[i][size-1 -i] == face)
+                alignements++;
+        }
+        if(alignements == 3)
+            score+= ALIGN3;
+        else if (alignements == 4)
+            score+= ALIGN4;
+        else if (alignements == 5)
+            score+= ALIGN5;
+
+        // Diagonale secondaire de (0,4) à (4,0)
+        for (int i = 0; i < size; i++) {
+            if (tabAfterMove[i][i] == face)
+                alignements++;
+        }
+        if(alignements == 3)
+            score+= ALIGN3;
+        else if (alignements == 4)
+            score+= ALIGN4;
+        else if (alignements == 5)
+            score+= ALIGN5;
+
+        return score;
+
+    }
+
+    public int[][] bestScoreMove(){
         return null;
-
     }
 
     public int[][] moveSequenceCube(int insertionRow, int insertionCol, int fromRow, int fromCol) {
         // Créez une copie du tableau actuel
         int[][] tabBoardAfterMove = copyBoardInTab();
-//        int[][] tabBoardAfterMove = Arrays.stream(copyBoardInTab())
-//                .map(int[]::clone)
-//                .toArray(int[][]::new);
 
         if (insertionCol == fromCol) {
             if (insertionRow < fromRow) {
@@ -130,6 +223,7 @@ public class QuixoDecider2 extends Decider {
                 //recuperer la face du cube parcouru
                 Cube cube = (Cube) board.getElement(i, j);
                 //la mettre dans le tableau
+//                System.out.println("board.getElement"+ i + " " + j);
                 tabBoard[i][j] = cube.getFace();
             }
         }
@@ -146,8 +240,8 @@ public class QuixoDecider2 extends Decider {
 
 
         for(int i=0; i<valid.size(); i++){
-            int cubeRow = (int) valid.get(i).getX();// 0
-            int cubeCol = (int) valid.get(i).getY(); // 4
+            int cubeRow = (int) valid.get(i).getY();// 0
+            int cubeCol = (int) valid.get(i).getX(); // 4
             firstMove[0] = cubeRow;
             firstMove[1] = cubeCol;
 
@@ -158,13 +252,14 @@ public class QuixoDecider2 extends Decider {
                 Point firstMoveCopy = new Point(firstMove[0], firstMove[1]);
                 allMoves.add(firstMoveCopy);
 
-                secondMoveTab[0] = (int) secondMove.get(j).getX();
-                secondMoveTab[1] = (int) secondMove.get(j).getY();
+                secondMoveTab[0] = (int) secondMove.get(j).getY();
+                secondMoveTab[1] = (int) secondMove.get(j).getX();
 
                 Point secondMoveCopy = new Point(secondMoveTab[0], secondMoveTab[1]);
                 allMoves.add(secondMoveCopy);
             }
         }
+        System.out.println(allMoves);
         return allMoves;
     }
     public void afficheTab2D(int[][] tab){
@@ -177,36 +272,4 @@ public class QuixoDecider2 extends Decider {
         }
 
     }
-
-
-// CODE REUTILISABLE POUR PARCOURIR CHAQUE ELEM DE LA LISTE DES MOVES, ET JOUER LE COUP DANS UNE ACTIONLIST
-//    // first coup
-//    int row = (int) allMoves.get(i).getY();
-//    int col = (int) allMoves.get(i).getX();
-//    Cube cube = (Cube) simulatedBoard.getElement(row, col);
-//
-//
-//    firstAction = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
-//            System.out.println("firstAction " + firstAction + "cube pris" + row + " " + col);
-//            System.out.println("posé dans la grille cubepot" + 0 + " " + 0);
-//
-//    //second coup
-//    row = (int) allMoves.get(i+1).getY();
-//    col = (int) allMoves.get(i+1).getX();
-//
-//    cube = (Cube) pot.getElement(0, 0);
-//
-//    ActionList secondAction = ActionFactory.generatePutInContainer(model, cube, "simulatedBoard", row, col);
-//            System.out.println("secondAction " + secondAction + "cube pris" + row + " " + col);
-//            System.out.println("posé dans la grille simulatedBoard" + row + " " + col);
-//
-//
-//
-//    //jouer tout les coups possibles sur le plateau simulé en parcourant la liste allMoves
-//    //dans le premier element de la liste il y a le premier coup et le deuxième, le deuxième coup
-//    //appeler getAlignement() ou une autre méthode pour calculer le "rendement" de chaque coup
-//    //jouer le coup le plus intéressant sur le VRAI plateau de jeu
-//
-//            firstAction.addAll(secondAction);
-//            firstAction.setDoEndOfTurn(false);
 }
