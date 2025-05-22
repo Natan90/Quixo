@@ -246,7 +246,7 @@ public class QuixoStageModel extends GameStageModel {
         }
     }
 
-    private void computePartyResult(int face) {
+    public void computePartyResult(int face) {
         int idWinner = -1;
         if( face == 1 ){
             System.out.println("Le winner est 1 avec id = 0");

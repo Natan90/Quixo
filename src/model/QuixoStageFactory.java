@@ -65,27 +65,5 @@ public class QuixoStageFactory extends StageElementsFactory {
                 index++;
             }
         }
-
-        /* Example with a main container that takes the ownership of the location
-           of the element that are put within.
-           If we put text, board, black/red pots within this container, their initial
-           location in the virtual space is no more relevant.
-           In such a case, we also need to create a look for the main container, see HoleStageView
-           comment at the end of the class.
-
-        // create the main container with 2 rows and 3 columns, in 0,0 in the virtual space
-        ContainerElement mainContainer = new ContainerElement("rootcontainer",0,0,2,3, stageModel);
-        // for cell 0,1, span over the row below => the column 1 goes from top to bottom of the container
-        mainContainer.setCellSpan(0,1,2,1);
-        // for cell 0,2, span over the row below => the column 2 goes from top to bottom of the container
-        mainContainer.setCellSpan(0,2,2,1);
-        // assign the
-        stageModel.setMainContainer(mainContainer);
-        // assign elements to main container cells
-        mainContainer.addElement(text,0,0);
-        mainContainer.addElement(board, 1,0);
-        mainContainer.addElement(blackPot,0,1);
-        mainContainer.addElement(redPot,0,2);
-        */
     }
 }
