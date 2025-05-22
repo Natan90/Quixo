@@ -31,7 +31,7 @@ public class QuixoDecider2 extends Decider {
     QuixoController quixoController = (QuixoController) control;
 
     final int ALIGN3 = 50;
-    final int ALIGN4 = 100;
+    final int ALIGN4 = 1000;
     final int ALIGN5 = 10000;
     int scoreFinal;
     int[][] coordBestMove;

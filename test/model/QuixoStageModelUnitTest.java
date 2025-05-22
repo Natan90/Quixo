@@ -25,6 +25,7 @@ public class QuixoStageModelUnitTest {
     public void testComputePartyResult() {
         quixoStageModel.computePartyResult(1);
 
+        // Pas finit
         verify(model, times(1)).setIdWinner(0);
         verify(model, times(1)).stopStage();
     }

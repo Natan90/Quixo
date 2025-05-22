@@ -37,7 +37,6 @@ public class QuixoDecider extends Decider {
         QuixoController quixoController = (QuixoController) control;
 
 
-
         int[] coordCube = new int[2];
 
         // Liste des coins. Si aucun coup n'est interessant à jouer, le bot jouera dans les coins
@@ -58,6 +57,8 @@ public class QuixoDecider extends Decider {
         int destCol = move[3];
         System.out.println("cubeRow : " + cubeRow + ", cubeCol : " + cubeCol + ", destRow : " + destRow + ", destCol : " + destCol);
 
+        // Prends le cube en (0,0) car aucun bon coup trouvé (pas d'alignement à bloquer et pas d'alignement à compléter)
+        // Sûrement à changer ça (car peut ếtre qu'il prend même si le cube ne correspond pas à sa face
         if (cubeRow == 0 && cubeCol == 0 && destRow == 0 && destCol == 0) {
             // Pas de coup trouvé : jouer un coup par défaut, par exemple prendre un coin
             Cube defaultCube = (Cube) board.getElement(0, 0);
@@ -69,13 +70,10 @@ public class QuixoDecider extends Decider {
 
         Cube cube = (Cube) pot.getElement(0, 0);
 
-        if (quixoController == null) {
-            System.out.println("quixoController est null !");
-        } else {
-            quixoController.mooveSequenceCube(destRow, destCol, cubeRow, cubeCol, false);
-            System.out.println("quixoController n'est pas null.");
-        }
+        // On fait se déplacer les cubes
+        quixoController.mooveSequenceCube(destRow, destCol, cubeRow, cubeCol, false);
 
+        // Si le cube n'est pas null, on fait les deux actions (dans la poule, dans le board)
         if (cube != null) {
             actions.addAll(firstTurn(cubeRow, cubeCol, destRow, destCol));
             actions.addAll(ActionFactory.generatePutInContainer(model, cube, "quixoboard", destRow, destCol));
@@ -91,12 +89,13 @@ public class QuixoDecider extends Decider {
 
         ActionList actions = new ActionList();
 
-        if (cube != null && cube.getFace() != model.getCurrentPlayer().getType()) {
+        // Vérifie que le cube n'est pas null et qu'il ne correspond pas à la face du joueur adverse
+        // Si c'est le cas, on met le cube dans la poule avec sa face
+        if (cube != null && cube.getFace() != model.getCurrentPlayer().getType() - 1) {
             cube.setFace(2);
             actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0));
             actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
         }
-
         return actions;
     }
 
@@ -114,7 +113,7 @@ public class QuixoDecider extends Decider {
         System.out.println(alignementsOpponent);
         System.out.println(alignementsCurrentPlayer);
 
-
+        // Récupérer la ligne ou la colonne ou la diago où le max est plus grand
         List<Point> coordMaxCurrentPlayer = new ArrayList<>(searchMax(alignementsCurrentPlayer));
         System.out.println("coordMaxCurrentPlayer : " + coordMaxCurrentPlayer);
         // retourne les coordonnées dans la liste des scores d'alignements les plus grands
@@ -129,6 +128,7 @@ public class QuixoDecider extends Decider {
         System.out.println("bestCasesToWin : " + bestCasesToWin);
         System.out.println("bestCasesToBlock : " + bestCasesToBlock);
 
+        // Renvoie les cases possibles à joueur premier tour
         List<Point> firstMoves = board.computeValidCells(true, new int[2], model);
 
         if (max > 2) {
@@ -153,12 +153,11 @@ public class QuixoDecider extends Decider {
                 return move;
             }
         }
-        // Sinon on joue par défault
+        // Sinon on joue par défault (surêment changer ce coup là
         return new int[]{0, 0, 0, 0};
     }
 
-    // j'avais pas vu que tu avais fait la methode getCoordPremierCoup
-    // je laisse les deux quand même
+    // renvoie le deuxième coup
     public int[] trouverSecondMove(Point cible, List<Point> firstMove) {
         int[] coordCube = new int[2];
 
@@ -169,9 +168,13 @@ public class QuixoDecider extends Decider {
 
             Cube cube = (Cube) board.getElement(coordCube[0], coordCube[1]);
             if (cube != null && (cube.getFace() == 0 || cube.getFace() == model.getCurrentPlayer().getType())) {
+                // Moves = coups possibles avec les coordonnées de coordCube
                 List<Point> moves = board.computeValidCells(false, coordCube, model);
+                // On parcours cette liste
                 for (int j = 0; j < moves.size(); j++) {
                     Point dest = moves.get(j);
+                    // Si un des points de cette liste correspond au Point cible rentré en paramètre alors,
+                    // on renvioe un tableau des coordonnées du premier coup et du deuxième coup
                     if (dest.y == cible.y && dest.x == cible.x) {
                         return new int[]{coordCube[0], coordCube[1], dest.y, dest.x};
                     }
@@ -280,7 +283,6 @@ public class QuixoDecider extends Decider {
                 } else if (elem == max) {
                     coordMax.add(new Point(i, j));
                 }
-
             }
         }
         return coordMax;
@@ -341,14 +343,14 @@ public class QuixoDecider extends Decider {
         return caseObjectif;
     }
 
-
+    // On vérifie si le cube aux coordonnées (i, j) a pour face 0 (blanche) ou pour face (la propre face du joueur courant)
     private void cubeDetection(int i, int j, List<Point> caseObjectif) {
         Cube cube = (Cube) board.getElement(i, j);
         int currentFace = 0;
         if (cube != null)
             currentFace = cube.getFace();
 
-        if (currentFace == 0 || currentFace == model.getCurrentPlayer().getType() - 1) {
+        if (currentFace == 0 || currentFace == model.getCurrentPlayer().getType()) {
             caseObjectif.add(new Point(j, i));
         }
     }
