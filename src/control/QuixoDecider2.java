@@ -84,7 +84,7 @@ public class QuixoDecider2 extends Decider {
                 coordBestMove[0] = new int[]{fromRow, fromCol};
                 coordBestMove[1] = new int[]{insertionRow, insertionCol};
 
-                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
+//                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
             }
 //            System.out.println("Tableau de base : ");
 //            afficheTab2D(tabBoard);
@@ -217,11 +217,7 @@ public class QuixoDecider2 extends Decider {
                 }
             }
         }
-
-        if (quixoController.currentPlayer == 1)
-            tabBoardAfterMove[insertionRow][insertionCol] = 2;
-        else
-            tabBoardAfterMove[insertionRow][insertionCol] = 1;
+            tabBoardAfterMove[insertionRow][insertionCol] = quixoController.currentPlayer;
 
 
         return tabBoardAfterMove;

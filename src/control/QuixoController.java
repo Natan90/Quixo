@@ -10,6 +10,7 @@ import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class QuixoController extends Controller {
     int[] coordCube = new int[2];
     ContainerElement board;
     QuixoStageModel quixoStageModel;
-    QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+    QuixoStageModel gameStage;
 
 
 
@@ -31,6 +32,7 @@ public class QuixoController extends Controller {
         super(model, view);
         currentPlayer = 1;
         quixoStageModel = new QuixoStageModel("quixostagemodel", model);
+
     }
 
     /**
@@ -58,14 +60,22 @@ public class QuixoController extends Controller {
     }
 
     private void playTurn(Boolean isSecondeMove) {
+        gameStage = (QuixoStageModel) model.getGameStage();
         board = gameStage.getBoard();
         // get the new player
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            QuixoDecider2 decider = new QuixoDecider2(model, this);
-            ActionPlayer playDecider = new ActionPlayer(model, this, decider, null);
-            playDecider.start();
+            if (currentPlayer == 1) {
+                QuixoDecider decider = new QuixoDecider(model, this);
+                ActionPlayer playDecider = new ActionPlayer(model, this, decider, null);
+                playDecider.start();
+            } else{
+                QuixoDecider2 decider2 = new QuixoDecider2(model, this);
+                ActionPlayer playDecider = new ActionPlayer(model, this, decider2, null);
+                playDecider.start();
+
+            }
 
         } else {
             boolean ok = false;
@@ -112,7 +122,6 @@ public class QuixoController extends Controller {
 //        System.out.println("row = " + row + " col = " + col + "----------------------------------------------------");
 
         // check if the pawn is still in its pot
-        board = null;
 
 
         //verifier si l'entree user est comprise entre 0 et 5

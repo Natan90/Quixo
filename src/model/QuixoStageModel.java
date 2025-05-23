@@ -224,8 +224,7 @@ public class QuixoStageModel extends GameStageModel {
 
             }
             if (allSameDiag2) {
-                Player joueurFace = model.getPlayers().get(face - 1);
-                if (joueurFace.getType() != face - 1) {
+                if (currentPlayer == face) {
                     computePartyResult(face);
                 }
 //                if (model.getCurrentPlayer().getType() + 1 != face) {

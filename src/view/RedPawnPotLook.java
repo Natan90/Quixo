@@ -20,7 +20,7 @@ public class RedPawnPotLook extends GridLook {
     }
 
     protected void renderBorders() {
-        Logger.debug("called", this);
+//        Logger.debug("called", this);
         // start by drawing the border of each cell, which will be change after
         for (int i = 0; i < nbRows; i++) {
             //top-left corner

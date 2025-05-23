@@ -558,7 +558,7 @@ public class ContainerLook extends ElementLook {
 
     public void updateInners(boolean rowColUpdate) {
 
-        Logger.trace("called", this);
+//        Logger.trace("called", this);
         if (rowColUpdate) {
             updateRowHeight();
             updateColWidth();
@@ -567,7 +567,7 @@ public class ContainerLook extends ElementLook {
             ContainerLook up = (ContainerLook) parent;
             // back to the top to propagate changes
             while (up != null) {
-                Logger.trace("change in the structure => call parent updateInners()", this);
+//                Logger.trace("change in the structure => call parent updateInners()", this);
                 up.updateInners();
                 up = (ContainerLook) up.parent;
             }

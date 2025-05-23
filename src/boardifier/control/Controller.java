@@ -81,7 +81,7 @@ public abstract class Controller {
     }
 
     private void processContainerEvents() {
-        Logger.trace(" called", this);
+//        Logger.trace(" called", this);
 
         // for each element : process all event and then update
         mapElementLook.forEach((k,v) -> {
@@ -115,7 +115,7 @@ public abstract class Controller {
     }
 
     private void updateElements() {
-        Logger.trace(" called", this);
+//        Logger.trace(" called", this);
         // for each element : process all event and then update
         mapElementLook.forEach((k,v) -> {
             // update the model of the element, in case of there is really something to do (see comment before GameElement.update())
@@ -124,7 +124,7 @@ public abstract class Controller {
     }
 
     private void processLookEvents() {
-        Logger.trace(" called", this);
+//        Logger.trace(" called", this);
 
         // for each element : process all event and then update
         mapElementLook.forEach((k,v) -> {
@@ -204,7 +204,7 @@ public abstract class Controller {
     }
 
     public void removeElementLookFromContainerLookCell(ContainerElement container, ElementLook look, int row, int col) {
-        Logger.trace(frameNumber+" - remove element look ["+look+" ] from "+row+","+col);
+//        Logger.trace(frameNumber+" - remove element look ["+look+" ] from "+row+","+col);
         // get the container look from the container element where the element was removed
         ContainerLook containerLook = (ContainerLook) getElementLook(container);
         // add the look of the element to the inner looks of the container look =>
@@ -214,7 +214,7 @@ public abstract class Controller {
 
     public void putElementLookToContainerLookCell(ContainerElement container, ElementLook look, int row, int col) {
 
-        Logger.trace(frameNumber+" - put element look ["+look+"] in "+row+","+col);
+//        Logger.trace(frameNumber+" - put element look ["+look+"] in "+row+","+col);
         // get the look of the container element
         ContainerLook containerLook = (ContainerLook) getElementLook(container);
         // add the look of the element to the inner looks of the container look =>
@@ -223,7 +223,7 @@ public abstract class Controller {
     }
 
     public void moveElementLookToContainerLookCell(GameElement element, ElementLook look, int rowSrc, int colSrc, int rowDest, int colDest) {
-        Logger.trace(frameNumber+" - move element look ["+look+"] from "+rowSrc+","+colSrc+ " to "+rowDest+","+colDest);
+//        Logger.trace(frameNumber+" - move element look ["+look+"] from "+rowSrc+","+colSrc+ " to "+rowDest+","+colDest);
         // NB: element may have been removed from a container but not put in another one
         // in this case, do nothing
         if (element.getContainer() == null) return;
