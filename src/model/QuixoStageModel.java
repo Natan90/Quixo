@@ -254,7 +254,7 @@ public class QuixoStageModel extends GameStageModel {
             idWinner = 0;
         }
         if( face == 2 ){
-            System.out.println("Le winner est 2 avec id = 0");
+            System.out.println("Le winner est 2 avec id = 1");
             idWinner = 1;
         }
         // set the winner

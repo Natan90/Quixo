@@ -23,6 +23,7 @@ public class QuixoController extends Controller {
     int[] coordCube = new int[2];
     ContainerElement board;
     QuixoStageModel quixoStageModel;
+    QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
 
 
     public QuixoController(Model model, View view) {
@@ -56,6 +57,7 @@ public class QuixoController extends Controller {
     }
 
     private void playTurn(Boolean isSecondeMove) {
+        board = gameStage.getBoard();
         // get the new player
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
@@ -101,7 +103,7 @@ public class QuixoController extends Controller {
     }
 
     private boolean analyseAndPlay(String line) {
-        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+
         // get the ccords in the board
         int col = (int) (line.charAt(0) - 'A');
         int row = (int) (line.charAt(1) - '1');
@@ -110,7 +112,7 @@ public class QuixoController extends Controller {
 
         // check if the pawn is still in its pot
         board = null;
-        board = gameStage.getBoard();
+
 
         //verifier si l'entree user est comprise entre 0 et 5
         if (!gameStage.getBoard().canReachCell(row, col)) {
