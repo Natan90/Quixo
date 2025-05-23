@@ -48,11 +48,8 @@ public class QuixoDecider2 extends Decider {
 
         board = stage.getBoard(); // get the board
 
-        ContainerElement pot = null;
-        pot = stage.getRedPot();
-
         int[][] tabBoard = copyBoardInTab();
-            List<Point> allMoves = getAllmoves();
+        List<Point> allMoves = getAllmoves();
         System.out.println(allMoves);
 
         for (int i = 0; i<allMoves.size(); i=i+2){
@@ -107,72 +104,47 @@ public class QuixoDecider2 extends Decider {
 
     }
 
-    public int getScore(int face, int[][] tabAfterMove) {
-        int size = 5;
-        int score=0;
+    public int getScore(int face, int[][] board) {
+        int score = 0;
 
+        // Vérifie les lignes et colonnes
+        for (int i = 0; i < 5; i++) {
+            int rowCount = 0;
+            int colCount = 0;
 
-
-        for (int i = 0; i < size; i++) {
-            int alignements = 0;
-//            System.out.println("Vérification des lignes");
-
-            // Vérification des lignes
-            for (int j = 0; j < size; j++) {
-                if (tabAfterMove[i][j] == face)
-                    alignements++;
-
+            for (int j = 0; j < 5; j++) {
+                if (board[i][j] == face) rowCount++;
+                if (board[j][i] == face) colCount++;
             }
-            if(alignements == 3)
-                score+= ALIGN3;
-            else if (alignements == 4)
-                score+= ALIGN4;
-            else if (alignements == 5)
-                score+= ALIGN5;
 
-            // Vérification des colonnes
-            alignements = 0;
-            for (int j = 0; j < size; j++) {
-                if (tabAfterMove[i][j] == face)
-                    alignements++;
-
-
-            }
-            if(alignements == 3)
-                score+= ALIGN3;
-            else if (alignements == 4)
-                score+= ALIGN4;
-            else if (alignements == 5)
-                score+= ALIGN5;
+            score += getPointsForAlignment(rowCount);
+            score += getPointsForAlignment(colCount);
         }
 
-        // Diagonale principale de (0,0) à (4,4)
-        int alignements =0;
-        for (int i = 0; i < size; i++) {
-            if (tabAfterMove[i][size-1 -i] == face)
-                alignements++;
-        }
-        if(alignements == 3)
-            score+= ALIGN3;
-        else if (alignements == 4)
-            score+= ALIGN4;
-        else if (alignements == 5)
-            score+= ALIGN5;
+        // Diagonale principale
+        int diag1 = 0;
+        // Diagonale secondaire
+        int diag2 = 0;
 
-        // Diagonale secondaire de (0,4) à (4,0)
-        for (int i = 0; i < size; i++) {
-            if (tabAfterMove[i][i] == face)
-                alignements++;
+        for (int i = 0; i < 5; i++) {
+            if (board[i][i] == face) diag1++;
+            if (board[i][4 - i] == face) diag2++;
         }
-        if(alignements == 3)
-            score+= ALIGN3;
-        else if (alignements == 4)
-            score+= ALIGN4;
-        else if (alignements == 5)
-            score+= ALIGN5;
+
+        score += getPointsForAlignment(diag1);
+        score += getPointsForAlignment(diag2);
 
         return score;
+    }
 
+    private int getPointsForAlignment(int count) {
+        if(count == 3)
+            return ALIGN3;
+        else if (count == 4)
+            return ALIGN4;
+        else if (count == 5)
+            return ALIGN5;
+        return 0;
     }
 
     public int[][] bestScoreMove(){
