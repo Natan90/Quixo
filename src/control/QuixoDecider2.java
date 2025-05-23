@@ -63,7 +63,14 @@ public class QuixoDecider2 extends Decider {
             int insertionRow = (int) allMoves.get(i+1).getY();
 
             int[][] tabAfterMove = moveSequenceCube(insertionRow, insertionCol, fromRow, fromCol);
-            int score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
+
+            int score;
+            if (quixoController.currentPlayer == 1)
+                score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
+            else
+                score = getScore(1, tabAfterMove) - (getScore(2, tabAfterMove)*2);
+
+
             if(score > scoreFinal) {
                 scoreFinal = score;
                 fromRow = (int) allMoves.get(i).getY();
@@ -74,7 +81,7 @@ public class QuixoDecider2 extends Decider {
                 coordBestMove[0] = new int[]{fromRow, fromCol};
                 coordBestMove[1] = new int[]{insertionRow, insertionCol};
 
-                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
+//                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
             }
 //            System.out.println("Tableau de base : ");
 //            afficheTab2D(tabBoard);
@@ -86,7 +93,7 @@ public class QuixoDecider2 extends Decider {
 
         Cube cube = (Cube) board.getElement(coordBestMove[0][0], coordBestMove[0][1]);// row -- col
 
-        cube.setFace(2);
+        cube.setFace(quixoController.currentPlayer);
 //        ActionList firstMove = ActionFactory.generatePutInContainer(model, cube, "cubepot", coordBestMove[0][0], coordBestMove[0][1]);
 
 
@@ -182,8 +189,8 @@ public class QuixoDecider2 extends Decider {
                 }
             }
         }
+            tabBoardAfterMove[insertionRow][insertionCol] = quixoController.currentPlayer;
 
-        tabBoardAfterMove[insertionRow][insertionCol] = 2; // Face du joueur 2
 
         return tabBoardAfterMove;
     }
