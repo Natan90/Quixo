@@ -1,6 +1,7 @@
 package model;
 
 import boardifier.model.*;
+import control.QuixoController;
 
 /**
  * HoleStageModel defines the model for the single stage in "The Hole". Indeed,
@@ -39,6 +40,7 @@ public class QuixoStageModel extends GameStageModel {
     private QuixoPawnPot redPot;
     private Cube[] cubes;
     private TextElement playerName;
+
     // Uncomment next line if the example with a main container is used. see end of HoleStageFactory and HoleStageView
     //private ContainerElement mainContainer;
 
@@ -46,18 +48,6 @@ public class QuixoStageModel extends GameStageModel {
         super(name, model);
 //        setupCallbacks();
     }
-
-    //Uncomment this 2 methods if example with a main container is used
-    /*
-    public ContainerElement getMainContainer() {
-        return mainContainer;
-    }
-
-    public void setMainContainer(ContainerElement mainContainer) {
-        this.mainContainer = mainContainer;
-        addContainer(mainContainer);
-    }
-     */
 
     public QuixoBoard getBoard() {
         return board;
@@ -97,7 +87,9 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks(ContainerElement board) {
+    public void setupCallbacks(ContainerElement board, int currentPlayer) {
+
+
 
         int size = 5;
         int face;
@@ -130,10 +122,8 @@ public class QuixoStageModel extends GameStageModel {
 
             }
             if (allSame) {
-                Player joueurFace = model.getPlayers().get(face - 1);
-                if (joueurFace.getType() != face - 1) {
+                if (currentPlayer == 1)
                     computePartyResult(face);
-                }
 //                if (model.getCurrentPlayer().getType() + 1 != face) {
 //                    computePartyResult(face);
 //                }
