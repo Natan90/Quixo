@@ -19,7 +19,7 @@ import java.util.List;
 public class QuixoController extends Controller {
 
     BufferedReader consoleIn;
-    boolean firstPlayer;
+    int currentPlayer;
     int[] coordCube = new int[2];
     ContainerElement board;
     QuixoStageModel quixoStageModel;
@@ -27,7 +27,7 @@ public class QuixoController extends Controller {
 
     public QuixoController(Model model, View view) {
         super(model, view);
-        firstPlayer = true;
+        currentPlayer = 1;
         quixoStageModel = new QuixoStageModel("quixostagemodel", model);
     }
 
@@ -39,6 +39,7 @@ public class QuixoController extends Controller {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
         update();
         while (!model.isEndStage()) {
+            System.out.println("Joueur actuel : " + currentPlayer);
             if (model.getCurrentPlayer().getType() == Player.COMPUTER) {
                 playTurn(null);
             } else {
@@ -47,6 +48,7 @@ public class QuixoController extends Controller {
                 playTurn(true);
             }
 
+            setNextPlayer();
             endOfTurn();
             update();
         }
@@ -282,6 +284,13 @@ public class QuixoController extends Controller {
 
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
+    }
+
+    public void setNextPlayer(){
+        if (currentPlayer == 1)
+            currentPlayer = 2;
+        else
+            currentPlayer = 1;
     }
 
 
