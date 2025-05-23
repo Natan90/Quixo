@@ -93,7 +93,7 @@ public class QuixoDecider extends Decider {
         // Si c'est le cas, on met le cube dans la poule avec sa face
         if (cube != null && cube.getFace() != model.getCurrentPlayer().getType() - 1) {
             cube.setFace(2);
-            actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0));
+            actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", destRow, destCol));
             actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
         }
         return actions;
@@ -276,11 +276,9 @@ public class QuixoDecider extends Decider {
             for (int j = 0; j < liste.get(i).size(); j++) {
                 int elem = liste.get(i).get(j);
 
-                if (elem > max) {
+                if (elem >= max) {
                     max = elem;
                     coordMax.clear();
-                    coordMax.add(new Point(i, j));
-                } else if (elem == max) {
                     coordMax.add(new Point(i, j));
                 }
             }
@@ -344,13 +342,14 @@ public class QuixoDecider extends Decider {
     }
 
     // On vérifie si le cube aux coordonnées (i, j) a pour face 0 (blanche) ou pour face (la propre face du joueur courant)
-    private void cubeDetection(int i, int j, List<Point> caseObjectif) {
+    public void cubeDetection(int i, int j, List<Point> caseObjectif) {
         Cube cube = (Cube) board.getElement(i, j);
         int currentFace = 0;
         if (cube != null)
             currentFace = cube.getFace();
 
         if (currentFace == 0 || currentFace == model.getCurrentPlayer().getType()) {
+            System.out.println("Adding point to caseObjectif");
             caseObjectif.add(new Point(j, i));
         }
     }

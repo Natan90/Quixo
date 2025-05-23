@@ -111,6 +111,7 @@ public class QuixoDecider2 extends Decider {
 
     }
 
+
     public int getScore(int face, int[][] board) {
         int score = 0;
 
@@ -144,7 +145,7 @@ public class QuixoDecider2 extends Decider {
         return score;
     }
 
-    private int getPointsForAlignment(int count) {
+    public int getPointsForAlignment(int count) {
         if(count == 3)
             return ALIGN3;
         else if (count == 4)
@@ -154,9 +155,6 @@ public class QuixoDecider2 extends Decider {
         return 0;
     }
 
-    public int[][] bestScoreMove(){
-        return null;
-    }
 
     public int[][] moveSequenceCube(int insertionRow, int insertionCol, int fromRow, int fromCol) {
         // Créez une copie du tableau actuel
@@ -241,6 +239,7 @@ public class QuixoDecider2 extends Decider {
         System.out.println(allMoves);
         return allMoves;
     }
+
     public void afficheTab2D(int[][] tab){
 //        System.out.println("Tableau : \n");
         for(int i =0; i<tab.length;i++){
@@ -249,6 +248,5 @@ public class QuixoDecider2 extends Decider {
             }
             System.out.println("");
         }
-
     }
 }

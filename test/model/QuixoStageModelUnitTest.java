@@ -24,7 +24,7 @@ public class QuixoStageModelUnitTest {
 
     @Test
     public void testSetUpCallBacks() {
-        quixoStageModel.setupCallbacks(quixoBoard);
+        quixoStageModel.setupCallbacks(quixoBoard, 1);
 
 
     }
