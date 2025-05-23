@@ -93,7 +93,7 @@ public class QuixoDecider extends Decider {
         // Si c'est le cas, on met le cube dans la poule avec sa face
         if (cube != null && cube.getFace() != model.getCurrentPlayer().getType() - 1) {
             cube.setFace(2);
-            actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", destRow, destCol));
+            actions.addAll(ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0));
             actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
         }
         return actions;
