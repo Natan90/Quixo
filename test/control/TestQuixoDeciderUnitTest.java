@@ -1,23 +1,16 @@
 package control;
 
 import boardifier.control.ActionFactory;
-import boardifier.control.Controller;
-import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import boardifier.model.Player;
 import boardifier.model.action.ActionList;
-import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoPawnPot;
 import model.QuixoStageModel;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import javax.naming.ldap.Control;
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +29,7 @@ public class TestQuixoDeciderUnitTest {
     private Cube cube;
     private QuixoDecider quixoDecider;
     private QuixoController quixoController;
+    private Player player;
 
 
     @BeforeEach
@@ -47,6 +41,7 @@ public class TestQuixoDeciderUnitTest {
         cube = Mockito.mock(Cube.class);
         quixoDecider = Mockito.mock(QuixoDecider.class);
         quixoController = Mockito.mock(QuixoController.class);
+        player = Mockito.mock(Player.class);
 
         when(model.getGameStage()).thenReturn(quixoStageModel);
         when(quixoStageModel.getBoard()).thenReturn(quixoBoard);
@@ -80,7 +75,7 @@ public class TestQuixoDeciderUnitTest {
     public void testFirstTurn() {
         when(quixoBoard.getElement(anyInt(), anyInt())).thenReturn(cube);
         when(cube.getFace()).thenReturn(1);
-        Player player = Mockito.mock(Player.class);
+
         when(model.getCurrentPlayer()).thenReturn(player);
         when(model.getCurrentPlayer().getType()).thenReturn(1);
 
@@ -142,30 +137,42 @@ public class TestQuixoDeciderUnitTest {
 
     @Test
     public void testSearchMax() {
+        QuixoDecider decider = new QuixoDecider(null, null);
+
         List<List<Integer>> liste = new ArrayList<>(Arrays.asList(
            Arrays.asList(1, 7, 3),
            Arrays.asList(15, 5, 6),
            Arrays.asList(0, 8, 9)
         ));
 
-        List<Point> coordMax = List.of(
-                new Point(1, 0)
+        List<Point> result = decider.searchMax(liste);
+        assertEquals(1, result.size());
+        assertEquals(new Point(1, 0), result.getFirst());
+
+        List<List<Integer>> data = Arrays.asList(
+                Arrays.asList(-5, -2, -3),
+                Arrays.asList(-4, -1, -6)
         );
-        assertTrue(quixoDecider.searchMax(liste).contains(coordMax.getFirst()));
+
+        List<Point> otherResult = decider.searchMax(data);
+        assertEquals(0, otherResult.size());        // Ne marche pas avec des valeurs négatives
     }
 
 
     @Test
     public void testCubeDetection() {
-
-        List<Point> caseObjectif = Mockito.mock(List.class);
+        QuixoDecider decider = new QuixoDecider(null, null);
+        List<Point> caseObjectif = new ArrayList<>();
 
         when(quixoBoard.getElement(anyInt(), anyInt())).thenReturn(cube);
         when(cube.getFace()).thenReturn(0);
+        when(model.getCurrentPlayer()).thenReturn(player);
+        when(player.getType()).thenReturn(1);
 
-        quixoDecider.cubeDetection(1, 2, caseObjectif);
+        decider.cubeDetection(1, 2, caseObjectif);
 
-        verify(caseObjectif, atLeastOnce()).add(any(Point.class));
+        assertEquals(1, caseObjectif.size());
+        assertEquals(new Point(2, 1), caseObjectif.getFirst());
     }
 
 
