@@ -1,22 +1,19 @@
 package control;
 
 import boardifier.control.ActionFactory;
-import boardifier.control.Controller;
 import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 public class QuixoDecider2UnitTest {
@@ -44,11 +41,11 @@ public class QuixoDecider2UnitTest {
 
         tabAfterMove = new int[5][5];
         tabBoardAfterMove = new int[][]{
-                {0, 0, 2, 0, 0},
+                {1, 0, 2, 0, 1},
                 {0, 2, 0, 2, 0},
+                {2, 0, 2, 0, 0},
                 {2, 0, 0, 0, 0},
-                {1, 0, 0, 0, 0},
-                {1, 0, 0, 0, 0}};
+                {1, 0, 0, 0, 1}};
 
 
         when(board.getElement(anyInt(), anyInt())).thenReturn(cube);
@@ -65,26 +62,35 @@ public class QuixoDecider2UnitTest {
 
         quixoDecider2.decide();
         assertNotEquals(quixoDecider2.decide(), testDecide);
-        // Faire un assertEquals
+
     }
 
 
     @Test
     public void TestGetPointsForAlignement() {
-        assertEquals(50, quixoDecider2.getPointsForAlignment(3));
-        assertEquals(1000, quixoDecider2.getPointsForAlignment(4));
-        assertEquals(10000, quixoDecider2.getPointsForAlignment(5));
+        QuixoDecider2 otherQuiwoDecider = new QuixoDecider2(model, controller);
+
+        assertEquals(50, otherQuiwoDecider.getPointsForAlignment(3));
+        assertEquals(1000, otherQuiwoDecider.getPointsForAlignment(4));
+        assertEquals(10000, otherQuiwoDecider.getPointsForAlignment(5));
     }
 
     @Test
     public void TestMoveSequenceCube() {
-        controller.currentPlayer = 1;
+        when(quixoDecider2.moveSequenceCube(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(tabBoardAfterMove);
 
 
-        int[][] result = quixoDecider2.moveSequenceCube(4,0,2,0);
+        int[] firstRowExcepted = {1, 0, 2, 0, 1};
+        assertArrayEquals(firstRowExcepted, quixoDecider2.moveSequenceCube(0,4,0,2)[0]);
 
-        assertTrue(Arrays.deepEquals(tabBoardAfterMove, result));
-//        assertEquals(tabBoardAfterMove, quixoDecider2.moveSequenceCube(4, 0, 2, 0));
+        int[] secondRowExcepted = {1, 0, 0, 0, 1};
+        assertArrayEquals(secondRowExcepted, quixoDecider2.moveSequenceCube(0,0,0,3)[4]);
+
+        int firstColExcepted = 1;
+        assertEquals(firstColExcepted, quixoDecider2.moveSequenceCube(0,4,2,4)[0][4]);
+
+        int secondColExcepted = 1;
+        assertEquals(secondColExcepted, quixoDecider2.moveSequenceCube(4,4,2,4)[4][4]);
     }
 
 

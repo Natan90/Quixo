@@ -35,6 +35,7 @@ public class TestQuixoDeciderUnitTest {
     private QuixoPawnPot pot;
     private Cube cube;
     private QuixoDecider quixoDecider;
+    private QuixoController quixoController;
 
 
     @BeforeEach
@@ -45,6 +46,7 @@ public class TestQuixoDeciderUnitTest {
         pot = Mockito.mock(QuixoPawnPot.class);
         cube = Mockito.mock(Cube.class);
         quixoDecider = Mockito.mock(QuixoDecider.class);
+        quixoController = Mockito.mock(QuixoController.class);
 
         when(model.getGameStage()).thenReturn(quixoStageModel);
         when(quixoStageModel.getBoard()).thenReturn(quixoBoard);
@@ -53,8 +55,24 @@ public class TestQuixoDeciderUnitTest {
 
     @Test
     public void testDecide() {
+        QuixoDecider spyDecider = Mockito.spy(quixoDecider);
 
-        // À continuer
+        int[] move = new int[]{0, 0, 0, 0};
+        doReturn(move).when(spyDecider).play();
+
+        when(quixoBoard.getElement(0, 0)).thenReturn(cube);
+
+        doNothing().when(quixoController).mooveSequenceCube(anyInt(), anyInt(), anyInt(), anyInt(), anyBoolean());
+
+        ActionList firstTurnActions = new ActionList();
+        firstTurnActions.addAll(Mockito.mock(ActionList.class));
+        doReturn(firstTurnActions).when(spyDecider).firstTurn(anyInt(), anyInt(), anyInt(), anyInt());
+
+        Cube spyCube = Mockito.spy(cube);
+
+        ActionList defaultAction = ActionFactory.generatePutInContainer(model, spyCube, "cubepot", 0, 0);
+        when(quixoDecider.decide()).thenReturn(defaultAction);
+        assertEquals(defaultAction, quixoDecider.decide());
     }
 
 
@@ -65,12 +83,13 @@ public class TestQuixoDeciderUnitTest {
         Player player = Mockito.mock(Player.class);
         when(model.getCurrentPlayer()).thenReturn(player);
         when(model.getCurrentPlayer().getType()).thenReturn(1);
-//
-//        ActionList atcions = ActionFactory.generatePutInContainer(model, any(Cube.class), "cubepot", anyInt(), anyInt());
-//
-//        when(quixoDecider.firstTurn(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(atcions);
-        // À terminer
 
+        Cube spyCube = Mockito.spy(cube);
+
+        ActionList atcions = ActionFactory.generatePutInContainer(model, spyCube, "cubepot", 0, 0);
+
+        when(quixoDecider.firstTurn(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(atcions);
+        assertEquals(atcions, quixoDecider.firstTurn(anyInt(), anyInt(), anyInt(), anyInt()));
     }
 
 
