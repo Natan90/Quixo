@@ -65,7 +65,7 @@ public class QuixoDecider2 extends Decider {
             int[][] tabAfterMove = moveSequenceCube(insertionRow, insertionCol, fromRow, fromCol);
 
             int score;
-            if (quixoController.currentPlayer == 1)
+            if (quixoController.currentPlayer == 2)
                 score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
             else
                 score = getScore(1, tabAfterMove) - (getScore(2, tabAfterMove)*2);
@@ -78,8 +78,11 @@ public class QuixoDecider2 extends Decider {
                 insertionRow = (int) allMoves.get(i+1).getY();
                 insertionCol = (int) allMoves.get(i+1).getX();
 
+
+
                 coordBestMove[0] = new int[]{fromRow, fromCol};
                 coordBestMove[1] = new int[]{insertionRow, insertionCol};
+                System.out.println("Meilleur score trouvé aux coordonnées : " + Arrays.toString(coordBestMove[0]) + "(premier coup) et " + Arrays.toString(coordBestMove[1]) + " (deuxième coup)");
 
 //                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
             }
