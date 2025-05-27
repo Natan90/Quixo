@@ -5,6 +5,7 @@ import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.model.*;
 import boardifier.model.action.ActionList;
+import boardifier.model.animation.AnimationTypes;
 import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
@@ -147,7 +148,11 @@ public class QuixoController extends Controller {
             return false;
 
 
-        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
+//        ActionList actions = ActionFactory.generatePutInContainer(model, cube, "cubepot", 0, 0);
+
+        ActionList actions = null;
+//        Controller control;
+//        ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0, AnimationTypes.MOVE_LINEARPROP, 10);
 
 
         actions.setDoEndOfTurn(false); // after playing this action list, it will be the end of turn for current player.
@@ -244,7 +249,7 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(i, insertionCol);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, insertionCol);
+//                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i + 1, insertionCol);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
                 }
@@ -254,7 +259,7 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(i, insertionCol);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, insertionCol);
+//                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", i - 1, insertionCol);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
                 }
@@ -268,7 +273,7 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(insertionRow, i);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", insertionRow, i + 1);
+//                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", insertionRow, i + 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
                 }
@@ -278,7 +283,7 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(insertionRow, i);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", insertionRow, i - 1);
+//                    actions = ActionFactory.generatePutInContainer(model, cubeBoard, "quixoboard", insertionRow, i - 1);
                     ActionPlayer play = new ActionPlayer(model, this, actions);
                     play.start();
                 }
@@ -291,7 +296,7 @@ public class QuixoController extends Controller {
         else
             cube.setFace(2);
 
-        actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", insertionRow, insertionCol);
+//        actions = ActionFactory.generatePutInContainer(model, cube, "quixoboard", insertionRow, insertionCol);
         actions.setDoEndOfTurn(true); // Finir le tour après cette action
 
         ActionPlayer play = new ActionPlayer(model, this, actions);
