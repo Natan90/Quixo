@@ -1,17 +1,16 @@
 import boardifier.control.Logger;
-import boardifier.model.GameException;
-import boardifier.view.View;
 import boardifier.control.StageFactory;
 import boardifier.model.Model;
 import control.QuixoController;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import view.QuixoRootPane;
+import view.QuixoView;
 
-public class QuixoConsole {
+public class QuixoConsole extends Application {
 
+    private static int mode;
     public static void main(String[] args) {
-
-        Logger.setLevel(Logger.LOGGER_TRACE);
-        Logger.setVerbosity(Logger.VERBOSE_HIGH);
-        int mode = 0;
         if (args.length == 1) {
             try {
                 mode = Integer.parseInt(args[0]);
@@ -21,7 +20,17 @@ public class QuixoConsole {
                 mode = 0;
             }
         }
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
+        Logger.setLevel(Logger.LOGGER_DEBUG); // show info and debug messages
+
+        // create the global model
         Model model = new Model();
+        // add some players taking mode into account
         if (mode == 0) {
             model.addHumanPlayer("player1");
             model.addHumanPlayer("player2");
@@ -34,17 +43,19 @@ public class QuixoConsole {
             model.addComputerPlayer("computer1");
             model.addComputerPlayer("computer2");
         }
-
-        StageFactory.registerModelAndView("quixo", "model.QuixoStageModel", "view.QuixoStageView");
-        View quixoView = new View(model);
-        QuixoController control = new QuixoController(model,quixoView);
-        control.setFirstStageName("quixo");
-        try {
-            control.startGame();
-            control.stageLoop();
-        }
-        catch(GameException e) {
-            System.out.println("Cannot start the game. Abort");
-        }
+        // register a single stage for the game, called hole
+        StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
+        // create the root pane, using the subclass HoleRootPane
+        QuixoRootPane rootPane = new QuixoRootPane();
+        // create the global view.
+        QuixoView view = new QuixoView(model, stage, rootPane);
+        // create the controllers.
+        QuixoController control = new QuixoController(model,view);
+        // set the name of the first stage to create when the game is started
+        control.setFirstStageName("hole");
+        // set the stage title
+        stage.setTitle("The Hole");
+        // show the JavaFx main stage
+        stage.show();
     }
 }

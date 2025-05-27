@@ -5,8 +5,11 @@ import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.control.Decider;
 import boardifier.model.ContainerElement;
+import boardifier.model.Coord2D;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.view.GridLook;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
@@ -44,6 +47,9 @@ public class QuixoDecider2 extends Decider {
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
         scoreFinal =-100000;
         coordBestMove = new int[2][2];
+
+        GridLook look = (GridLook) control.getElementLook(board);
+
 
 
         board = stage.getBoard(); // get the board
@@ -106,11 +112,14 @@ public class QuixoDecider2 extends Decider {
         quixoController.mooveSequenceCube(coordBestMove[1][0], coordBestMove[1][1], coordBestMove[0][0], coordBestMove[0][1], false); //insert row, insert col, from row, from col
         System.out.println("Element reposé en  : "+coordBestMove[1][0] + coordBestMove[1][1]);
 
-        ActionList secondMove = ActionFactory.generatePutInContainer(model, cube, "quixoboard", coordBestMove[1][0], coordBestMove[1][1]); //rowdest, coldest
+        ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "quixoboard", coordBestMove[1][0], coordBestMove[1][1], AnimationTypes.MOVE_LINEARPROP, 10);
+        actions.setDoEndOfTurn(true);
+//        secondMove = ActionFactory.generatePutInContainer(model, cube, "quixoboard", coordBestMove[1][0], coordBestMove[1][1]); //rowdest, coldest
+
+
 
 //        firstMove.addAll(secondMove);
-        secondMove.setDoEndOfTurn(true);
-        return secondMove;
+        return actions;
 
     }
 

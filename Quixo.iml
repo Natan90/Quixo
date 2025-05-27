@@ -26,5 +26,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="openjfx.javafx.base" level="application" />
+    <orderEntry type="library" name="lib2" level="application" />
   </component>
 </module>
