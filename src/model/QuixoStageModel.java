@@ -40,9 +40,18 @@ public class QuixoStageModel extends GameStageModel {
     private QuixoPawnPot redPot;
     private Cube[] cubes;
     private TextElement playerName;
+//    private ContainerElement mainContainer;
 
-    // Uncomment next line if the example with a main container is used. see end of HoleStageFactory and HoleStageView
-    //private ContainerElement mainContainer;
+    //Uncomment this 2 methods if example with a main container is used
+//    public ContainerElement getMainContainer() {
+//        return mainContainer;
+//    }
+//
+//    public void setMainContainer(ContainerElement mainContainer) {
+//        this.mainContainer = mainContainer;
+//        addContainer(mainContainer);
+//    }
+
 
     public QuixoStageModel(String name, Model model) {
         super(name, model);

@@ -28,7 +28,7 @@ public class RedPawnPotLook extends GridLook {
         setHorizontalAlignment(ALIGN_CENTER);
         cells = new Rectangle[4];
         // create the rectangles.
-        for(int i=0;i<25;i++) {
+        for(int i=0;i<1;i++) {
             cells[i] = new Rectangle(colWidth, rowHeight, Color.WHITE);
             cells[i].setStrokeWidth(3);
             cells[i].setStrokeMiterLimit(10);

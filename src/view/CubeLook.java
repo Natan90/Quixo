@@ -21,18 +21,16 @@ public class CubeLook extends ElementLook {
     public void render() {
         Cube cube = (Cube) element;
 
-        // Crée un rectangle pour représenter le carré
-        Rectangle square = new Rectangle(50, 50); // Taille 50x50 (modifiable)
+        Rectangle square = new Rectangle(50, 50);
         square.setStroke(Color.BLACK); // Bordure noire
 
         // Détermine la couleur de fond en fonction de l'état du cube
         if (cube.isJouable()) {
-            square.setFill(Color.LIGHTGREEN); // Fond vert clair si jouable
+            square.setFill(Color.LIGHTGREEN);
         } else {
-            square.setFill(Color.LIGHTGRAY); // Fond gris clair si non jouable
+            square.setFill(Color.LIGHTGRAY);
         }
 
-        // Crée un texte pour afficher "X" ou "O"
         Text text = new Text();
         if (cube.getFace() == 1) {
             text.setText("X");
@@ -44,7 +42,7 @@ public class CubeLook extends ElementLook {
             text.setText(""); // Pas de texte si la face est 0
         }
 
-        // Superpose le texte sur le rectangle
+
         StackPane stack = new StackPane();
         stack.getChildren().addAll(square, text);
 

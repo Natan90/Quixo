@@ -44,7 +44,7 @@ public class QuixoConsole extends Application {
             model.addComputerPlayer("computer2");
         }
         // register a single stage for the game, called hole
-        StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
+        StageFactory.registerModelAndView("quixo", "model.QuixoStageModel", "view.QuixoStageView");
         // create the root pane, using the subclass HoleRootPane
         QuixoRootPane rootPane = new QuixoRootPane();
         // create the global view.
@@ -52,9 +52,9 @@ public class QuixoConsole extends Application {
         // create the controllers.
         QuixoController control = new QuixoController(model,view);
         // set the name of the first stage to create when the game is started
-        control.setFirstStageName("hole");
+        control.setFirstStageName("quixo");
         // set the stage title
-        stage.setTitle("The Hole");
+        stage.setTitle("Quixo Game");
         // show the JavaFx main stage
         stage.show();
     }
