@@ -1,5 +1,6 @@
 package model;
 
+import boardifier.model.ContainerElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
 import boardifier.model.TextElement;
@@ -33,11 +34,11 @@ public class QuixoStageFactory extends StageElementsFactory {
 
         // create the text that displays the player name and put it in 0,0 in the virtual space
         TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
-        text.setLocation(0,0);
+        text.setLocation(5,50);
         stageModel.setPlayerName(text);
 
         // create the board, in 0,1 in the virtual space
-        QuixoBoard board = new QuixoBoard(30, 1, stageModel);
+        QuixoBoard board = new QuixoBoard(200, 0, stageModel);
 
         // assign the board to the game stage model
         stageModel.setBoard(board);
@@ -45,7 +46,7 @@ public class QuixoStageFactory extends StageElementsFactory {
         // assign the black pot to the game stage model
 
         //create the black pot in 25,0 in the virtual space
-        QuixoPawnPot redPot = new QuixoPawnPot(10,5, stageModel);
+        QuixoPawnPot redPot = new QuixoPawnPot(50,200, stageModel);
         // assign the red pot to the game stage model
         stageModel.setRedPot(redPot);
 
@@ -54,6 +55,7 @@ public class QuixoStageFactory extends StageElementsFactory {
 
         for (int i =0; i<25; i++){
             cubes[i] = new Cube(Cube.CUBE_WHITE, stageModel, false);
+            System.out.println("Cube" + cubes[i] + " created with stageFactory");
         }
         stageModel.setCubes(cubes);
 
@@ -66,4 +68,27 @@ public class QuixoStageFactory extends StageElementsFactory {
             }
         }
     }
+            /* Example with a main container that takes the ownership of the location
+           of the element that are put within.
+           If we put text, board, black/red pots within this container, their initial
+           location in the virtual space is no more relevant.
+           In such a case, we also need to create a look for the main container, see HoleStageView
+           comment at the end of the class.
+
+             */
+
+//        // create the main container with 2 rows and 3 columns, in 0,0 in the virtual space
+//        ContainerElement mainContainer = new ContainerElement("rootcontainer",0,0,2,3, stageModel);
+//        // for cell 0,1, span over the row below => the column 1 goes from top to bottom of the container
+//        mainContainer.setCellSpan(0,1,2,1);
+//        // for cell 0,2, span over the row below => the column 2 goes from top to bottom of the container
+//        mainContainer.setCellSpan(0,2,2,1);
+//        // assign the
+//        stageModel.setMainContainer(mainContainer);
+//        // assign elements to main container cells
+//        mainContainer.addElement(text,0,0);
+//        mainContainer.addElement(board, 1,0);
+//        mainContainer.addElement(blackPot,0,1);
+//        mainContainer.addElement(redPot,0,2);
+
 }

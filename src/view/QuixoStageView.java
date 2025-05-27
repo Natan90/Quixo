@@ -24,12 +24,15 @@ public class QuixoStageView extends GameStageView {
 
         /* Example to show how to set a global container to layout all looks in the root pane
            Must also uncomment lines in HoleStageFactory and HoleStageModel
-        ContainerLook mainLook = new ContainerLook(model.getRootContainer(), -1);
-        mainLook.setPadding(10);
-        mainLook.setVerticalAlignment(ContainerLook.ALIGN_MIDDLE);
-        mainLook.setHorizontalAlignment(ContainerLook.ALIGN_CENTER);
-        addLook(mainLook);
 
          */
+
+//        ContainerLook mainLook = new ContainerLook(model.getRootContainer(), -1);
+//        mainLook.setPadding(10);
+//        mainLook.setVerticalAlignment(ContainerLook.ALIGN_MIDDLE);
+//        mainLook.setHorizontalAlignment(ContainerLook.ALIGN_CENTER);
+//        addLook(mainLook);
+
+
     }
 }

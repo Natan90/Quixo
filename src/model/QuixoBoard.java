@@ -23,9 +23,9 @@ public class QuixoBoard extends ContainerElement {
         super("quixoboard", x, y, 5 , 5, gameStageModel);
     }
 
-    public boolean[][] getReachableCells() {
-        return getReachableCells();
-    }
+//    public boolean[][] getReachableCells() {
+//        return getReachableCells();
+//    }
 
 
     public List<Point> computeValidCells(boolean isFirstMove, int[] coordCube, Model model) {
