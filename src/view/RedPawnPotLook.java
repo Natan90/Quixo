@@ -29,11 +29,11 @@ public class RedPawnPotLook extends GridLook {
         cells = new Rectangle[4];
         // create the rectangles.
         for(int i=0;i<1;i++) {
-            cells[i] = new Rectangle(colWidth, rowHeight, Color.WHITE);
+            cells[i] = new Rectangle(colWidth, rowHeight, Color.PURPLE);
             cells[i].setStrokeWidth(3);
             cells[i].setStrokeMiterLimit(10);
             cells[i].setStrokeType(StrokeType.CENTERED);
-            cells[i].setStroke(Color.valueOf("0x333333"));
+            cells[i].setStroke(Color.PURPLE);
             cells[i].setX(borderWidth);
             cells[i].setY(i*rowHeight+borderWidth);
             addShape(cells[i]);

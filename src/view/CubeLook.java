@@ -17,7 +17,6 @@ import model.Cube;
 public class CubeLook extends ElementLook {
 
     private Rectangle rectangle;
-    private int radius;
 
     public CubeLook(GameElement element) {
         super(element);
@@ -26,23 +25,20 @@ public class CubeLook extends ElementLook {
     public void render() {
         Cube cube = (Cube)element;
         rectangle = new Rectangle(-45, -45, 95, 95);
-        if (cube.getColor() == Cube.CUBE_WHITE) {
-            rectangle.setFill(Color.BLACK);
-        }
-        else {
-            rectangle.setFill(Color.RED);
-        }
+        rectangle.setFill(Color.BLACK);
 
         addShape(rectangle);
         // NB: text won't change so no need to put it as an attribute
-        Text text = new Text(String.valueOf(cube.getFace()));
+        Text text = null;
+        if (cube.getFace() == 0){
+            text = new Text("");
+        } else if (cube.getFace() == 1) {
+            text = new Text("X");
+        }else if (cube.getFace() == 2){
+            text = new Text("O");
+        }
         text.setFont(new Font(24));
-        if (cube.getColor() == Cube.CUBE_WHITE) {
-            text.setFill(Color.valueOf("0xFFFFFF"));
-        }
-        else {
-            text.setFill(Color.valueOf("0x000000"));
-        }
+        text.setFill(Color.valueOf("0xFFFFFF"));
         Bounds bt = text.getBoundsInLocal();
         text.setX(-bt.getWidth()/2);
         // since numbers are always above the baseline, relocate just using the part above baseline
