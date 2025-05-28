@@ -64,6 +64,7 @@ public class QuixoStageFactory extends StageElementsFactory {
         for(int i=0;i< 5; i++){
             for (int j=0; j< 5; j++){
                 board.addElement(cubes[index], i, j);
+                System.out.println("cubes[index] : "+ cubes[index] + " i : " + i + " j : "+ j);
                 index++;
             }
         }
