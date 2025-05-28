@@ -2,9 +2,11 @@ package view;
 
 import boardifier.model.GameElement;
 import boardifier.view.ElementLook;
+import javafx.geometry.Bounds;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.Cube;
 
@@ -14,42 +16,38 @@ import model.Cube;
  */
 public class CubeLook extends ElementLook {
 
+    private Rectangle rectangle;
+    private int radius;
+
     public CubeLook(GameElement element) {
         super(element);
     }
 
     public void render() {
-        Cube cube = (Cube) element;
-
-        // Crée un rectangle pour représenter le carré
-        Rectangle square = new Rectangle(50, 50); // Taille 50x50 (modifiable)
-        square.setStroke(Color.BLACK); // Bordure noire
-
-        // Détermine la couleur de fond en fonction de l'état du cube
-        if (cube.isJouable()) {
-            square.setFill(Color.LIGHTGREEN); // Fond vert clair si jouable
-        } else {
-            square.setFill(Color.LIGHTGRAY); // Fond gris clair si non jouable
+        Cube cube = (Cube)element;
+        rectangle = new Rectangle(-45, -45, 95, 95);
+        if (cube.getColor() == Cube.CUBE_WHITE) {
+            rectangle.setFill(Color.BLACK);
+        }
+        else {
+            rectangle.setFill(Color.RED);
         }
 
-        // Crée un texte pour afficher "X" ou "O"
-        Text text = new Text();
-        if (cube.getFace() == 1) {
-            text.setText("X");
-            text.setFill(Color.BLACK); // Couleur du texte
-        } else if (cube.getFace() == 2) {
-            text.setText("O");
-            text.setFill(Color.BLACK);
-        } else {
-            text.setText(""); // Pas de texte si la face est 0
+        addShape(rectangle);
+        // NB: text won't change so no need to put it as an attribute
+        Text text = new Text(String.valueOf(cube.getFace()));
+        text.setFont(new Font(24));
+        if (cube.getColor() == Cube.CUBE_WHITE) {
+            text.setFill(Color.valueOf("0xFFFFFF"));
         }
-
-        // Superpose le texte sur le rectangle
-        StackPane stack = new StackPane();
-        stack.getChildren().addAll(square, text);
-
-        // Ajoutez le stack à votre scène ou conteneur principal
-        // Exemple : root.getChildren().add(stack);
+        else {
+            text.setFill(Color.valueOf("0x000000"));
+        }
+        Bounds bt = text.getBoundsInLocal();
+        text.setX(-bt.getWidth()/2);
+        // since numbers are always above the baseline, relocate just using the part above baseline
+        text.setY(text.getBaselineOffset()/2-4);
+        addShape(text);
 
     }
 
