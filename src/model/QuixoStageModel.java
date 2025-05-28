@@ -34,6 +34,10 @@ public class QuixoStageModel extends GameStageModel {
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
 
+    public final static int STATE_SELECTEDCUBE = 1;
+    public final static int STATE_SELECTEDDEST = 2;
+
+
     // define stage game elements
     private QuixoBoard board;
     private QuixoPawnPot blackPot;
@@ -56,6 +60,7 @@ public class QuixoStageModel extends GameStageModel {
     public QuixoStageModel(String name, Model model) {
         super(name, model);
 //        setupCallbacks();
+        state = STATE_SELECTEDCUBE;
     }
 
     public QuixoBoard getBoard() {

@@ -25,7 +25,14 @@ public class CubeLook extends ElementLook {
     public void render() {
         Cube cube = (Cube)element;
         rectangle = new Rectangle(-45, -45, 95, 95);
-        rectangle.setFill(Color.BLACK);
+
+        if (cube.selected) {
+            rectangle.setFill(Color.GREEN);
+        }
+        else {
+            rectangle.setFill(Color.BLACK);
+
+        }
 
         addShape(rectangle);
         // NB: text won't change so no need to put it as an attribute
@@ -44,6 +51,7 @@ public class CubeLook extends ElementLook {
         // since numbers are always above the baseline, relocate just using the part above baseline
         text.setY(text.getBaselineOffset()/2-4);
         addShape(text);
+
 
     }
 
