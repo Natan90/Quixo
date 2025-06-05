@@ -24,7 +24,7 @@ public class CubeLook extends ElementLook {
 
     public void render() {
         Cube cube = (Cube)element;
-        rectangle = new Rectangle(-45, -45, 95, 95);
+        rectangle = new Rectangle(-40, -40, 90, 90);
 
         if (cube.selected) {
             rectangle.setFill(Color.GREEN);
