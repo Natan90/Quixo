@@ -24,4 +24,6 @@ public class QuixoRootPane extends RootPane {
         group.getChildren().clear();
         group.getChildren().addAll(frame, text);
     }
+
+
 }

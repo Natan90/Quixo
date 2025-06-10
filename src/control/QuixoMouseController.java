@@ -7,6 +7,7 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.PutInContainerAction;
 import boardifier.model.action.RemoveFromContainerAction;
 import boardifier.model.animation.AnimationTypes;
+import boardifier.view.ContainerLook;
 import boardifier.view.ElementLook;
 import boardifier.view.GridLook;
 import boardifier.view.View;
@@ -17,8 +18,11 @@ import model.Cube;
 import model.QuixoBoard;
 import model.QuixoPawnPot;
 import model.QuixoStageModel;
+import view.QuixoBoardLook;
+import view.RedPawnPotLook;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,14 +44,38 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
 
         QuixoBoard board = gameStage.getBoard();
+        QuixoPawnPot pot = gameStage.getRedPot();
 
-        int[] coordCube = new int[1];
+        int[] coordCube = {0, 0};
+
+//        RedPawnPotLook potLook = (RedPawnPotLook) control.getElementLook(pot);
+
+        GridLook look = (GridLook) control.getElementLook(pot);
+        Coord2D coordPot = look.getRootPaneLocationForLookFromCell((ElementLook) look, 0, 0);
+
+        ElementLook elementLook = control.getElementLook(cube);
+        // get the container look of the destination container
+        ContainerLook containerLook = (ContainerLook) control.getElementLook(containerDest);
+        // get the location of the element look within this destination look, if placed in rowDest, colDest
+        Coord2D center = containerLook.getRootPaneLocationForLookFromCell(elementLook, rowDest, colDest);
+
+//        Coord2D coordPot = new Coord2D(potLook.);
+        System.out.println(coordPot.getX() + " " + coordPot.getY()+ " coordPot");
+
+        int[] tabPot = {(int) coordPot.getX() ,(int) coordPot.getY()};
+
+        System.out.println(Arrays.toString(tabPot) + " tabPot");
+
 
         List<Point> validCells = board.computeValidCells(true, coordCube, model);
 
 
         // get the clic x,y in the whole scene (this includes the menu bar if it exists)
         Coord2D clic = new Coord2D(event.getSceneX(),event.getSceneY());
+//        System.out.println(quixoBoardLook.getCellFromSceneLocation + " " + clic.getY());
+        QuixoBoardLook lookBoard = (QuixoBoardLook) control.getElementLook(board);
+        int[] dest = lookBoard.getCellFromSceneLocation(clic);
+        System.out.println(dest);
         // get elements at that position
         List<GameElement> list = control.elementsAt(clic);
         // for debug, uncomment next instructions to display x,y and elements at that postio
@@ -58,6 +86,60 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
         }
         QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
 
+//        for (GameElement element : list){
+//            if(element.getType() == "cube")
+//        }
+
+        // if quand le cube est déja sélctionné -> placer le cube
+        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDCUBE) {
+            for (GameElement element : list) {
+                if (element.getType() == ElementTypes.getType("cube")) {
+                    Cube cube = (Cube) element;
+                    // check if color of the pawn corresponds to the current player id
+                    for (int i = 0; i<validCells.size();i++){
+                        Point valid = validCells.get(i);
+                        if (dest != null && dest[0] == valid.getX() && dest[1] == valid.getY()) {
+                            element.toggleSelected();
+                            stageModel.setState(QuixoStageModel.STATE_SELECTEDDEST);
+
+                            System.out.println(cube.getX()+ " "+ cube.getY()+ " coordonnées du cube");
+                            ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", tabPot[0],tabPot[0], AnimationTypes.MOVE_LINEARPROP, 10);
+                            stageModel.unselectAll();
+//                            board.updateLastCubePosition(dest[0], dest[1]);
+                            ActionPlayer play = new ActionPlayer(model, control, actions);
+                            play.start();
+
+                            System.out.println(cube.getX()+ " "+ cube.getY());
+
+
+                            System.out.println("J'ai appuyé sur le cube " + Arrays.toString(dest));
+
+                            return; // do not allow another element to be selected
+                        }
+                    }
+                }
+                System.out.println("TEST sélectionné");
+            }
+        }else if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
+
+            // first check if the click is on the current selected pawn. In this case, unselect it
+            for (GameElement element : list) {
+                if (element.isSelected()) {
+                    element.toggleSelected();
+                    stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
+                    return;
+                }
+
+
+            }
+
+
+            stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
+            System.out.println("TEST pas sélectionne");
+        }
+
+
+
 //        for(GameElement element : list) {
 //            if (element.getType() == ElementTypes.getType("cube")) {
 //                Cube cube = (Cube) element;
@@ -66,106 +148,12 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
 //
 //                ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0, AnimationTypes.MOVE_LINEARPROP, 10);
 //                actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
-////                stageModel.unselectAll();
+//                stageModel.unselectAll();
 //                stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
 //                ActionPlayer play = new ActionPlayer(model, control, actions);
 //                play.start();
 //            }
 //        }
 
-        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDCUBE) {
-            for (GameElement element : list) {
-                if (element.getType() == ElementTypes.getType("cube")) {
-                    System.out.println("Jsuis renttré dans ce if");
-                    Cube cube = (Cube)element;
-
-                    // parcourir toutes les validCells
-                    for (int i = 0; i<validCells.size(); i++){
-                        //vérifier si le cube clické est dans validCells
-                        if (coordClick[0] == (int)validCells.get(i).getX() && coordClick[1] == (int)validCells.get(i).getY()){
-                            System.out.println("Je joue le coup car il est valide");
-                            ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0, AnimationTypes.MOVE_LINEARPROP, 10);
-                            actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
-                            stageModel.unselectAll();
-                            stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
-                            ActionPlayer play = new ActionPlayer(model, control, actions);
-                            play.start();
-
-                        }
-                    }
-                    System.out.println("Ce coup est invalide");
-
-//                    if (coordClick) {
-//
-//                        element.toggleSelected();
-//                        stageModel.setState(QuixoStageModel.STATE_SELECTEDDEST);
-//                        System.out.println("Jsuis renttré ici aussi");
-//                        return; // do not allow another element to be selected
-//                    }
-                }
-            }
-        }
-
-
-
-//        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDCUBE) {
-//            for (GameElement element : list) {
-//                if (element.getType() == ElementTypes.getType("cube")) {
-//                    System.out.println("Jsuis renttré dans ce if");
-//                    Cube cube = (Cube)element;
-//                    // check if color of the pawn corresponds to the current player id
-////                    if (cube.getColor() == model.getIdPlayer()) {
-//                    if () {
-//                        element.toggleSelected();
-//                        stageModel.setState(QuixoStageModel.STATE_SELECTEDDEST);
-//                        System.out.println("Jsuis renttré ici aussi");
-//                        return; // do not allow another element to be selected
-//                    }
-//                }
-//            }
-//        }
-        else if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
-            // first check if the click is on the current selected pawn. In this case, unselect it
-            for (GameElement element : list) {
-                if (element.isSelected()) {
-                    element.toggleSelected();
-                    stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
-                    return;
-                }
-            }
-            // secondly, search if the board has been clicked. If not just return
-            boolean boardClicked = false;
-            for (GameElement element : list) {
-                if (element == stageModel.getBoard()) {
-                    boardClicked = true; break;
-                }
-            }
-            if (!boardClicked) return;
-            // get the board, pot,  and the selected pawn to simplify code in the following
-            // by default get black pot
-            QuixoPawnPot pot = stageModel.getRedPot();
-            // but if it's player2 that plays, get red pot
-            GameElement cube = model.getSelected().get(0);
-
-            // thirdly, get the clicked cell in the 3x3 board
-            GridLook lookBoard = (GridLook) control.getElementLook(board);
-            int[] dest = lookBoard.getCellFromSceneLocation(clic);
-            System.out.println("int[] dest : "+Arrays.toString(dest));
-            // get the cell in the pot that owns the selected pawn
-            int[] from = pot.getElementCell(cube);
-            System.out.println("int[] from : "+Arrays.toString(dest));
-
-            Logger.debug("try to move pawn from pot "+from[0]+","+from[1]+ " to board "+ dest[0]+","+dest[1]);
-            // if the destination cell is valid for for the selected pawn
-            if (board.canReachCell(dest[0], dest[1])) {
-
-                ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "quixoboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, 10);
-                actions.setDoEndOfTurn(true); // after playing this action list, it will be the end of turn for current player.
-                stageModel.unselectAll();
-                stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
-                ActionPlayer play = new ActionPlayer(model, control, actions);
-                play.start();
-            }
-        }
     }
 }

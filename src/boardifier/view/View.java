@@ -5,6 +5,7 @@ import boardifier.model.GameException;
 import boardifier.model.Model;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -157,6 +158,7 @@ public class View {
             rootPane.setClip(r);
         }
     }
+    
 
 
     /**
