@@ -158,7 +158,7 @@ public class View {
             rootPane.setClip(r);
         }
     }
-    
+
 
 
     /**

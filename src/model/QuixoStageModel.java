@@ -31,8 +31,6 @@ import control.QuixoController;
 public class QuixoStageModel extends GameStageModel {
 
     // define stage state variables
-    private int blackPawnsToPlay;
-    private int redPawnsToPlay;
 
     public final static int STATE_SELECTEDCUBE = 1;
     public final static int STATE_SELECTEDDEST = 2;

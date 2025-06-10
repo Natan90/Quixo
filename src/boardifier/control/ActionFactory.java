@@ -12,7 +12,7 @@ import boardifier.view.ElementLook;
 public class ActionFactory {
 
     public static ActionList generatePutInContainer(Controller control, Model model, GameElement element, String nameContainerDest, int rowDest, int colDest) {
-        return generatePutInContainer(control, model, element, nameContainerDest,rowDest, colDest, AnimationTypes.NONE, 0);
+        return generatePutInContainer(control, model, element, nameContainerDest,rowDest, colDest, AnimationTypes.MOVE_LINEARPROP, 0);
     }
 
     public static ActionList generatePutInContainer(Controller control, Model model, GameElement element, String nameContainerDest, int rowDest, int colDest, String animationName, double factor) {
@@ -28,7 +28,7 @@ public class ActionFactory {
         }
         // create the put in container action,if possible
         if (containerDest != null) {
-            if (AnimationTypes.NONE.equals(animationName)) {
+            if (AnimationTypes.MOVE_LINEARPROP.equals(animationName)) {
                 GameAction put = new PutInContainerAction(model, element, nameContainerDest, rowDest, colDest);
                 list.addSingleAction(put);
             }
@@ -48,7 +48,7 @@ public class ActionFactory {
     }
 
     public static ActionList generateMoveWithinContainer(Controller control, Model model, GameElement element, int rowDest, int colDest) {
-        return generateMoveWithinContainer(control, model, element, rowDest, colDest, AnimationTypes.NONE, 0);
+        return generateMoveWithinContainer(control, model, element, rowDest, colDest, AnimationTypes.MOVE_LINEARPROP, 0);
     }
     public static ActionList generateMoveWithinContainer(Controller control, Model model, GameElement element, int rowDest, int colDest, String animationName, double factor) {
         ContainerElement containerSrc = element.getContainer();
@@ -56,7 +56,7 @@ public class ActionFactory {
 
         // create the move within container action,if possible
         if (containerSrc != null) {
-            if (AnimationTypes.NONE.equals(animationName)) {
+            if (AnimationTypes.MOVE_LINEARPROP.equals(animationName)) {
                 GameAction put = new MoveWithinContainerAction(model, element, rowDest, colDest);
                 list.addSingleAction(put);
             }

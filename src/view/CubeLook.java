@@ -45,7 +45,7 @@ public class CubeLook extends ElementLook {
             text = new Text("O");
         }
         text.setFont(new Font(24));
-        text.setFill(Color.valueOf("0xFFFFFF"));
+        text.setFill(Color.valueOf("FFFFFF"));
         Bounds bt = text.getBoundsInLocal();
         text.setX(-bt.getWidth()/2);
         // since numbers are always above the baseline, relocate just using the part above baseline

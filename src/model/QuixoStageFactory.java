@@ -68,6 +68,7 @@ public class QuixoStageFactory extends StageElementsFactory {
                 index++;
             }
         }
+
     }
             /* Example with a main container that takes the ownership of the location
            of the element that are put within.
