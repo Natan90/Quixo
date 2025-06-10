@@ -55,4 +55,10 @@ public class CubeLook extends ElementLook {
 
     }
 
+    @Override
+    public void onFaceChange() {
+        clearShapes();
+        render();
+    }
+
 }

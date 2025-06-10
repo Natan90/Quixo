@@ -1,7 +1,6 @@
 package model;
 
 import boardifier.model.*;
-import control.QuixoController;
 
 /**
  * HoleStageModel defines the model for the single stage in "The Hole". Indeed,
@@ -30,6 +29,9 @@ import control.QuixoController;
  */
 public class QuixoStageModel extends GameStageModel {
 
+    public final static int STATE_SELECTCUBE = 1; // the player must select a pawn
+    public final static int STATE_SELECTDEST = 2; // the player must select a destination
+
     // define stage state variables
 
     public final static int STATE_SELECTEDCUBE = 1;
@@ -57,6 +59,7 @@ public class QuixoStageModel extends GameStageModel {
 
     public QuixoStageModel(String name, Model model) {
         super(name, model);
+        state = STATE_SELECTCUBE;
 //        setupCallbacks();
         state = STATE_SELECTEDCUBE;
     }

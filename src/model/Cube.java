@@ -32,6 +32,7 @@ public class Cube extends GameElement {
     }
     public void setFace(int face){
         this.face = face;
+        addChangeFaceEvent();
     }
     public void setJouable(){
         isJouable = true;

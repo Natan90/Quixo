@@ -69,8 +69,8 @@ public class View {
         // WARNING: must set the scene and resize the stage BEFORE defining the clipping.
         // Otherwise, dimensions won't be correct.
         stage.setScene(scene);
-        stage.sizeToScene();
-        stage.setResizable(false);
+//        stage.sizeToScene();
+//        stage.setResizable(true);
     }
 
     public Pane getRootPane() {

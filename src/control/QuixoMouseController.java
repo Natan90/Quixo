@@ -32,6 +32,8 @@ import java.util.List;
  */
 public class QuixoMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
 
+    private int[] coordCube = {0, 0};
+
     public QuixoMouseController(Model model, View view, Controller control) {
         super(model, view, control);
     }
@@ -46,7 +48,7 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
         QuixoBoard board = gameStage.getBoard();
         QuixoPawnPot pot = gameStage.getRedPot();
 
-        int[] coordCube = {0, 0};
+//        int[] coordCube = {0, 0};
 
 //        RedPawnPotLook potLook = (RedPawnPotLook) control.getElementLook(pot);
 
@@ -79,6 +81,7 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
             Logger.debug(element.toString());
         }
         QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
+        System.out.println(clic.getX() + " " + clic.getY());
 
 //        for (GameElement element : list){
 //            if(element.getType() == "cube")
@@ -98,20 +101,20 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
 
                             System.out.println(cube.getX() + " " + cube.getY() + " coordonnées du cube");
 
-                            cube.setFace(2);
                             System.out.println(cube.getFace());
                             ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0, AnimationTypes.MOVE_LINEARPROP, 12);
                             stageModel.unselectAll();
                             actions.setDoEndOfTurn(false);
-//                            board.updateLastCubePosition(dest[0], dest[1]);
                             ActionPlayer play = new ActionPlayer(model, control, actions);
                             play.start();
 
 
                             System.out.println("J'ai appuyé sur le cube " + Arrays.toString(dest));
 
-                            coordCube[0] = dest[0];
-                            coordCube[1] = dest[1];
+                            coordCube[0] = dest[1];
+                            coordCube[1] = dest[0];
+
+                            System.out.println("coordCube : " + Arrays.toString(coordCube));
                             return; // do not allow another element to be selected
                         }
                     }
@@ -119,7 +122,6 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
                 System.out.println("TEST sélectionné");
             }
         } else if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
-            Cube cube = (Cube) pot.getElement(0, 0);
             QuixoController quixoController = (QuixoController) control;
 
 //            for (int i = 0; i < list.size(); i++) {
@@ -133,11 +135,12 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
 
             System.out.println("dest[0] : " + dest[0] + ", dest[1] :" + dest[1]);
 
+            System.out.println("coordCube : " + Arrays.toString(coordCube));
             validCells = board.computeValidCells(false, coordCube, model);
 
             for (Point valid : validCells) {
                 if (dest != null && dest[0] == (int) valid.getX() && dest[1] == (int) valid.getY()) {
-                    quixoController.mooveSequenceCube(dest[0], dest[1], coordCube[0], coordCube[1], true);
+                    quixoController.mooveSequenceCube(dest[0], dest[1], coordCube[1], coordCube[0], true);
                     stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
                     return;
                 }
