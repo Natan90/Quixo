@@ -25,11 +25,13 @@ public class QuixoActionController extends ControllerAction implements EventHand
 
     // to avoid lots of casts, create an attribute that matches the instance type.
     private QuixoView quixoView;
+    private QuixoController quixoController;
 
     public QuixoActionController(Model model, View view, Controller control) {
         super(model, view, control);
         // take the view parameter ot define a local view attribute with the real instance type, i.e. BasicView.
         quixoView = (QuixoView) view;
+        quixoController = (QuixoController) control;
 
         // set handlers dedicated to menu items
         setMenuHandlers();
@@ -81,6 +83,7 @@ public class QuixoActionController extends ControllerAction implements EventHand
 
                         int difficulty = dialogView.getBotDifficulty();
                         System.out.println("bot difficulty = " + difficulty);
+                        quixoController.setBotDifficulty(difficulty);
 
                     } else {
                         System.out.println("bot contre bot");

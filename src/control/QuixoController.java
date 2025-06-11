@@ -23,6 +23,7 @@ public class QuixoController extends Controller {
     QuixoStageModel quixoStageModel;
     QuixoView quixoView;
     int idWinner;
+    int botDifficulty = 1; //1 : c'est pour facile et 2 : c'est pour dur
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -61,14 +62,25 @@ public class QuixoController extends Controller {
         stageModel.getPlayerName().setText(p.getName());
         if (p.getType() == Player.COMPUTER) {
             Logger.debug("COMPUTER PLAYS");
-            QuixoDecider decider = new QuixoDecider(model,this);
-            ActionPlayer play = new ActionPlayer(model, this, decider, null);
-            play.start();
-
+            if (botDifficulty == 1) {
+                System.out.println("decider1");
+                QuixoDecider decider = new QuixoDecider(model,this);
+                ActionPlayer play = new ActionPlayer(model, this, decider, null);
+                play.start();
+            } else if (botDifficulty == 2) {
+                System.out.println("decider2");
+                QuixoDecider2 decider2 = new QuixoDecider2(model,this);
+                ActionPlayer play = new ActionPlayer(model, this, decider2, null);
+                play.start();
+            }
         }
         else {
             Logger.debug("PLAYER PLAYS");
         }
+    }
+
+    public void setBotDifficulty(int difficulty) {
+        this.botDifficulty = difficulty;
     }
 
 

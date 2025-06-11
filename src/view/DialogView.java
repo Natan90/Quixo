@@ -30,10 +30,12 @@ public class DialogView {
 
 
     private Model model;
+    private QuixoChoiceController quixoChoiceController;
 
 
     public DialogView(Model model) {
         this.model = model;
+        this.quixoChoiceController = new QuixoChoiceController(model, this);
 //        super(model, stage, rootPane);
     }
 
@@ -91,7 +93,7 @@ public class DialogView {
         applyStyleButton(cancelButton);
 
 
-        addListener();
+        addListener(quixoChoiceController);
         Optional<ButtonType> result = dialog.showAndWait();
 
         return result;
@@ -114,25 +116,24 @@ public class DialogView {
     public void showJcJ() {
         if (!vBox.getChildren().isEmpty())
             vBox.getChildren().clear();
-        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add2TextField(), spacerVBox);
+        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add2TextField(), spacerVBox, applique);
     }
 
     public void showJcB() {
         if (!vBox.getChildren().isEmpty())
             vBox.getChildren().clear();
-        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add1TextField(), lTypeBot, addBot(), spacerVBox);
+        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add1TextField(), lTypeBot, addBot(), spacerVBox, applique);
     }
 
-//    public void showBcB() {
-//        if (!vBox.getChildren().isEmpty())
-//            vBox.getChildren().clear();
-//        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, applique);
-//    }
 
-
-    public void addListener() {
-        QuixoChoiceController controller = new QuixoChoiceController(model, this);
+    public void addListener(QuixoChoiceController controller) {
         applique.setOnAction(controller);
+
+        groupChoice.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                controller.onGameModeChanged();
+            }
+        });
     }
 
     public HBox add1TextField() {
@@ -214,12 +215,8 @@ public class DialogView {
         return -1;
     }
 
-    public Dialog<ButtonType> getDialog() {
-        return dialog;
-    }
-
-    public ButtonType getButtonJouer() {
-        return ok;
+    public Button getApplyButton() {
+        return applique;
     }
 
 

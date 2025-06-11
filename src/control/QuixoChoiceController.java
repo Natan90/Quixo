@@ -1,6 +1,7 @@
 package control;
 
 import boardifier.model.Model;
+import boardifier.view.View;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.RadioButton;
@@ -10,7 +11,7 @@ public class QuixoChoiceController implements  EventHandler<ActionEvent> {
 
     private Model model;
     private DialogView dialogView;
-    private QuixoController quixoController;
+    private View view;
 
 
     public QuixoChoiceController(Model model, DialogView dialogView) {
@@ -24,38 +25,25 @@ public class QuixoChoiceController implements  EventHandler<ActionEvent> {
         nameDisplay(dialogView.getGameMode());
     }
 
-
+    // Change la vue pour le mode choisis et rend le bouton disable
     public void nameDisplay(int choice) {
         if (choice == 1) {
             System.out.println("joueur contre joueur");
             dialogView.showJcJ();
-
+            dialogView.getApplyButton().setDisable(true);
         } else if (choice == 2) {
             System.out.println("joueur contre bot");
             dialogView.showJcB();
-            difficultDisplay();
-
+            dialogView.getApplyButton().setDisable(true);
         } else {
             System.out.println("bot contre bot");
             dialogView.showDefault();
-
-        }
-
-    }
-
-    public void difficultDisplay() {
-        int botChoice = dialogView.getBotDifficulty();
-//        quixoController = new QuixoController(model, dialogView);
-
-        if (botChoice == 1) {
-            System.out.println("jouer le bot facile");
-            dialogView.add1TextField();
-            dialogView.addBot();
-
-
-        }
-        else {
-            System.out.println("jouer le bot dur");
         }
     }
+
+    // rend le bouton enable quand on clique su un radioButton (il y a un listener sur le toggleGroup des radioButton)
+    public void onGameModeChanged() {
+        dialogView.getApplyButton().setDisable(false);
+    }
+
 }
