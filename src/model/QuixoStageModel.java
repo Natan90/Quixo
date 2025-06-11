@@ -103,11 +103,12 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks(ContainerElement board) {
+    public int setupCallbacks(ContainerElement board) {
         System.out.println("setupCallbacks appelée");
         int size = 5;
         int face;
         boolean allSame;
+        int idWinner = -1;
 
         // Vérif lignes
         for (int i = 0; i < size; i++) {
@@ -123,7 +124,7 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
             }
-            if (allSame) computePartyResult(face);
+            if (allSame) idWinner = computePartyResult(face);
         }
 
         // Vérif colonnes
@@ -140,7 +141,7 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
             }
-            if (allSame) computePartyResult(face);
+            if (allSame) idWinner = computePartyResult(face);
         }
 
         // Diagonale principale
@@ -155,7 +156,7 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
             }
-            if (allSame) computePartyResult(face);
+            if (allSame) idWinner = computePartyResult(face);
         }
 
         // Diagonale secondaire
@@ -170,12 +171,14 @@ public class QuixoStageModel extends GameStageModel {
                     break;
                 }
             }
-            if (allSame) computePartyResult(face);
+            if (allSame) idWinner = computePartyResult(face);
         }
+
+        return idWinner;
     }
 
 
-    public void computePartyResult(int face) {
+    public int computePartyResult(int face) {
         int idWinner = -1;
         if( face == 1 ){
             System.out.println("Le winner est 1 avec id = 0");
@@ -194,7 +197,7 @@ public class QuixoStageModel extends GameStageModel {
 //        WinnerScreen winnerScreen = new WinnerScreen(view);
 //        winnerScreen.display();
 
-
+        return idWinner;
     }
 
     @Override

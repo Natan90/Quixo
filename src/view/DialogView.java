@@ -28,7 +28,6 @@ public class DialogView {
     private Separator separtor;
 
 
-    private QuixoStageModel quixoStageModel;
     private Model model;
 
 
@@ -204,9 +203,18 @@ public class DialogView {
         return ok;
     }
 
-    public Dialog getDialog() {
-        return dialog;
+    public int getGameMode() {
+        if (radioButtonChoice1.isSelected()) return 1;
+        if (radioButtonChoice2.isSelected()) return 2;
+        return 3;
     }
+
+    public int getBotDifficulty() {
+        if (radioButton1.isSelected()) return 1;
+        if (radioButton2.isSelected()) return 2;
+        return -1;
+    }
+
 
 
     // Appliquer un style aux différents éléments

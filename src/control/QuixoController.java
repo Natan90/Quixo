@@ -13,13 +13,15 @@ import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
+import view.QuixoView;
+import view.WinnerScreen;
 
 public class QuixoController extends Controller {
 
-    private int currentPlayer;
-
     QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
     QuixoStageModel quixoStageModel;
+    QuixoView quixoView;
+    int idWinner;
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -27,6 +29,8 @@ public class QuixoController extends Controller {
         setControlMouse(new QuixoMouseController(model, view, this));
         setControlAction (new QuixoActionController(model, view, this));
         quixoStageModel = new QuixoStageModel("quixostagemodel", model);
+
+        quixoView = (QuixoView) view;
     }
 
     public void endOfTurn() {
@@ -34,7 +38,13 @@ public class QuixoController extends Controller {
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         QuixoBoard board = gameStage.getBoard();
 
-        quixoStageModel.setupCallbacks(board);
+        idWinner = quixoStageModel.setupCallbacks(board);
+        if (idWinner != -1) {
+            System.out.println("Affichage de la fenêtre de victoire pour le joueur " + idWinner);
+            WinnerScreen winnerScreen = new WinnerScreen(gameStage, this, quixoView);
+            winnerScreen.initDialog();
+            return;
+        }
         // use the default method to compute next player
         model.setNextPlayer();
         // get the new player

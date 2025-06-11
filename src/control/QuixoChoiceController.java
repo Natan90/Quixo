@@ -21,46 +21,39 @@ public class QuixoChoiceController implements  EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         System.out.println("Action event triggered: " + event.getSource());
-        nameDisplay();
+        nameDisplay(dialogView.getGameMode());
     }
 
-    private int getSelectedChoice(RadioButton radioButtonChoice1, RadioButton radioButtonChoice2) {
-        if (radioButtonChoice1.isSelected()) return 1;
-        if (radioButtonChoice2.isSelected()) return 2;
-        return 3;
-    }
 
-    public void nameDisplay() {
-        int choice = getSelectedChoice(dialogView.getRadioButtonChoice1(), dialogView.getRadioButtonChoice2());
+    public void nameDisplay(int choice) {
+//        model.reset();
         if (choice == 1) {
             System.out.println("joueur contre joueur");
             dialogView.showJcJ();
 
-            model.reset();
-            model.addHumanPlayer("player1");
-            model.addHumanPlayer("player2");
+
+//            model.addHumanPlayer("player1");
+//            model.addHumanPlayer("player2");
         } else if (choice == 2) {
             System.out.println("joueur contre bot");
             dialogView.showJcB();
             difficultDisplay();
 
-            model.reset();
-            model.addHumanPlayer("player");
-            model.addComputerPlayer("computer");
+//            model.addHumanPlayer("player");
+//            model.addComputerPlayer("computer");
         } else {
             System.out.println("bot contre bot");
             dialogView.showDefault();
 //            dialogView.showBcB();         Même vue si joueur contre joueur ou joueur contre bot
 
-            model.reset();
-            model.addComputerPlayer("computer1");
-            model.addComputerPlayer("computer2");
+//            model.addComputerPlayer("computer1");
+//            model.addComputerPlayer("computer2");
         }
 
     }
 
     public void difficultDisplay() {
-        int botChoice = getSelectedChoice(dialogView.getRadioButtonBot1(), dialogView.getRadioButtonBot2());
+        int botChoice = dialogView.getBotDifficulty();
 //        quixoController = new QuixoController(model, dialogView);
 
         if (botChoice == 1) {

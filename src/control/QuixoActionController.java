@@ -7,6 +7,7 @@ import boardifier.view.RootPane;
 import boardifier.view.View;
 import javafx.event.*;
 import javafx.scene.control.ButtonType;
+import model.QuixoStageModel;
 import view.DialogView;
 import view.QuixoView;
 
@@ -51,16 +52,40 @@ public class QuixoActionController extends ControllerAction implements EventHand
                 dialogView.initVBox();
                 Optional<ButtonType> result = dialogView.initDialog();
                 if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
+                    model.reset();
+
+                    int mode = dialogView.getGameMode();
+
+                    if (mode == 1) {
+                        System.out.println("joueur contre joueur");
+                        model.addHumanPlayer("player1");
+                        model.addHumanPlayer("player2");
+
+                    } else if (mode == 2) {
+                        System.out.println("joueur contre bot");
+                        model.addHumanPlayer("player");
+                        model.addComputerPlayer("computer");
+                        int difficulty = dialogView.getBotDifficulty();
+                        System.out.println("bot difficulty = " + difficulty);
+
+                    } else {
+                        System.out.println("bot contre bot");
+                        model.addComputerPlayer("computer1");
+                        model.addComputerPlayer("computer2");
+                    }
+
                     if (model.isStageStarted()) {
                         System.out.println("stop game");
                         control.stopStage();
 //                        quixoView.getStage().close();
-                        quixoView.resetView();
 
                     }
                     System.out.println("start game");
+                    quixoView.setView(quixoView.getGameStageView());
+
                     control.startGame();
-//                    quixoView.setView(quixoView.getGameStageView());
+
+
                 }
             }
             catch(Exception err) {
