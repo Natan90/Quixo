@@ -33,6 +33,7 @@ import java.util.List;
 public class QuixoMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
 
     private int[] coordCube = {0, 0};
+    private int[] dest;
 
     public QuixoMouseController(Model model, View view, Controller control) {
         super(model, view, control);
@@ -87,6 +88,23 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
 //            if(element.getType() == "cube")
 //        }
 
+        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
+            for (GameElement element : list) {
+                if(element.getContainer() == pot){
+                    System.out.println("Je clique sur le pot pour annuler mon coup");
+                    Cube cube = (Cube) pot.getElement(0, 0);
+                    ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "quixoboard", coordCube[1], coordCube[0], AnimationTypes.MOVE_LINEARPROP, 12);
+                    ActionPlayer play = new ActionPlayer(model, control, actions);
+                    stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
+
+                    play.start();
+                }
+
+
+            }
+        }
+
+
         // if quand le cube est déja sélctionné -> placer le cube
         if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDCUBE) {
             for (GameElement element : list) {
@@ -120,6 +138,7 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
                     }
                 }
                 System.out.println("TEST sélectionné");
+
             }
         } else if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
             QuixoController quixoController = (QuixoController) control;
@@ -133,7 +152,7 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
 //            }
 
 
-            System.out.println("dest[0] : " + dest[0] + ", dest[1] :" + dest[1]);
+//            System.out.println("dest[0] : " + dest[0] + ", dest[1] :" + dest[1]);
 
             System.out.println("coordCube : " + Arrays.toString(coordCube));
             validCells = board.computeValidCells(false, coordCube, model);
