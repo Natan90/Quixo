@@ -9,19 +9,17 @@ import boardifier.model.GameException;
 import boardifier.model.Model;
 import boardifier.model.Player;
 import boardifier.model.action.ActionList;
+import boardifier.model.animation.Animation;
 import boardifier.view.View;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
-import view.QuixoView;
-import view.WinnerScreen;
 
 public class QuixoController extends Controller {
 
     QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
     QuixoStageModel quixoStageModel;
-    QuixoView quixoView;
-    int idWinner;
+    int currentPlayer = 1;
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -29,24 +27,20 @@ public class QuixoController extends Controller {
         setControlMouse(new QuixoMouseController(model, view, this));
         setControlAction (new QuixoActionController(model, view, this));
         quixoStageModel = new QuixoStageModel("quixostagemodel", model);
-
-        quixoView = (QuixoView) view;
     }
 
     public void endOfTurn() {
 
         QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
         QuixoBoard board = gameStage.getBoard();
+        quixoStageModel.setupCallbacks(board);
 
-        idWinner = quixoStageModel.setupCallbacks(board);
-        if (idWinner != -1) {
-            System.out.println("Affichage de la fenêtre de victoire pour le joueur " + idWinner);
-            WinnerScreen winnerScreen = new WinnerScreen(gameStage, this, quixoView);
-            winnerScreen.initDialog();
-            return;
-        }
+        if(model.getIdPlayer() == 0)
+            model.setIdPlayer(1);
+        else if (model.getIdPlayer() == 1) model.setIdPlayer(0);
+
+
         // use the default method to compute next player
-        model.setNextPlayer();
         // get the new player
         Player p = model.getCurrentPlayer();
         // change the text of the TextElement
@@ -54,9 +48,10 @@ public class QuixoController extends Controller {
         stageModel.getPlayerName().setText(p.getName());
         if (p.getType() == Player.COMPUTER) {
             Logger.debug("COMPUTER PLAYS");
-            QuixoDecider2 decider = new QuixoDecider2(model,this);
+            QuixoDecider decider = new QuixoDecider(model,this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
+
         }
         else {
             Logger.debug("PLAYER PLAYS");
@@ -131,10 +126,11 @@ public class QuixoController extends Controller {
         }
 
         // Mise à jour de la face du cube final selon le joueur
+        System.out.println("Joueur actuel (ID): " + model.getIdPlayer());
         if (model.getIdPlayer() == 0)
-            cube.setFace(1);
+            cube.setFace(1); // Croix
         else
-            cube.setFace(2);
+            cube.setFace(2); // Rond
 
         actions = ActionFactory.generatePutInContainer(this,model, cube, "quixoboard", insertionRow, insertionCol);
         actions.setDoEndOfTurn(true); // Finir le tour après cette action
