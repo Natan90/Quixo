@@ -12,6 +12,7 @@ import view.DialogView;
 import view.QuixoView;
 
 import javax.swing.text.html.Option;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -60,11 +61,18 @@ public class QuixoActionController extends ControllerAction implements EventHand
                         System.out.println("joueur contre joueur");
                         model.addHumanPlayer("player1");
                         model.addHumanPlayer("player2");
+                        if (!Objects.equals(dialogView.getTextField1().getText(), ""))
+                            model.getPlayers().getFirst().setName(dialogView.getTextField1().getText());
+                        if (!Objects.equals(dialogView.getTextField2().getText(), ""))
+                            model.getPlayers().getFirst().setName(dialogView.getTextField2().getText());
 
                     } else if (mode == 2) {
                         System.out.println("joueur contre bot");
                         model.addHumanPlayer("player");
                         model.addComputerPlayer("computer");
+                        if (!Objects.equals(dialogView.getTextField1().getText(), ""))
+                            model.getPlayers().getFirst().setName(dialogView.getTextField1().getText());
+
                         int difficulty = dialogView.getBotDifficulty();
                         System.out.println("bot difficulty = " + difficulty);
 

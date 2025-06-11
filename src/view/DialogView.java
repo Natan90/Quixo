@@ -182,21 +182,28 @@ public class DialogView {
         return hboxBot;
     }
 
-    public RadioButton getRadioButtonChoice1() {
-        return radioButtonChoice1;
+//    public RadioButton getRadioButtonChoice1() {
+//        return radioButtonChoice1;
+//    }
+//
+//    public RadioButton getRadioButtonChoice2() {
+//        return radioButtonChoice2;
+//    }
+//
+//
+//    public RadioButton getRadioButtonBot1() {
+//        return radioButton1;
+//    }
+//
+//    public RadioButton getRadioButtonBot2() {
+//        return radioButton2;
+//    }
+    public TextField getTextField1() {
+        return textField1;
     }
 
-    public RadioButton getRadioButtonChoice2() {
-        return radioButtonChoice2;
-    }
-
-
-    public RadioButton getRadioButtonBot1() {
-        return radioButton1;
-    }
-
-    public RadioButton getRadioButtonBot2() {
-        return radioButton2;
+    public TextField getTextField2() {
+        return textField2;
     }
 
     public ButtonType getButtonTypeJouer() {

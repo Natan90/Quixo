@@ -26,28 +26,19 @@ public class QuixoChoiceController implements  EventHandler<ActionEvent> {
 
 
     public void nameDisplay(int choice) {
-//        model.reset();
         if (choice == 1) {
             System.out.println("joueur contre joueur");
             dialogView.showJcJ();
 
-
-//            model.addHumanPlayer("player1");
-//            model.addHumanPlayer("player2");
         } else if (choice == 2) {
             System.out.println("joueur contre bot");
             dialogView.showJcB();
             difficultDisplay();
 
-//            model.addHumanPlayer("player");
-//            model.addComputerPlayer("computer");
         } else {
             System.out.println("bot contre bot");
             dialogView.showDefault();
-//            dialogView.showBcB();         Même vue si joueur contre joueur ou joueur contre bot
 
-//            model.addComputerPlayer("computer1");
-//            model.addComputerPlayer("computer2");
         }
 
     }
