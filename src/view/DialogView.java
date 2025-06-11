@@ -40,15 +40,15 @@ public class DialogView {
     public Optional<ButtonType> initDialog() {
         dialog = new Dialog<>();
 
-        cancel = new ButtonType("Annuler");
-        ok = new ButtonType("Jouer");
+        cancel = new ButtonType("Cancel");
+        ok = new ButtonType("Play");
 
-        lTypeJeu = new Label("Choisissez votre type de jeu : ");
-        lTypeBot = new Label("Choisissez la difficulté du bot : ");
+        lTypeJeu = new Label("Choose your game type : ");
+        lTypeBot = new Label("Choose the bot's difficulty : ");
 
         groupChoice = new ToggleGroup();
-        radioButtonChoice1 = new RadioButton("Joueur vs Joueur");
-        radioButtonChoice2 = new RadioButton("Joueur vs Bot");
+        radioButtonChoice1 = new RadioButton("Player vs Player");
+        radioButtonChoice2 = new RadioButton("Player vs Bot");
         radioButtonChoice3 = new RadioButton("Bot vs Bot");
         radioButtonChoice1.setToggleGroup(groupChoice);
         radioButtonChoice2.setToggleGroup(groupChoice);
@@ -62,7 +62,7 @@ public class DialogView {
         separtor = new Separator();
         separtor.prefWidth(500);
 
-        applique = new Button("Appliquer les choix");
+        applique = new Button("Apply choices");
 
 
         hbox = new HBox();
@@ -137,7 +137,7 @@ public class DialogView {
 
     public HBox add1TextField() {
         textField1 = new TextField();
-        textField1.setPromptText("Entrer le nom du joueur 1");
+        textField1.setPromptText("Enter the player's name");
         applyStyleTextField(textField1);
 
         Region spacer1 = new Region();
@@ -156,8 +156,8 @@ public class DialogView {
     public HBox add2TextField() {
         textField1 = new TextField();
         textField2 = new TextField();
-        textField1.setPromptText("Entrer le nom du joueur 1");
-        textField2.setPromptText("Entrer le nom du joueur 2");
+        textField1.setPromptText("Enter Player 1's name");
+        textField2.setPromptText("Enter Player 2's name");
         applyStyleTextField(textField1);
         applyStyleTextField(textField2);
 
@@ -178,8 +178,8 @@ public class DialogView {
 
     public HBox addBot(){
         groupBot = new ToggleGroup();
-        radioButton1 = new RadioButton("Bot facile");
-        radioButton2 = new RadioButton("Bot difficile");
+        radioButton1 = new RadioButton("Easy bot");
+        radioButton2 = new RadioButton("Hard bot");
         radioButton1.setToggleGroup(groupBot);
         radioButton2.setToggleGroup(groupBot);
         radioButton1.setSelected(true);
@@ -190,22 +190,6 @@ public class DialogView {
         return hboxBot;
     }
 
-//    public RadioButton getRadioButtonChoice1() {
-//        return radioButtonChoice1;
-//    }
-//
-//    public RadioButton getRadioButtonChoice2() {
-//        return radioButtonChoice2;
-//    }
-//
-//
-//    public RadioButton getRadioButtonBot1() {
-//        return radioButton1;
-//    }
-//
-//    public RadioButton getRadioButtonBot2() {
-//        return radioButton2;
-//    }
     public TextField getTextField1() {
         return textField1;
     }
@@ -240,13 +224,7 @@ public class DialogView {
 
 
     // Appliquer un style aux différents éléments
-//    public void applyStyleDialog(Dialog<ButtonType> dialog) {
-//        dialog.getDialogPane().setStyle(
-//                "-fx-background-image: url('/images/wood_texture.jpg');" +
-//                        "-fx-background-size: cover;" +
-//                        "-fx-background-repeat: no-repeat;"
-//        );
-//    }
+
     public void applyStylVBox(VBox vBox) {
         vBox.setStyle(
                 "-fx-background-color: #f5f0e1;" +
@@ -261,7 +239,7 @@ public class DialogView {
         String normalStyle;
         String hoverStyle;
 
-        if (button.getText().equals("Jouer")) {
+        if (button.getText().equals("Play")) {
             // Style vert pour Jouer
             normalStyle = "-fx-background-color: #4CAF50;" +
                     "-fx-text-fill: white;" +
@@ -279,7 +257,7 @@ public class DialogView {
                     "-fx-padding: 8 20 8 20;" +
                     "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);";
 
-        } else if (button.getText().equals("Annuler")) {
+        } else if (button.getText().equals("Cancel")) {
             // Style rouge pour Annuler
             normalStyle = "-fx-background-color: #d9534f;" +
                     "-fx-text-fill: white;" +
