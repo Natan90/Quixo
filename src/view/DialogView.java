@@ -222,6 +222,10 @@ public class DialogView {
         return -1;
     }
 
+    public Dialog<ButtonType> getDialog() {
+        return dialog;
+    }
+
 
 
     // Appliquer un style aux différents éléments

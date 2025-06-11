@@ -6,6 +6,7 @@ import boardifier.model.*;
 import boardifier.view.RootPane;
 import boardifier.view.View;
 import javafx.event.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import model.QuixoStageModel;
 import view.DialogView;
@@ -61,8 +62,11 @@ public class QuixoActionController extends ControllerAction implements EventHand
                         System.out.println("joueur contre joueur");
                         model.addHumanPlayer("player1");
                         model.addHumanPlayer("player2");
-                        if (!Objects.equals(dialogView.getTextField1().getText(), ""))
+                        if (!Objects.equals(dialogView.getTextField1().getText(), "")) {
+                            Button button = (Button) dialogView.getDialog().getDialogPane().lookupButton();
+
                             model.getPlayers().getFirst().setName(dialogView.getTextField1().getText());
+                        }
                         if (!Objects.equals(dialogView.getTextField2().getText(), ""))
                             model.getPlayers().getFirst().setName(dialogView.getTextField2().getText());
 
