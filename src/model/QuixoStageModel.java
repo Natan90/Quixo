@@ -1,6 +1,7 @@
 package model;
 
 import boardifier.model.*;
+import view.WinnerScreen;
 
 /**
  * HoleStageModel defines the model for the single stage in "The Hole". Indeed,
@@ -102,153 +103,77 @@ public class QuixoStageModel extends GameStageModel {
 
 
 
-    public void setupCallbacks(ContainerElement board, int currentPlayer) {
-
-
-
+    public void setupCallbacks(ContainerElement board) {
+        System.out.println("setupCallbacks appelée");
         int size = 5;
         int face;
         boolean allSame;
 
-        // Vérification des lignes
+        // Vérif lignes
         for (int i = 0; i < size; i++) {
-            System.out.println("Vérification des lignes");
-            // On récupère la face du premier cube
             Cube cube = (Cube) board.getElement(i, 0);
-            if (cube == null)
-                continue;
+            if (cube == null || cube.getFace() == 0) continue;
 
             face = cube.getFace();
-            //Si face blanche, on return false directement
             allSame = true;
             for (int j = 1; j < size; j++) {
-                if(face == 0){
+                Cube c = (Cube) board.getElement(i, j);
+                if (c == null || c.getFace() != face) {
                     allSame = false;
                     break;
                 }
-                // On compare avec les cubes à la suite
-                Cube cube1 = (Cube) board.getElement(i, j);
-                if (cube1 == null)
-                    continue;
-                if (cube1.getFace() != face) {
-                    allSame = false;
-                    break;
-                }
-
             }
-            if (allSame) {
-                if (currentPlayer == 1)
-                    computePartyResult(face);
-//                if (model.getCurrentPlayer().getType() + 1 != face) {
-//                    computePartyResult(face);
-//                }
-            }
-
+            if (allSame) computePartyResult(face);
         }
 
-        // Vérification des colonnes
+        // Vérif colonnes
         for (int j = 0; j < size; j++) {
-            System.out.println("Vérification des colonnes");
-            // On récupère la face du premier cube
             Cube cube = (Cube) board.getElement(0, j);
-            if (cube == null)
-                continue;
+            if (cube == null || cube.getFace() == 0) continue;
 
             face = cube.getFace();
             allSame = true;
             for (int i = 1; i < size; i++) {
-                if (face == 0) {
+                Cube c = (Cube) board.getElement(i, j);
+                if (c == null || c.getFace() != face) {
                     allSame = false;
                     break;
                 }
-                // On compare avec les cubes à la suite
-                Cube cube1 = (Cube) board.getElement(i, j);
-                if (cube1 == null)
-                    continue;
-                if (cube1.getFace() != face) {
-                    allSame = false;
-                    break;
-                }
-
             }
-            if (allSame) {
-                Player joueurFace = model.getPlayers().get(face - 1);
-                if (joueurFace.getType() != face - 1) {
-                    computePartyResult(face);
-                }
-//                if (model.getCurrentPlayer().getType() + 1 != face) {
-//                    computePartyResult(face);
-//                }
-            }
+            if (allSame) computePartyResult(face);
+        }
 
-            // Diagonale principale (0,0 à 4,4)
-            // On récupère la face du premier cube
-            Cube cube1 = (Cube) board.getElement(0, 0);
-            if (cube1 == null)
-                continue;
-            face = cube1.getFace();
-
-            boolean allSameDiag1 = true;
+        // Diagonale principale
+        Cube diag1 = (Cube) board.getElement(0, 0);
+        if (diag1 != null && diag1.getFace() != 0) {
+            face = diag1.getFace();
+            allSame = true;
             for (int i = 1; i < size; i++) {
-//                System.out.println("Vérification première diago");
-                if (face == 0) {
-                    allSameDiag1 = false;
-                    break;
-                }
-                // On compare avec les cubes à la suite
-                Cube cube2 = (Cube) board.getElement(i, i);
-                if (cube2 == null)
-                    continue;
-                if (cube2.getFace() != face) {
-                    allSameDiag1 = false;
+                Cube c = (Cube) board.getElement(i, i);
+                if (c == null || c.getFace() != face) {
+                    allSame = false;
                     break;
                 }
             }
-            if (allSameDiag1) {
-                Player joueurFace = model.getPlayers().get(face - 1);
-                if (joueurFace.getType() != face - 1) {
-                    computePartyResult(face);
-                }
-//                if (model.getCurrentPlayer().getType() + 1 != face) {
-//                    computePartyResult(face);
-//                }
-            }
+            if (allSame) computePartyResult(face);
+        }
 
-            // Diagonale secondaire (0,4 à 4,0)
-            // On récupère la face du premier cube
-            Cube cube2 = (Cube) board.getElement(0, size - 1);
-            if (cube2 == null)
-                continue;
-            face = cube2.getFace();
-            boolean allSameDiag2 = true;
-
-            for (int i = size - 1; i > 1; i--) {
-//                System.out.println("Vérification deuxième diago");
-                if (face == 0) {
-                    allSameDiag2 = false;
+        // Diagonale secondaire
+        Cube diag2 = (Cube) board.getElement(0, size - 1);
+        if (diag2 != null && diag2.getFace() != 0) {
+            face = diag2.getFace();
+            allSame = true;
+            for (int i = 1; i < size; i++) {
+                Cube c = (Cube) board.getElement(i, size - 1 - i);
+                if (c == null || c.getFace() != face) {
+                    allSame = false;
                     break;
                 }
-                // On compare avec les cubes à la suite
-                Cube cube3 = (Cube) board.getElement(i, size - 1 - i);
-                if (cube3 == null)
-                    continue;
-                if (cube3.getFace() != face) {
-                    allSameDiag2 = false;
-                    break;
-                }
-
             }
-            if (allSameDiag2) {
-                if (currentPlayer == face) {
-                    computePartyResult(face);
-                }
-//                if (model.getCurrentPlayer().getType() + 1 != face) {
-//                    computePartyResult(face);
-//                }
-            }
-
+            if (allSame) computePartyResult(face);
         }
     }
+
 
     public void computePartyResult(int face) {
         int idWinner = -1;
@@ -265,6 +190,9 @@ public class QuixoStageModel extends GameStageModel {
         model.setIdWinner(idWinner);
         // stop de the game
         model.stopStage();
+
+//        WinnerScreen winnerScreen = new WinnerScreen(view);
+//        winnerScreen.display();
 
 
     }

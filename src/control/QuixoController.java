@@ -18,14 +18,23 @@ public class QuixoController extends Controller {
 
     private int currentPlayer;
 
+    QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+    QuixoStageModel quixoStageModel;
+
     public QuixoController(Model model, View view) {
         super(model, view);
         setControlKey(new QuixoKeyController(model, view, this));
         setControlMouse(new QuixoMouseController(model, view, this));
         setControlAction (new QuixoActionController(model, view, this));
+        quixoStageModel = new QuixoStageModel("quixostagemodel", model);
     }
 
     public void endOfTurn() {
+
+        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
+        QuixoBoard board = gameStage.getBoard();
+
+        quixoStageModel.setupCallbacks(board);
         // use the default method to compute next player
         model.setNextPlayer();
         // get the new player
