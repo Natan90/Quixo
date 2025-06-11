@@ -3,9 +3,15 @@ package control;
 import boardifier.control.Controller;
 import boardifier.control.ControllerAction;
 import boardifier.model.*;
+import boardifier.view.RootPane;
 import boardifier.view.View;
 import javafx.event.*;
+import javafx.scene.control.ButtonType;
+import view.DialogView;
 import view.QuixoView;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 /**
  * A basic action controller that only manages menu actions
@@ -39,9 +45,25 @@ public class QuixoActionController extends ControllerAction implements EventHand
         // set event handler on the MenuStart item
         quixoView.getMenuStart().setOnAction(e -> {
             try {
-                control.startGame();
+//                control.startGame();
+                DialogView dialogView = new DialogView(model);
+
+                dialogView.initVBox();
+                Optional<ButtonType> result = dialogView.initDialog();
+                if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
+                    if (model.isStageStarted()) {
+                        System.out.println("stop game");
+                        control.stopStage();
+//                        quixoView.getStage().close();
+                        quixoView.resetView();
+
+                    }
+                    System.out.println("start game");
+                    control.startGame();
+//                    quixoView.setView(quixoView.getGameStageView());
+                }
             }
-            catch(GameException err) {
+            catch(Exception err) {
                 System.err.println(err.getMessage());
                 System.exit(1);
             }
