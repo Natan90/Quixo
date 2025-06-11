@@ -26,6 +26,7 @@ public class DialogView {
     private HBox hbox, hbox2;
     private Label lTypeJeu, lTypeBot;
     private Separator separtor;
+    private Region spacerVBox;
 
 
     private Model model;
@@ -39,7 +40,7 @@ public class DialogView {
     public Optional<ButtonType> initDialog() {
         dialog = new Dialog<>();
 
-        cancel = new ButtonType("Cancel");
+        cancel = new ButtonType("Annuler");
         ok = new ButtonType("Jouer");
 
         lTypeJeu = new Label("Choisissez votre type de jeu : ");
@@ -68,7 +69,11 @@ public class DialogView {
         hbox2 = new HBox();
 
         hbox2.getChildren().addAll(radioButtonChoice1, radioButtonChoice2, radioButtonChoice3);
+        spacerVBox = new Region();
+        VBox.setVgrow(spacerVBox, Priority.ALWAYS);
         showDefault();
+
+
 
         dialog.getDialogPane().setContent(vBox);
         dialog.getDialogPane().setPrefSize(500, 300);
@@ -76,6 +81,7 @@ public class DialogView {
 
         Button jouerButton = (Button) dialog.getDialogPane().lookupButton(ok);
         Button cancelButton = (Button) dialog.getDialogPane().lookupButton(cancel);
+
 
         applyStyleRadioButton(radioButtonChoice1);
         applyStyleRadioButton(radioButtonChoice2);
@@ -95,24 +101,26 @@ public class DialogView {
         vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setPadding(new Insets(10, 10, 10, 10));
+
+        applyStylVBox(vBox);
     }
 
     public void showDefault() {
         if (!vBox.getChildren().isEmpty())
             vBox.getChildren().clear();
-        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, applique);
+        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, spacerVBox, applique);
     }
 
     public void showJcJ() {
         if (!vBox.getChildren().isEmpty())
             vBox.getChildren().clear();
-        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add2TextField(), applique);
+        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add2TextField(), spacerVBox);
     }
 
     public void showJcB() {
         if (!vBox.getChildren().isEmpty())
             vBox.getChildren().clear();
-        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add1TextField(), lTypeBot, addBot(), applique);
+        vBox.getChildren().addAll(lTypeJeu, hbox2, hbox, separtor, add1TextField(), lTypeBot, addBot(), spacerVBox);
     }
 
 //    public void showBcB() {
@@ -226,44 +234,102 @@ public class DialogView {
         return dialog;
     }
 
+    public ButtonType getButtonJouer() {
+        return ok;
+    }
 
 
     // Appliquer un style aux différents éléments
-    public void applyStyleButton(Button button) {
-        // Style par défaut
-        String normalStyle = "-fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-font-size: 14px;" +
-                "-fx-background-radius: 20;" +
-                "-fx-padding: 8 20 8 20;" +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);";
+//    public void applyStyleDialog(Dialog<ButtonType> dialog) {
+//        dialog.getDialogPane().setStyle(
+//                "-fx-background-image: url('/images/wood_texture.jpg');" +
+//                        "-fx-background-size: cover;" +
+//                        "-fx-background-repeat: no-repeat;"
+//        );
+//    }
+    public void applyStylVBox(VBox vBox) {
+        vBox.setStyle(
+                "-fx-background-color: #f5f0e1;" +
+                        "-fx-border-color: #8b5e3c;" +
+                        "-fx-border-width: 4;" +
+                        "-fx-padding: 10;"
+        );
 
-        // Style au survol
-        String hoverStyle = "-fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-font-size: 14px;" +
-                "-fx-background-radius: 20;" +
-                "-fx-padding: 8 20 8 20;" +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);";
+    }
+
+    public void applyStyleButton(Button button) {
+        String normalStyle;
+        String hoverStyle;
+
+        if (button.getText().equals("Jouer")) {
+            // Style vert pour Jouer
+            normalStyle = "-fx-background-color: #4CAF50;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);";
+
+            hoverStyle = "-fx-background-color: #45a049;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);";
+
+        } else if (button.getText().equals("Annuler")) {
+            // Style rouge pour Annuler
+            normalStyle = "-fx-background-color: #d9534f;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);";
+
+            hoverStyle = "-fx-background-color: #c9302c;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);";
+        } else {
+            // Style bois classique pour le reste
+            normalStyle = "-fx-background-color: #8b5e3c;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);";
+
+            hoverStyle = "-fx-background-color: #a47148;" +
+                    "-fx-text-fill: white;" +
+                    "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" +
+                    "-fx-background-radius: 10;" +
+                    "-fx-padding: 8 20 8 20;" +
+                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);";
+        }
 
         button.setStyle(normalStyle);
-
-        // Quand la souris survol
         button.setOnMouseEntered(e -> button.setStyle(hoverStyle));
-        // Quand elle ne survol plus
         button.setOnMouseExited(e -> button.setStyle(normalStyle));
     }
 
+
     public void applyStyleTextField(TextField textField) {
         textField.setStyle(
-                "-fx-background-color: white;" +
+                "-fx-background-color: #f5f0e1;" +
                         "-fx-background-radius: 10;" +
-                        "-fx-border-color: #4facfe;" +
+                        "-fx-border-color: #8b5e3c;" +
                         "-fx-border-radius: 10;" +
                         "-fx-padding: 6 10;" +
-                        "-fx-font-size: 13px;"
+                        "-fx-font-size: 13px;" +
+                        "-fx-text-fill: #3e2f1c;"
         );
         textField.setMinWidth(100);
         textField.setMaxWidth(Double.MAX_VALUE);
@@ -271,9 +337,12 @@ public class DialogView {
     }
 
     public void applyStyleRadioButton(RadioButton radioButton) {
-        radioButton.setStyle("-fx-padding: 5 15 5 5;" +
-                "-fx-background-color: transparent;" +
-                "-fx-cursor: hand;");
+        radioButton.setStyle(
+                "-fx-padding: 5 15 5 5;" +
+                        "-fx-text-fill: #3e2f1c;" +
+                        "-fx-background-color: transparent;" +
+                        "-fx-cursor: hand;"
+        );
     }
 
 }

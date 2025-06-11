@@ -63,13 +63,15 @@ public class QuixoActionController extends ControllerAction implements EventHand
                         model.addHumanPlayer("player1");
                         model.addHumanPlayer("player2");
                         if (!Objects.equals(dialogView.getTextField1().getText(), "")) {
-                            Button button = (Button) dialogView.getDialog().getDialogPane().lookupButton();
-
+//                            Button button = (Button) dialogView.getDialog().getDialogPane().lookupButton(dialogView.getButtonTypeJouer());
+//                            button.setDisable(true);
                             model.getPlayers().getFirst().setName(dialogView.getTextField1().getText());
                         }
-                        if (!Objects.equals(dialogView.getTextField2().getText(), ""))
-                            model.getPlayers().getFirst().setName(dialogView.getTextField2().getText());
-
+                        if (!Objects.equals(dialogView.getTextField2().getText(), "")) {
+//                            Button button = (Button) dialogView.getDialog().getDialogPane().lookupButton(dialogView.getButtonTypeJouer());
+//                            button.setDisable(true);
+                            model.getPlayers().get(1).setName(dialogView.getTextField2().getText());
+                        }
                     } else if (mode == 2) {
                         System.out.println("joueur contre bot");
                         model.addHumanPlayer("player");
