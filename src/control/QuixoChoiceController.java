@@ -35,10 +35,9 @@ public class QuixoChoiceController implements  EventHandler<ActionEvent> {
             System.out.println("joueur contre bot");
             dialogView.showJcB();
             dialogView.getApplyButton().setDisable(true);
-        } else {
+        } else if (choice == 3) {
             System.out.println("bot contre bot");
             dialogView.showDefault();
-            dialogView.getApplyButton().setDisable(true);
         }
     }
 

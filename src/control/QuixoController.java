@@ -85,6 +85,7 @@ public class QuixoController extends Controller {
     }
 
 
+
     public void mooveSequenceCube(int insertionRow, int insertionCol, int fromRow, int fromCol, boolean human) {
         // insertionRow = ligne où sera inséré le cube du joueur après le décalage
         // insertionCol = colonne où sera inséré le cube du joueur après le décalage
@@ -101,7 +102,7 @@ public class QuixoController extends Controller {
             cube = (Cube) board.getElement(fromRow, fromCol);
         }
 
-        ActionList actions = null;
+        ActionList actions = new ActionList();
 
         if (insertionCol == fromCol) {
             if (insertionRow < fromRow) {
@@ -110,9 +111,10 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(i, insertionCol);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i + 1, insertionCol);
-                    ActionPlayer play = new ActionPlayer(model, this, actions);
-                    play.start();
+                    actions.addAll(ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i + 1, insertionCol));
+//                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i + 1, insertionCol);
+//                    ActionPlayer play = new ActionPlayer(model, this, actions);
+//                    play.start();
                 }
             } else {
                 System.out.println("Déplacement colonne vers le haut");
@@ -120,9 +122,10 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(i, insertionCol);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i - 1, insertionCol);
-                    ActionPlayer play = new ActionPlayer(model, this, actions);
-                    play.start();
+                    actions.addAll(ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i - 1, insertionCol));
+//                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", i - 1, insertionCol);
+//                    ActionPlayer play = new ActionPlayer(model, this, actions);
+//                    play.start();
                 }
             }
         }
@@ -134,9 +137,10 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(insertionRow, i);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i + 1);
-                    ActionPlayer play = new ActionPlayer(model, this, actions);
-                    play.start();
+                    actions.addAll(ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i + 1));
+//                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i + 1);
+//                    ActionPlayer play = new ActionPlayer(model, this, actions);
+//                    play.start();
                 }
             } else {
                 System.out.println("Déplacement ligne vers la gauche");
@@ -144,9 +148,10 @@ public class QuixoController extends Controller {
                     Cube cubeBoard = (Cube) board.getElement(insertionRow, i);
                     if (cubeBoard == null)
                         continue;
-                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i - 1);
-                    ActionPlayer play = new ActionPlayer(model, this, actions);
-                    play.start();
+                    actions.addAll(ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i - 1));
+//                    actions = ActionFactory.generatePutInContainer(this, model, cubeBoard, "quixoboard", insertionRow, i - 1);
+//                    ActionPlayer play = new ActionPlayer(model, this, actions);
+//                    play.start();
                 }
             }
         }
@@ -158,11 +163,13 @@ public class QuixoController extends Controller {
         else
             cube.setFace(2); // Rond
 
-        actions = ActionFactory.generatePutInContainer(this,model, cube, "quixoboard", insertionRow, insertionCol);
+        actions.addAll(ActionFactory.generatePutInContainer(this,model, cube, "quixoboard", insertionRow, insertionCol));
+//        actions = ActionFactory.generatePutInContainer(this,model, cube, "quixoboard", insertionRow, insertionCol);
 
+        actions.setDoEndOfTurn(true);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
-        actions.setDoEndOfTurn(true); // Finir le tour après cette action
+
 
     }
 

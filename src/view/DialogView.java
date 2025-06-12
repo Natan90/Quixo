@@ -74,12 +74,13 @@ public class DialogView {
         hbox2.getChildren().addAll(radioButtonChoice1, radioButtonChoice2, radioButtonChoice3);
         spacerVBox = new Region();
         VBox.setVgrow(spacerVBox, Priority.ALWAYS);
-        showDefault();
+        showJcJ();
+        applique.setDisable(true);
 
 
 
         dialog.getDialogPane().setContent(vBox);
-        dialog.getDialogPane().setPrefSize(500, 300);
+        dialog.getDialogPane().setPrefSize(500, 350);
 
 
         Button jouerButton = (Button) dialog.getDialogPane().lookupButton(ok);
@@ -222,7 +223,6 @@ public class DialogView {
 
 
     // Appliquer un style aux différents éléments
-
     public void applyStylVBox(VBox vBox) {
         vBox.setStyle(
                 "-fx-background-color: #f5f0e1;" +
