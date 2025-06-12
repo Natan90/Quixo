@@ -214,12 +214,12 @@ public abstract class Controller {
         String message = "";
         if (model.getIdWinner() != -1) {
             message = model.getPlayers().get(model.getIdWinner()).getName() + " wins";
-        }
-        else {
+        } else {
             message = "Draw game";
         }
         // disable all events
         model.setCaptureEvents(false);
+
         // create a dialog
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         // remove the frame around the dialog
@@ -227,7 +227,10 @@ public abstract class Controller {
         // make it a children of the main game window => it appears centered
         alert.initOwner(view.getStage());
         // set the message displayed
-        alert.setHeaderText(message);
+        alert.setHeaderText(null); // remove default header
+        alert.setContentText(message);
+        alert.getDialogPane().setStyle("-fx-background-color: #f4f4f4; -fx-font-size: 14px; -fx-font-weight: bold;");
+
         // define new ButtonType to fit with our needs => one type is for Quit, one for New Game
         ButtonType quit = new ButtonType("Quit");
         ButtonType newGame = new ButtonType("New Game");
@@ -235,14 +238,19 @@ public abstract class Controller {
         alert.getButtonTypes().clear();
         // add the new ones
         alert.getButtonTypes().addAll(quit, newGame);
+
+        // Add custom styles to buttons
+        alert.getDialogPane().lookupButton(quit).setStyle("-fx-background-color: #ff6f61; -fx-text-fill: white; -fx-font-weight: bold;");
+        alert.getDialogPane().lookupButton(newGame).setStyle("-fx-background-color: #6cbf84; -fx-text-fill: white; -fx-font-weight: bold;");
+
         // show the dialog and wait for the result
         Optional<ButtonType> option = alert.showAndWait();
         // check if result is quit
-        if (option.get() == quit) {
+        if (option.isPresent() && option.get() == quit) {
             System.exit(0);
         }
         // check if result is new game
-        else if (option.get() == newGame) {
+        else if (option.isPresent() && option.get() == newGame) {
             try {
                 startGame();
             } catch (GameException e) {
@@ -252,7 +260,7 @@ public abstract class Controller {
         }
         // abnormal case :-)
         else {
-            System.err.println("Abnormal case: dialog closed with not choice");
+            System.err.println("Abnormal case: dialog closed with no choice");
             System.exit(1);
         }
     }

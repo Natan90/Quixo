@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Model {
 
+
+
     protected int state; // the game state
     protected final static int STATE_INIT = 1; // e.g. the intro screen
     protected final static int STATE_PLAY = 2; // when player is playing within a stage
@@ -116,6 +118,12 @@ public class Model {
         setCaptureMouseEvent(state);
         setCaptureKeyEvent(state);
         setCaptureActionEvent(state);
+    }
+
+    public void changePlayerName(int index, String newName) {
+        if (index >= 0 && index < players.size()) {
+            players.get(index).setName(newName);
+        }
     }
 
     public long getFrameGap() {

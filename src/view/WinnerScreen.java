@@ -35,14 +35,14 @@ public class WinnerScreen {
     public void initDialog() {
         dialog = new Dialog<>();
 
-        quitter = new ButtonType("Quitter");
-        recommencer = new ButtonType("Recommencer");
+        quitter = new ButtonType("Leave");
+        recommencer = new ButtonType("Start again");
 
         dialog.getDialogPane().getButtonTypes().addAll(quitter, recommencer);
         dialog.setTitle("Winner");
         dialog.initModality(Modality.APPLICATION_MODAL);
 
-        lMessageWin = new Label("Le gagnant de la partie est : ");
+        lMessageWin = new Label("The winner of the game is : ");
         lNamePlayer = new Label(model.getCurrentPlayerName());
 
         vBox = new VBox();

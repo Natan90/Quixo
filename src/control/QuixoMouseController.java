@@ -3,173 +3,153 @@ package control;
 import boardifier.control.*;
 import boardifier.model.*;
 import boardifier.model.action.ActionList;
-import boardifier.model.action.GameAction;
-import boardifier.model.action.PutInContainerAction;
-import boardifier.model.action.RemoveFromContainerAction;
-import boardifier.model.animation.AnimationTypes;
-import boardifier.view.ContainerLook;
-import boardifier.view.ElementLook;
-import boardifier.view.GridLook;
 import boardifier.view.View;
-import javafx.event.*;
-import javafx.geometry.Point2D;
-import javafx.scene.input.*;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoPawnPot;
 import model.QuixoStageModel;
 import view.QuixoBoardLook;
-import view.RedPawnPotLook;
 
-import java.awt.*;
-import java.lang.reflect.Array;
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A basic mouse controller that just grabs the mouse clicks and prints out some informations.
- * It gets the elements of the scene that are at the clicked position and prints them.
- */
 public class QuixoMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
 
     private int[] coordCube = {0, 0};
-    private int[] dest;
 
     public QuixoMouseController(Model model, View view, Controller control) {
         super(model, view, control);
     }
 
+    @Override
     public void handle(MouseEvent event) {
-        // if mouse event capture is disabled in the model, just return
         if (!model.isCaptureMouseEvent()) return;
 
-
-        QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
-
-        QuixoBoard board = gameStage.getBoard();
-        QuixoPawnPot pot = gameStage.getRedPot();
-
-//        int[] coordCube = {0, 0};
-
-//        RedPawnPotLook potLook = (RedPawnPotLook) control.getElementLook(pot);
-
-        GridLook look = (GridLook) control.getElementLook(pot);
-        System.out.println(pot.getX() + " getX");
-
-        Coord2D coordPot = new Coord2D();
-        System.out.println(coordPot.getX() + " " + coordPot.getY() + " coordPot");
-
-        int[] tabPot = {(int) coordPot.getX(), (int) coordPot.getY()};
-
-        System.out.println(Arrays.toString(tabPot) + " tabPot");
-
-
-        List<Point> validCells = board.computeValidCells(true, coordCube, model);
-
-
-        // get the clic x,y in the whole scene (this includes the menu bar if it exists)
-        Coord2D clic = new Coord2D(event.getSceneX(), event.getSceneY());
-//        System.out.println(quixoBoardLook.getCellFromSceneLocation + " " + clic.getY());
-        QuixoBoardLook lookBoard = (QuixoBoardLook) control.getElementLook(board);
-        int[] dest = lookBoard.getCellFromSceneLocation(clic);
-        System.out.println(dest);
-        // get elements at that position
-        List<GameElement> list = control.elementsAt(clic);
-        // for debug, uncomment next instructions to display x,y and elements at that postio
-        Logger.debug("click in " + event.getSceneX() + "," + event.getSceneY());
-        int[] coordClick = {(int) event.getSceneX(), (int) event.getSceneY()};
-        for (GameElement element : list) {
-            Logger.debug(element.toString());
-        }
         QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
+        QuixoBoard board = stageModel.getBoard();
+        QuixoPawnPot pot = stageModel.getRedPot();
+
+        Coord2D clic = new Coord2D(event.getSceneX(), event.getSceneY());
         System.out.println(clic.getX() + " " + clic.getY());
 
-//        for (GameElement element : list){
-//            if(element.getType() == "cube")
-//        }
+        QuixoBoardLook lookBoard = (QuixoBoardLook) control.getElementLook(board);
+        int[] dest = lookBoard.getCellFromSceneLocation(clic);
+        System.out.println(Arrays.toString(dest));
 
-        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
-            for (GameElement element : list) {
-                if(element.getContainer() == pot){
-                    System.out.println("Je clique sur le pot pour annuler mon coup");
-                    Cube cube = (Cube) pot.getElement(0, 0);
-                    ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "quixoboard", coordCube[1], coordCube[0], AnimationTypes.MOVE_LINEARPROP, 12);
-                    ActionPlayer play = new ActionPlayer(model, control, actions);
-                    stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
-
-                    play.start();
-                }
-
-
-            }
+        List<GameElement> elementsAtClick = control.elementsAt(clic);
+        Logger.debug("click in " + event.getSceneX() + "," + event.getSceneY());
+        for (GameElement element : elementsAtClick) {
+            Logger.debug(element.toString());
         }
 
+        switch (stageModel.getState()) {
+            case QuixoStageModel.STATE_SELECTEDDEST:
+                if (clickedOnPot(pot, elementsAtClick)) {
+                    System.out.println("Je clique sur le pot pour annuler mon coup");
+                    cancelSelection(stageModel, pot, board);
+                } else {
+                    handleDestinationClick(stageModel, board, elementsAtClick, dest);
+                }
+                break;
 
-        // if quand le cube est déja sélctionné -> placer le cube
-        if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDCUBE) {
-            for (GameElement element : list) {
-                if (element.getType() == ElementTypes.getType("cube")) {
-                    Cube cube = (Cube) element;
-                    // check if color of the pawn corresponds to the current player id
-                    for (int i = 0; i < validCells.size(); i++) {
-                        Point valid = validCells.get(i);
-                        if (dest != null && dest[0] == (int) valid.getX() && dest[1] == (int) valid.getY()) {
-                            element.toggleSelected();
-                            stageModel.setState(QuixoStageModel.STATE_SELECTEDDEST);
+            case QuixoStageModel.STATE_SELECTEDCUBE:
+                handleCubeSelection(stageModel, board, elementsAtClick, dest);
+                break;
 
-                            System.out.println(cube.getX() + " " + cube.getY() + " coordonnées du cube");
+            default:
+                break;
+        }
+    }
 
-                            System.out.println(cube.getFace());
-                            ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0, AnimationTypes.MOVE_LINEARPROP, 12);
-                            stageModel.unselectAll();
-                            actions.setDoEndOfTurn(false);
-                            ActionPlayer play = new ActionPlayer(model, control, actions);
-                            play.start();
+    private boolean clickedOnPot(QuixoPawnPot pot, List<GameElement> elements) {
+        for (GameElement element : elements) {
+            if (element.getContainer() == pot) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private void cancelSelection(QuixoStageModel stageModel, QuixoPawnPot pot, QuixoBoard board) {
+        Cube cube = (Cube) pot.getElement(0, 0);
+        ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "quixoboard", coordCube[1], coordCube[0]);
+        ActionPlayer play = new ActionPlayer(model, control, actions);
+        stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
 
-                            System.out.println("J'ai appuyé sur le cube " + Arrays.toString(dest));
+        List<Point> validCellsToReset = board.computeValidCells(false, coordCube, model);
+        System.out.println(validCellsToReset.toString() + " validCellsToReset");
 
-                            coordCube[0] = dest[1];
-                            coordCube[1] = dest[0];
+        for (Point p : validCellsToReset) {
+            Cube cubeToReset = (Cube) board.getElement(p.x, p.y);
+            if (cubeToReset != null)
+                cubeToReset.setJouable(false);
+        }
+        play.start();
+    }
 
-                            System.out.println("coordCube : " + Arrays.toString(coordCube));
-                            return; // do not allow another element to be selected
+    private void handleCubeSelection(QuixoStageModel stageModel, QuixoBoard board, List<GameElement> elements, int[] dest) {
+        List<Point> validCells = board.computeValidCells(true, coordCube, model);
+
+        for (GameElement element : elements) {
+            if (element.getType() == ElementTypes.getType("cube")) {
+                Cube cube = (Cube) element;
+                for (Point valid : validCells) {
+                    if (dest != null && dest[0] == valid.x && dest[1] == valid.y) {
+                        element.toggleSelected();
+                        stageModel.setState(QuixoStageModel.STATE_SELECTEDDEST);
+
+                        System.out.println(cube.getX() + " " + cube.getY() + " coordonnées du cube");
+                        System.out.println(cube.getFace());
+
+                        ActionList actions = ActionFactory.generatePutInContainer(control, model, cube, "cubepot", 0, 0);
+                        stageModel.unselectAll();
+                        actions.setDoEndOfTurn(false);
+                        ActionPlayer play = new ActionPlayer(model, control, actions);
+                        play.start();
+
+                        System.out.println("J'ai appuyé sur le cube " + Arrays.toString(dest));
+
+                        coordCube[0] = dest[1];
+                        coordCube[1] = dest[0];
+
+                        System.out.println("coordCube : " + Arrays.toString(coordCube));
+
+                        List<Point> validCells2 = board.computeValidCells(false, coordCube, model);
+                        for (Point p : validCells2) {
+                            Cube cubeJouable = (Cube) board.getElement(p.x, p.y);
+                            if (cubeJouable != null)
+                                cubeJouable.setJouable(true);
                         }
+                        return;
                     }
                 }
                 System.out.println("TEST sélectionné");
-
             }
-        } else if (stageModel.getState() == QuixoStageModel.STATE_SELECTEDDEST) {
-            QuixoController quixoController = (QuixoController) control;
-
-//            for (int i = 0; i < list.size(); i++) {
-//                GameElement element = list.get(i);
-//                if (element.getType() == ElementTypes.getType("cube")) {
-//                    coordCube[0] = dest[0];
-//                    coordCube[1] = (int) list.get(i).getY();
-//                }
-//            }
-
-
-//            System.out.println("dest[0] : " + dest[0] + ", dest[1] :" + dest[1]);
-
-            System.out.println("coordCube : " + Arrays.toString(coordCube));
-            validCells = board.computeValidCells(false, coordCube, model);
-
-            for (Point valid : validCells) {
-                if (dest != null && dest[0] == (int) valid.getX() && dest[1] == (int) valid.getY()) {
-                    quixoController.mooveSequenceCube(dest[0], dest[1], coordCube[1], coordCube[0], true);
-                    stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
-                    return;
-                }
-            }
-            System.out.println("TEST pas sélectionne");
         }
+    }
 
+    private void handleDestinationClick(QuixoStageModel stageModel, QuixoBoard board, List<GameElement> elements, int[] dest) {
+        QuixoController quixoController = (QuixoController) control;
 
+        System.out.println("coordCube : " + Arrays.toString(coordCube));
+        List<Point> validCells = board.computeValidCells(false, coordCube, model);
+
+        System.out.println("validCells 2 " + validCells.toString());
+
+        for (Point valid : validCells) {
+            Cube cubeToReset = (Cube) board.getElement(valid.x, valid.y);
+            if (cubeToReset != null)
+                cubeToReset.setJouable(false);
+
+            if (dest != null && dest[0] == valid.x && dest[1] == valid.y) {
+                quixoController.mooveSequenceCube(dest[0], dest[1], coordCube[1], coordCube[0], true);
+                stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
+                return;
+            }
+        }
+        System.out.println("TEST pas sélectionne");
     }
 }
-
-
-

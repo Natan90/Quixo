@@ -10,8 +10,7 @@ public class Cube extends GameElement {
 
     private int face;
     private int color;
-    private boolean isJouable;
-    public boolean selected;
+    public boolean isJouable;
 
     public Cube(int color, GameStageModel gameStageModel, boolean isJouable, boolean selected) {
         super(gameStageModel);
@@ -34,17 +33,13 @@ public class Cube extends GameElement {
         this.face = face;
         addChangeFaceEvent();
     }
-    public void setJouable(){
-        isJouable = true;
+    public void setJouable(boolean jouable){
+        isJouable = jouable;
+        addChangeFaceEvent();
     }
-    public void resetJouable() {
-        isJouable = false;
-    }
+
     public boolean isJouable() {
         return isJouable;
-    }
-    public void setSelected() {
-        selected = true;
     }
 
 

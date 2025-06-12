@@ -3,6 +3,7 @@ package view;
 import boardifier.control.Logger;
 import boardifier.model.ContainerElement;
 import boardifier.view.GridLook;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -20,7 +21,6 @@ public class RedPawnPotLook extends GridLook {
 
     public RedPawnPotLook(int height, int width,  ContainerElement element) {
         super(height/4, width, element, -1, 1, Color.BLACK);
-
     }
 
     protected void render() {

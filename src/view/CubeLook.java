@@ -26,11 +26,13 @@ public class CubeLook extends ElementLook {
         Cube cube = (Cube)element;
         rectangle = new Rectangle(-40, -40, 90, 90);
 
-        if (cube.selected) {
+        if (cube.isJouable) {
             rectangle.setFill(Color.GREEN);
+            System.out.println("le cube est vert");
         }
         else {
             rectangle.setFill(Color.BLACK);
+            System.out.println("le cube est noir");
 
         }
 

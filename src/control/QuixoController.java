@@ -23,7 +23,8 @@ public class QuixoController extends Controller {
     QuixoStageModel quixoStageModel;
     QuixoView quixoView;
     int idWinner;
-    int botDifficulty = 1; //1 : c'est pour facile et 2 : c'est pour dur
+    int botDifficulty; //1 : c'est pour facile et 2 : c'est pour dur
+
 
     public QuixoController(Model model, View view) {
         super(model, view);
@@ -164,6 +165,7 @@ public class QuixoController extends Controller {
         actions.setDoEndOfTurn(true); // Finir le tour après cette action
 
     }
+
 
 
 }

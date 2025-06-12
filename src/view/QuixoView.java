@@ -1,5 +1,6 @@
 package view;
 
+import boardifier.model.ContainerElement;
 import boardifier.model.Model;
 import boardifier.view.GameStageView;
 import boardifier.view.RootPane;
@@ -8,6 +9,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import model.QuixoStageModel;
 
 public class QuixoView extends View {
 
@@ -15,6 +17,7 @@ public class QuixoView extends View {
     private MenuItem menuIntro;
     private MenuItem menuQuit;
     private MenuItem menuHelp;
+
 
     public QuixoView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
@@ -52,6 +55,8 @@ public class QuixoView extends View {
     }
 
     public void resetGameStageView() {
-        gameStageView = new QuixoStageView("quixo", model.getGameStage());
+        QuixoStageView qsv = new QuixoStageView("quixo", model.getGameStage());
     }
+
+
 }

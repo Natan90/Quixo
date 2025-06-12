@@ -5,6 +5,9 @@ import boardifier.view.*;
 import model.QuixoStageModel;
 
 public class QuixoStageView extends GameStageView {
+
+    public RedPawnPotLook redPawnPotLook;
+
     public QuixoStageView(String name, GameStageModel gameStageModel) {
         super(name, gameStageModel);
     }
@@ -14,7 +17,8 @@ public class QuixoStageView extends GameStageView {
         QuixoStageModel model = (QuixoStageModel)gameStageModel;
 
         addLook(new QuixoBoardLook(300, model.getBoard()));
-        addLook(new RedPawnPotLook(320, 80,model.getRedPot()));
+        redPawnPotLook = new RedPawnPotLook(320, 80, model.getRedPot());
+        addLook(redPawnPotLook);
 
         for(int i=0;i<25;i++) {
             addLook(new CubeLook(model.getCubes()[i]));
