@@ -56,9 +56,13 @@ public class QuixoActionController extends ControllerAction implements EventHand
                 dialogView.initVBox();
                 Optional<ButtonType> result = dialogView.initDialog();
                 if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
-                    model.reset();
-
                     int mode = dialogView.getGameMode();
+                    if (model.isStageStarted()) {
+                        System.out.println("Stop previous game");
+                        control.stopStage();
+                    }
+                    model.getPlayers().clear();
+                    model.reset();
 
                     if (mode == 1) {
                         System.out.println("joueur contre joueur");
@@ -91,18 +95,13 @@ public class QuixoActionController extends ControllerAction implements EventHand
                         model.addComputerPlayer("computer2");
                     }
 
-                    if (model.isStageStarted()) {
-                        System.out.println("stop game");
-                        control.stopStage();
-//                        quixoView.getStage().close();
+                    QuixoStageModel stageModel = new QuixoStageModel("quixo", model);
+                    model.startGame(stageModel);
 
-                    }
-                    System.out.println("start game");
+                    quixoView.resetGameStageView();
                     quixoView.setView(quixoView.getGameStageView());
 
                     control.startGame();
-
-
                 }
             }
             catch(Exception err) {
