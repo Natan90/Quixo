@@ -43,6 +43,8 @@ public class QuixoDecider2 extends Decider {
 
     @Override
     public ActionList decide() {
+        System.out.println("Decider 2");
+        System.out.println("getIdPlayer "+ model.getIdPlayer());
         // do a cast get a variable of the real type to get access to the attributes of HoleStageModel
         QuixoStageModel stage = (QuixoStageModel) model.getGameStage();
         scoreFinal =-100000;
@@ -72,14 +74,18 @@ public class QuixoDecider2 extends Decider {
             int[][] tabAfterMove = moveSequenceCube(insertionRow, insertionCol, fromRow, fromCol);
 
             int score;
-            if (model.getIdPlayer() == 2)
-                score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
-            else
+            if (model.getIdPlayer() == 0)
                 score = getScore(1, tabAfterMove) - (getScore(2, tabAfterMove)*2);
+            else
+                score = getScore(2, tabAfterMove) - (getScore(1, tabAfterMove)*2);
+
+            System.out.println("score : "+score);
 
 
             if(score > scoreFinal) {
                 scoreFinal = score;
+                System.out.println("scoreFinal : "+scoreFinal);
+
                 fromRow = (int) allMoves.get(i).getY();
                 fromCol = (int) allMoves.get(i).getX();
                 insertionRow = (int) allMoves.get(i+1).getY();
@@ -91,7 +97,7 @@ public class QuixoDecider2 extends Decider {
                 coordBestMove[1] = new int[]{insertionRow, insertionCol};
                 System.out.println("Meilleur score trouvé aux coordonnées : " + Arrays.toString(coordBestMove[0]) + "(premier coup) et " + Arrays.toString(coordBestMove[1]) + " (deuxième coup)");
 
-//                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
+                System.out.println("coordBestMove" + Arrays.deepToString(coordBestMove) + " scoreFinal : " + scoreFinal);
             }
 //            System.out.println("Tableau de base : ");
 //            afficheTab2D(tabBoard);
@@ -103,7 +109,21 @@ public class QuixoDecider2 extends Decider {
 
         Cube cube = (Cube) board.getElement(coordBestMove[0][0], coordBestMove[0][1]);// row -- col
 
-        cube.setFace(model.getIdPlayer());
+        if (cube.getContainer() == null) {
+            System.err.println("Erreur : le cube n'a pas de conteneur avant le déplacement !");
+            cube.setContainer(board);
+        }
+
+        if (coordBestMove[0][0] < 0 || coordBestMove[0][0] >= 5 || coordBestMove[0][1] < 0 || coordBestMove[0][1] >= 5) {
+            System.err.println("Indices invalides pour le déplacement : " + Arrays.toString(coordBestMove[0]));
+            return null;
+        }
+
+        if (model.getIdPlayer() == 1)
+            cube.setFace(2);
+        else if (model.getIdPlayer() == 0) {
+            cube.setFace(1);
+        }
 //        ActionList firstMove = ActionFactory.generatePutInContainer(model, cube, "cubepot", coordBestMove[0][0], coordBestMove[0][1]);
 
 
@@ -159,12 +179,18 @@ public class QuixoDecider2 extends Decider {
     }
 
     public int getPointsForAlignment(int count) {
-        if(count == 3)
+        if(count == 3) {
             return ALIGN3;
-        else if (count == 4)
+        }
+        else if (count == 4) {
+
             return ALIGN4;
-        else if (count == 5)
+        }
+        else if (count == 5){
+
             return ALIGN5;
+
+        }
         return 0;
     }
 
@@ -201,6 +227,12 @@ public class QuixoDecider2 extends Decider {
             }
         }
             tabBoardAfterMove[insertionRow][insertionCol] = model.getIdPlayer();
+        if (model.getIdPlayer() == 1)
+            tabBoardAfterMove[insertionRow][insertionCol] = 2;
+        else
+            tabBoardAfterMove[insertionRow][insertionCol] = 1;
+
+
 
 
         return tabBoardAfterMove;
