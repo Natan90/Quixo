@@ -27,6 +27,7 @@ public class DialogView {
     private Label lTypeJeu, lTypeBot;
     private Separator separtor;
     private Region spacerVBox;
+    private Label rules;
 
 
     private Model model;

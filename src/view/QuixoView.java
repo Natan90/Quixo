@@ -14,6 +14,7 @@ public class QuixoView extends View {
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
+    private MenuItem menuHelp;
 
     public QuixoView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
@@ -26,9 +27,11 @@ public class QuixoView extends View {
         menuStart = new MenuItem("New game");
         menuIntro = new MenuItem("Intro");
         menuQuit = new MenuItem("Quit");
+        menuHelp = new MenuItem("Help");
         menu1.getItems().add(menuStart);
         menu1.getItems().add(menuIntro);
         menu1.getItems().add(menuQuit);
+        menu1.getItems().add(menuHelp);
         menuBar.getMenus().add(menu1);
     }
 
@@ -42,6 +45,10 @@ public class QuixoView extends View {
 
     public MenuItem getMenuQuit() {
         return menuQuit;
+    }
+
+    public MenuItem getMenuHelp() {
+        return menuHelp;
     }
 
     public void resetGameStageView() {

@@ -222,6 +222,7 @@ public class QuixoDecider2 extends Decider {
             } else {
                 // Déplacement ligne vers la gauche
                 for (int i = fromCol; i < insertionCol; i++) {
+
                     tabBoardAfterMove[fromRow][i] = tabBoardAfterMove[fromRow][i + 1];
                 }
             }

@@ -46,8 +46,18 @@ public class QuixoActionController extends ControllerAction implements EventHand
     }
 
     private void setMenuHandlers() {
+        quixoView.getMenuHelp().setOnAction(e -> {
+                DialogView dialogView = new DialogView(model);
+                    Optional<ButtonType> result = dialogView.initDialog();
 
-        // set event handler on the MenuStart item
+                    if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
+                        dialogView.initVBox();
+
+                    }
+
+                });
+
+       // set event handler on the MenuStart item
         quixoView.getMenuStart().setOnAction(e -> {
             try {
 //                control.startGame();

@@ -64,7 +64,7 @@ public class QuixoController extends Controller {
             Logger.debug("COMPUTER PLAYS");
             if (botDifficulty == 1) {
                 System.out.println("decider1");
-                QuixoDecider2 decider = new QuixoDecider2(model,this);
+                QuixoDecider3 decider = new QuixoDecider3(model,this);
                 ActionPlayer play = new ActionPlayer(model, this, decider, null);
                 play.start();
             } else if (botDifficulty == 2) {
@@ -158,10 +158,11 @@ public class QuixoController extends Controller {
             cube.setFace(2); // Rond
 
         actions = ActionFactory.generatePutInContainer(this,model, cube, "quixoboard", insertionRow, insertionCol);
-        actions.setDoEndOfTurn(true); // Finir le tour après cette action
 
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
+        actions.setDoEndOfTurn(true); // Finir le tour après cette action
+
     }
 
 

@@ -5,6 +5,7 @@ import boardifier.model.GameException;
 import boardifier.model.Model;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
@@ -180,4 +181,6 @@ public class View {
     public ContainerLook getElementContainerLook(GameElement element) {
         return (ContainerLook) rootPane.getElementLook(element.getContainer());
     }
+
+
 }
