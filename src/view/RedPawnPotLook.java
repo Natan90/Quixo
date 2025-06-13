@@ -26,7 +26,7 @@ public class RedPawnPotLook extends GridLook {
     protected void render() {
         setVerticalAlignment(ALIGN_MIDDLE);
         setHorizontalAlignment(ALIGN_CENTER);
-        cells = new Rectangle[4];
+        cells = new Rectangle[1];
         // create the rectangles.
         for(int i=0;i<1;i++) {
             cells[i] = new Rectangle(colWidth, rowHeight, Color.PURPLE);

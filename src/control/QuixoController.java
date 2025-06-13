@@ -10,11 +10,16 @@ import boardifier.model.Model;
 import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import boardifier.model.animation.Animation;
+import javafx.animation.Timeline;
 import boardifier.view.View;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
 import model.Cube;
 import model.QuixoBoard;
 import model.QuixoStageModel;
+import model.TimerElement;
 import view.QuixoView;
+import view.TimerLook;
 import view.WinnerScreen;
 
 public class QuixoController extends Controller {
@@ -22,6 +27,8 @@ public class QuixoController extends Controller {
     QuixoStageModel gameStage = (QuixoStageModel) model.getGameStage();
     QuixoStageModel quixoStageModel;
     QuixoView quixoView;
+
+
     int idWinner;
     int botDifficulty; //1 : c'est pour facile et 2 : c'est pour dur
 

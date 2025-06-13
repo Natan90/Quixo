@@ -2,14 +2,28 @@ package view;
 
 import boardifier.model.GameStageModel;
 import boardifier.view.*;
+import model.CoupsElement;
 import model.QuixoStageModel;
+import model.TimerElement;
 
 public class QuixoStageView extends GameStageView {
 
     public RedPawnPotLook redPawnPotLook;
+    private TimerLook timerLook;
+    private CoupsLook coupsLook;
 
     public QuixoStageView(String name, GameStageModel gameStageModel) {
         super(name, gameStageModel);
+    }
+
+    public void setTimerElement(TimerElement timerElement) {
+        timerLook = new TimerLook(24, "#000000", timerElement);
+        addLook(timerLook);
+    }
+
+    public void setCoupsElement(CoupsElement coupsElement) {
+        coupsLook = new CoupsLook(15, "#000000", coupsElement);
+        addLook(coupsLook);
     }
 
     @Override
@@ -26,17 +40,21 @@ public class QuixoStageView extends GameStageView {
 
         addLook(new TextLook(24, "0x000000", model.getPlayerName()));
 
+        setTimerElement(((QuixoStageModel)gameStageModel).getTimer());
+        setCoupsElement((((QuixoStageModel) gameStageModel).getCoups()));
+
         /* Example to show how to set a global container to layout all looks in the root pane
            Must also uncomment lines in HoleStageFactory and HoleStageModel
 
          */
 
-//        ContainerLook mainLook = new ContainerLook(model.getRootContainer(), -1);
-//        mainLook.setPadding(10);
-//        mainLook.setVerticalAlignment(ContainerLook.ALIGN_MIDDLE);
-//        mainLook.setHorizontalAlignment(ContainerLook.ALIGN_CENTER);
-//        addLook(mainLook);
+    }
 
+    public TimerLook getTimerLook() {
+        return timerLook;
+    }
 
+    public CoupsLook getCoupsLook() {
+        return coupsLook;
     }
 }

@@ -45,6 +45,8 @@ public class QuixoStageModel extends GameStageModel {
     private QuixoPawnPot redPot;
     private Cube[] cubes;
     private TextElement playerName;
+    private TimerElement timer;
+    private CoupsElement coups;
 //    private ContainerElement mainContainer;
 
     //Uncomment this 2 methods if example with a main container is used
@@ -199,6 +201,23 @@ public class QuixoStageModel extends GameStageModel {
 
         return idWinner;
     }
+
+    public void setTimer(TimerElement timer) {
+        this.timer = timer;
+    }
+
+    public TimerElement getTimer() {
+        return timer;
+    }
+
+    public void setCoups(CoupsElement coups) {
+        this.coups = coups;
+    }
+
+    public CoupsElement getCoups() {
+        return coups;
+    }
+
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {

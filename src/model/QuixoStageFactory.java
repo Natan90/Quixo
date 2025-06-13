@@ -69,6 +69,11 @@ public class QuixoStageFactory extends StageElementsFactory {
             }
         }
 
+        TimerElement timer = new TimerElement(stageModel);
+        stageModel.setTimer(timer);
+        CoupsElement coups = new CoupsElement(stageModel);
+        stageModel.setCoups(coups);
+
     }
             /* Example with a main container that takes the ownership of the location
            of the element that are put within.

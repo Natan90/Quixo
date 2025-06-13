@@ -4,13 +4,16 @@ import boardifier.control.*;
 import boardifier.model.*;
 import boardifier.model.action.ActionList;
 import boardifier.view.View;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import model.Cube;
-import model.QuixoBoard;
-import model.QuixoPawnPot;
-import model.QuixoStageModel;
+import javafx.util.Duration;
+import model.*;
+import view.CoupsLook;
 import view.QuixoBoardLook;
+import view.QuixoStageView;
+import view.TimerLook;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -19,16 +22,35 @@ import java.util.List;
 public class QuixoMouseController extends ControllerMouse implements EventHandler<MouseEvent> {
 
     private int[] coordCube = {0, 0};
+    private Timeline timeline;
+    private TimerLook timerLook;
+    private TimerElement timerElement;
+    private CoupsLook coupsLook;
+    private CoupsElement coupsElement;
+    private int compteurTour = 0;
+    private boolean isTimerRunning = false;
+
 
     public QuixoMouseController(Model model, View view, Controller control) {
         super(model, view, control);
+
     }
 
     @Override
     public void handle(MouseEvent event) {
+        QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
+        timerElement = stageModel.getTimer();
+        coupsElement = stageModel.getCoups();
+        System.out.println("model.getIdPlayer() " + model.getIdPlayer());
+
+        QuixoStageView stageView = (QuixoStageView) view.getGameStageView();
+        timerLook = stageView.getTimerLook();
+        coupsLook = stageView.getCoupsLook();
+
+        toggleTimer();
         if (!model.isCaptureMouseEvent()) return;
 
-        QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
+//        QuixoStageModel stageModel = (QuixoStageModel) model.getGameStage();
         QuixoBoard board = stageModel.getBoard();
         QuixoPawnPot pot = stageModel.getRedPot();
 
@@ -147,9 +169,57 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
             if (dest != null && dest[0] == valid.x && dest[1] == valid.y) {
                 quixoController.mooveSequenceCube(dest[0], dest[1], coordCube[1], coordCube[0], true);
                 stageModel.setState(QuixoStageModel.STATE_SELECTEDCUBE);
+                timerLook.increment3(compteurTour);
+                coupsLook.incrementeCoups();
+                coupsLook.update();
                 return;
             }
         }
-        System.out.println("TEST pas sélectionne");
+
+    }
+
+    public void toggleTimer() {
+        if (!isTimerRunning) {
+            startTimer();
+        } else {
+            stopTimer();
+        }
+        isTimerRunning = !isTimerRunning; // alterne l'état
+    }
+
+
+    public void startTimer() {
+        System.out.println("compteur " + compteurTour);
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timerElement.decrement();
+            timerLook.update();
+            System.out.println("Temps restant : " + timerElement.getFormattedTime());
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+
+        compteurTour++;
+    }
+
+    public void stopTimer() {
+        if (timeline != null) {
+            timeline.stop();
+        }
+    }
+
+    public void updateTimer() {
+        System.out.println("compteurtour " + compteurTour);
+        if (compteurTour == 0) {
+            System.out.println("iffffffff");
+            timerLook.render();
+        } else if (compteurTour % 2 == 0) {
+            System.out.println("laaaaaaa");
+            if (timerElement.getTimeLeft() >= 177) {
+                timerElement.setTimeLeft(180);
+            } else {
+                timerElement.increment3();
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ public class CubeLook extends ElementLook {
     }
 
     public void render() {
-        Cube cube = (Cube)element;
+        Cube cube = (Cube) element;
         rectangle = new Rectangle(-40, -40, 90, 90);
 
         if (cube.isJouable) {
@@ -39,19 +39,19 @@ public class CubeLook extends ElementLook {
         addShape(rectangle);
         // NB: text won't change so no need to put it as an attribute
         Text text = null;
-        if (cube.getFace() == 0){
+        if (cube.getFace() == 0) {
             text = new Text("");
         } else if (cube.getFace() == 1) {
             text = new Text("X");
-        }else if (cube.getFace() == 2){
+        } else if (cube.getFace() == 2) {
             text = new Text("O");
         }
         text.setFont(new Font(24));
         text.setFill(Color.valueOf("FFFFFF"));
         Bounds bt = text.getBoundsInLocal();
-        text.setX(-bt.getWidth()/2);
+        text.setX(-bt.getWidth() / 2);
         // since numbers are always above the baseline, relocate just using the part above baseline
-        text.setY(text.getBaselineOffset()/2-4);
+        text.setY(text.getBaselineOffset() / 2 - 4);
         addShape(text);
 
 
