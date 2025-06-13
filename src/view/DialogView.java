@@ -17,7 +17,7 @@ public class DialogView {
 
     private ToggleGroup groupChoice, groupBot;
     private RadioButton radioButtonChoice1, radioButtonChoice2, radioButtonChoice3;
-    private RadioButton radioButton1, radioButton2;
+    private RadioButton radioButton1, radioButton2, radioButton3;
     private TextField textField1, textField2;
     private Button applique;
     private Dialog<ButtonType> dialog;
@@ -182,13 +182,16 @@ public class DialogView {
     public HBox addBot(){
         groupBot = new ToggleGroup();
         radioButton1 = new RadioButton("Easy bot");
-        radioButton2 = new RadioButton("Hard bot");
+        radioButton2 = new RadioButton("Medium bot");
+        radioButton3 = new RadioButton("Hard bot");
         radioButton1.setToggleGroup(groupBot);
         radioButton2.setToggleGroup(groupBot);
+        radioButton3.setToggleGroup(groupBot);
         radioButton1.setSelected(true);
-        HBox hboxBot = new HBox(radioButton1, radioButton2);
+        HBox hboxBot = new HBox(radioButton1, radioButton2, radioButton3);
         applyStyleRadioButton(radioButton1);
         applyStyleRadioButton(radioButton2);
+        applyStyleRadioButton(radioButton3);
         hboxBot.setSpacing(30);
         return hboxBot;
     }

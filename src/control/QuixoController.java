@@ -72,13 +72,17 @@ public class QuixoController extends Controller {
             Logger.debug("COMPUTER PLAYS");
             if (botDifficulty == 1) {
                 System.out.println("decider1");
-                QuixoDecider3 decider = new QuixoDecider3(model,this);
+                QuixoDecider decider = new QuixoDecider(model,this);
                 ActionPlayer play = new ActionPlayer(model, this, decider, null);
                 play.start();
             } else if (botDifficulty == 2) {
                 System.out.println("decider2");
                 QuixoDecider2 decider2 = new QuixoDecider2(model,this);
                 ActionPlayer play = new ActionPlayer(model, this, decider2, null);
+                play.start();
+            } else {
+                QuixoDecider3 decider3 = new QuixoDecider3(model,this);
+                ActionPlayer play = new ActionPlayer(model, this, decider3, null);
                 play.start();
             }
         }
