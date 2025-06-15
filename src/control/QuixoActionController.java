@@ -45,23 +45,23 @@ public class QuixoActionController extends ControllerAction implements EventHand
 
     }
 
-    private void setMenuHandlers() {
+    public void setMenuHandlers() {
         quixoView.getMenuHelp().setOnAction(e -> {
-                DialogView dialogView = new DialogView(model);
-                    Optional<ButtonType> result = dialogView.initDialog();
+            DialogView dialogView = createDialogView();
+            Optional<ButtonType> result = dialogView.initDialog();
 
-                    if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
-                        dialogView.initVBox();
+            if (result.isPresent() && result.get() == dialogView.getButtonTypeJouer()) {
+                dialogView.initVBox();
 
-                    }
+            }
 
-                });
+        });
 
        // set event handler on the MenuStart item
         quixoView.getMenuStart().setOnAction(e -> {
             try {
 //                control.startGame();
-                DialogView dialogView = new DialogView(model);
+                DialogView dialogView = createDialogView();
 
                 dialogView.initVBox();
                 Optional<ButtonType> result = dialogView.initDialog();
@@ -116,7 +116,7 @@ public class QuixoActionController extends ControllerAction implements EventHand
             }
             catch(Exception err) {
                 System.err.println(err.getMessage());
-                System.exit(1);
+//                System.exit(1);
             }
         });
         // set event handler on the MenuIntro item
@@ -142,5 +142,11 @@ public class QuixoActionController extends ControllerAction implements EventHand
 
         if (!model.isCaptureActionEvent()) return;
     }
+
+
+    public DialogView createDialogView() {
+        return new DialogView(model);
+    }
+
 }
 

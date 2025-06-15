@@ -211,15 +211,17 @@ public class QuixoMouseController extends ControllerMouse implements EventHandle
     public void updateTimer() {
         System.out.println("compteurtour " + compteurTour);
         if (compteurTour == 0) {
-            System.out.println("iffffffff");
             timerLook.render();
         } else if (compteurTour % 2 == 0) {
-            System.out.println("laaaaaaa");
             if (timerElement.getTimeLeft() >= 177) {
                 timerElement.setTimeLeft(180);
             } else {
                 timerElement.increment3();
             }
         }
+    }
+
+    public boolean isTimerRunning() {
+        return isTimerRunning;
     }
 }

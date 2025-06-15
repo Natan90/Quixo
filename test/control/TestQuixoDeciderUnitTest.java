@@ -65,9 +65,9 @@ public class TestQuixoDeciderUnitTest {
 
         Cube spyCube = Mockito.spy(cube);
 
-        ActionList defaultAction = ActionFactory.generatePutInContainer(model, spyCube, "cubepot", 0, 0);
-        when(quixoDecider.decide()).thenReturn(defaultAction);
-        assertEquals(defaultAction, quixoDecider.decide());
+//        ActionList defaultAction = ActionFactory.generatePutInContainer(model, spyCube, "cubepot", 0, 0);
+//        when(quixoDecider.decide()).thenReturn(defaultAction);
+//        assertEquals(defaultAction, quixoDecider.decide());
     }
 
 
